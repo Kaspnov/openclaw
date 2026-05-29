@@ -1,4 +1,4 @@
-// packages/gateway-protocol/src index helpers and runtime behavior.
+// Public gateway protocol validator bundle generated from the shared schema module.
 import { Compile, type Validator as TypeBoxValidator } from "typebox/compile";
 import {
   type AgentEvent,
@@ -433,7 +433,7 @@ import {
   WizardStepSchema,
 } from "./schema.js";
 
-/** Public type describing Validation Error for packages/gateway-protocol. */
+/** Normalized validation error shape exposed by compiled protocol validators. */
 export type ValidationError = {
   keyword?: string;
   instancePath?: string;
@@ -442,7 +442,7 @@ export type ValidationError = {
   message?: string;
 };
 
-/** Public type describing Protocol Validator for packages/gateway-protocol. */
+/** TypeBox-backed validator function that retains last errors and source schema. */
 export type ProtocolValidator<T = unknown> = ((data: unknown) => data is T) & {
   errors: ValidationError[] | null;
   schema: unknown;
@@ -483,504 +483,504 @@ function lazyCompile<T = unknown>(schema: unknown): ProtocolValidator<T> {
   return validate;
 }
 
-/** Public constant for validate Commands List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCommandsListParams = lazyCompile<CommandsListParams>(CommandsListParamsSchema);
-/** Public constant for validate Connect Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConnectParams = lazyCompile<ConnectParams>(ConnectParamsSchema);
-/** Public constant for validate Request Frame behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateRequestFrame = lazyCompile<RequestFrame>(RequestFrameSchema);
-/** Public constant for validate Response Frame behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateResponseFrame = lazyCompile<ResponseFrame>(ResponseFrameSchema);
-/** Public constant for validate Event Frame behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateEventFrame = lazyCompile<EventFrame>(EventFrameSchema);
-/** Public constant for validate Message Action Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateMessageActionParams =
   lazyCompile<MessageActionParams>(MessageActionParamsSchema);
-/** Public constant for validate Send Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSendParams = lazyCompile(SendParamsSchema);
-/** Public constant for validate Poll Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePollParams = lazyCompile<PollParams>(PollParamsSchema);
-/** Public constant for validate Agent Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentParams = lazyCompile(AgentParamsSchema);
-/** Public constant for validate Agent Identity Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentIdentityParams =
   lazyCompile<AgentIdentityParams>(AgentIdentityParamsSchema);
-/** Public constant for validate Agent Wait Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentWaitParams = lazyCompile<AgentWaitParams>(AgentWaitParamsSchema);
-/** Public constant for validate Wake Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWakeParams = lazyCompile<WakeParams>(WakeParamsSchema);
-/** Public constant for validate Agents List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsListParams = lazyCompile<AgentsListParams>(AgentsListParamsSchema);
-/** Public constant for validate Agents Create Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsCreateParams = lazyCompile<AgentsCreateParams>(AgentsCreateParamsSchema);
-/** Public constant for validate Agents Update Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsUpdateParams = lazyCompile<AgentsUpdateParams>(AgentsUpdateParamsSchema);
-/** Public constant for validate Agents Delete Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsDeleteParams = lazyCompile<AgentsDeleteParams>(AgentsDeleteParamsSchema);
-/** Public constant for validate Agents Files List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsFilesListParams = lazyCompile<AgentsFilesListParams>(
   AgentsFilesListParamsSchema,
 );
-/** Public constant for validate Agents Files Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsFilesGetParams = lazyCompile<AgentsFilesGetParams>(
   AgentsFilesGetParamsSchema,
 );
-/** Public constant for validate Agents Files Set Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateAgentsFilesSetParams = lazyCompile<AgentsFilesSetParams>(
   AgentsFilesSetParamsSchema,
 );
-/** Public constant for validate Artifacts List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateArtifactsListParams =
   lazyCompile<ArtifactsListParams>(ArtifactsListParamsSchema);
-/** Public constant for validate Artifacts Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateArtifactsGetParams = lazyCompile<ArtifactsGetParams>(ArtifactsGetParamsSchema);
-/** Public constant for validate Artifacts Download Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateArtifactsDownloadParams = lazyCompile<ArtifactsDownloadParams>(
   ArtifactsDownloadParamsSchema,
 );
-/** Public constant for validate Node Pair Request Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairRequestParams = lazyCompile<NodePairRequestParams>(
   NodePairRequestParamsSchema,
 );
-/** Public constant for validate Node Pair List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairListParams = lazyCompile<NodePairListParams>(NodePairListParamsSchema);
-/** Public constant for validate Node Pair Approve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairApproveParams = lazyCompile<NodePairApproveParams>(
   NodePairApproveParamsSchema,
 );
-/** Public constant for validate Node Pair Reject Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairRejectParams = lazyCompile<NodePairRejectParams>(
   NodePairRejectParamsSchema,
 );
-/** Public constant for validate Node Pair Remove Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairRemoveParams = lazyCompile<NodePairRemoveParams>(
   NodePairRemoveParamsSchema,
 );
-/** Public constant for validate Node Pair Verify Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePairVerifyParams = lazyCompile<NodePairVerifyParams>(
   NodePairVerifyParamsSchema,
 );
-/** Public constant for validate Node Rename Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeRenameParams = lazyCompile<NodeRenameParams>(NodeRenameParamsSchema);
-/** Public constant for validate Node List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeListParams = lazyCompile<NodeListParams>(NodeListParamsSchema);
-/** Public constant for validate Environments List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateEnvironmentsListParams = lazyCompile<EnvironmentsListParams>(
   EnvironmentsListParamsSchema,
 );
-/** Public constant for validate Environments Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateEnvironmentsStatusParams = lazyCompile<EnvironmentsStatusParams>(
   EnvironmentsStatusParamsSchema,
 );
-/** Public constant for validate Node Pending Ack Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePendingAckParams = lazyCompile<NodePendingAckParams>(
   NodePendingAckParamsSchema,
 );
-/** Public constant for validate Node Describe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeDescribeParams = lazyCompile<NodeDescribeParams>(NodeDescribeParamsSchema);
-/** Public constant for validate Node Invoke Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeInvokeParams = lazyCompile<NodeInvokeParams>(NodeInvokeParamsSchema);
-/** Public constant for validate Node Invoke Result Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeInvokeResultParams = lazyCompile<NodeInvokeResultParams>(
   NodeInvokeResultParamsSchema,
 );
-/** Public constant for validate Node Event Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeEventParams = lazyCompile<NodeEventParams>(NodeEventParamsSchema);
-/** Public constant for validate Node Event Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodeEventResult = lazyCompile<NodeEventResult>(NodeEventResultSchema);
-/** Public constant for validate Node Presence Alive Payload behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePresenceAlivePayload = lazyCompile<NodePresenceAlivePayload>(
   NodePresenceAlivePayloadSchema,
 );
-/** Public constant for validate Node Pending Drain Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePendingDrainParams = lazyCompile<NodePendingDrainParams>(
   NodePendingDrainParamsSchema,
 );
-/** Public constant for validate Node Pending Enqueue Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateNodePendingEnqueueParams = lazyCompile<NodePendingEnqueueParams>(
   NodePendingEnqueueParamsSchema,
 );
-/** Public constant for validate Push Test Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePushTestParams = lazyCompile<PushTestParams>(PushTestParamsSchema);
-/** Public constant for validate Web Push Vapid Public Key Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebPushVapidPublicKeyParams = lazyCompile<WebPushVapidPublicKeyParams>(
   WebPushVapidPublicKeyParamsSchema,
 );
-/** Public constant for validate Web Push Subscribe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebPushSubscribeParams = lazyCompile<WebPushSubscribeParams>(
   WebPushSubscribeParamsSchema,
 );
-/** Public constant for validate Web Push Unsubscribe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebPushUnsubscribeParams = lazyCompile<WebPushUnsubscribeParams>(
   WebPushUnsubscribeParamsSchema,
 );
-/** Public constant for validate Web Push Test Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebPushTestParams = lazyCompile<WebPushTestParams>(WebPushTestParamsSchema);
-/** Public constant for validate Secrets Resolve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSecretsResolveParams = lazyCompile<SecretsResolveParams>(
   SecretsResolveParamsSchema,
 );
-/** Public constant for validate Secrets Resolve Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSecretsResolveResult = lazyCompile<SecretsResolveResult>(
   SecretsResolveResultSchema,
 );
-/** Public constant for validate Sessions List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsListParams = lazyCompile<SessionsListParams>(SessionsListParamsSchema);
-/** Public constant for validate Sessions Cleanup Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCleanupParams = lazyCompile<SessionsCleanupParams>(
   SessionsCleanupParamsSchema,
 );
-/** Public constant for validate Sessions Preview Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsPreviewParams = lazyCompile<SessionsPreviewParams>(
   SessionsPreviewParamsSchema,
 );
-/** Public constant for validate Sessions Describe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsDescribeParams = lazyCompile<SessionsDescribeParams>(
   SessionsDescribeParamsSchema,
 );
-/** Public constant for validate Sessions Resolve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsResolveParams = lazyCompile<SessionsResolveParams>(
   SessionsResolveParamsSchema,
 );
-/** Public constant for validate Sessions Create Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCreateParams = lazyCompile<SessionsCreateParams>(
   SessionsCreateParamsSchema,
 );
-/** Public constant for validate Sessions Send Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsSendParams = lazyCompile<SessionsSendParams>(SessionsSendParamsSchema);
-/** Public constant for validate Sessions Messages Subscribe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsMessagesSubscribeParams = lazyCompile<SessionsMessagesSubscribeParams>(
   SessionsMessagesSubscribeParamsSchema,
 );
-/** Public constant for validate Sessions Messages Unsubscribe Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsMessagesUnsubscribeParams =
   lazyCompile<SessionsMessagesUnsubscribeParams>(SessionsMessagesUnsubscribeParamsSchema);
-/** Public constant for validate Sessions Abort Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsAbortParams =
   lazyCompile<SessionsAbortParams>(SessionsAbortParamsSchema);
-/** Public constant for validate Sessions Patch Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsPatchParams =
   lazyCompile<SessionsPatchParams>(SessionsPatchParamsSchema);
-/** Public constant for validate Sessions Plugin Patch Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsPluginPatchParams = lazyCompile<SessionsPluginPatchParams>(
   SessionsPluginPatchParamsSchema,
 );
-/** Public constant for validate Sessions Reset Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsResetParams =
   lazyCompile<SessionsResetParams>(SessionsResetParamsSchema);
-/** Public constant for validate Sessions Delete Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsDeleteParams = lazyCompile<SessionsDeleteParams>(
   SessionsDeleteParamsSchema,
 );
-/** Public constant for validate Sessions Compact Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCompactParams = lazyCompile<SessionsCompactParams>(
   SessionsCompactParamsSchema,
 );
-/** Public constant for validate Sessions Compaction List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCompactionListParams = lazyCompile<SessionsCompactionListParams>(
   SessionsCompactionListParamsSchema,
 );
-/** Public constant for validate Sessions Compaction Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCompactionGetParams = lazyCompile<SessionsCompactionGetParams>(
   SessionsCompactionGetParamsSchema,
 );
-/** Public constant for validate Sessions Compaction Branch Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCompactionBranchParams = lazyCompile<SessionsCompactionBranchParams>(
   SessionsCompactionBranchParamsSchema,
 );
-/** Public constant for validate Sessions Compaction Restore Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsCompactionRestoreParams = lazyCompile<SessionsCompactionRestoreParams>(
   SessionsCompactionRestoreParamsSchema,
 );
-/** Public constant for validate Sessions Usage Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSessionsUsageParams =
   lazyCompile<SessionsUsageParams>(SessionsUsageParamsSchema);
-/** Public constant for validate Tasks List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTasksListParams = lazyCompile<TasksListParams>(TasksListParamsSchema);
-/** Public constant for validate Tasks Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTasksGetParams = lazyCompile<TasksGetParams>(TasksGetParamsSchema);
-/** Public constant for validate Tasks Cancel Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTasksCancelParams = lazyCompile<TasksCancelParams>(TasksCancelParamsSchema);
-/** Public constant for validate Config Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigGetParams = lazyCompile<ConfigGetParams>(ConfigGetParamsSchema);
-/** Public constant for validate Config Set Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigSetParams = lazyCompile<ConfigSetParams>(ConfigSetParamsSchema);
-/** Public constant for validate Config Apply Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigApplyParams = lazyCompile<ConfigApplyParams>(ConfigApplyParamsSchema);
-/** Public constant for validate Config Patch Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigPatchParams = lazyCompile<ConfigPatchParams>(ConfigPatchParamsSchema);
-/** Public constant for validate Config Schema Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigSchemaParams = lazyCompile<ConfigSchemaParams>(ConfigSchemaParamsSchema);
-/** Public constant for validate Config Schema Lookup Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigSchemaLookupParams = lazyCompile<ConfigSchemaLookupParams>(
   ConfigSchemaLookupParamsSchema,
 );
-/** Public constant for validate Config Schema Lookup Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateConfigSchemaLookupResult = lazyCompile<ConfigSchemaLookupResult>(
   ConfigSchemaLookupResultSchema,
 );
-/** Public constant for validate Wizard Start Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWizardStartParams = lazyCompile<WizardStartParams>(WizardStartParamsSchema);
-/** Public constant for validate Wizard Next Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWizardNextParams = lazyCompile<WizardNextParams>(WizardNextParamsSchema);
-/** Public constant for validate Wizard Cancel Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWizardCancelParams = lazyCompile<WizardCancelParams>(WizardCancelParamsSchema);
-/** Public constant for validate Wizard Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWizardStatusParams = lazyCompile<WizardStatusParams>(WizardStatusParamsSchema);
-/** Public constant for validate Talk Mode Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkModeParams = lazyCompile<TalkModeParams>(TalkModeParamsSchema);
-/** Public constant for validate Talk Event behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkEvent = lazyCompile<TalkEvent>(TalkEventSchema);
-/** Public constant for validate Talk Catalog Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkCatalogParams = lazyCompile<TalkCatalogParams>(TalkCatalogParamsSchema);
-/** Public constant for validate Talk Catalog Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkCatalogResult = lazyCompile<TalkCatalogResult>(TalkCatalogResultSchema);
-/** Public constant for validate Talk Config Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkConfigParams = lazyCompile<TalkConfigParams>(TalkConfigParamsSchema);
-/** Public constant for validate Talk Config Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkConfigResult = lazyCompile<TalkConfigResult>(TalkConfigResultSchema);
-/** Public constant for validate Talk Client Create Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkClientCreateParams = lazyCompile<TalkClientCreateParams>(
   TalkClientCreateParamsSchema,
 );
-/** Public constant for validate Talk Client Create Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkClientCreateResult = lazyCompile<TalkClientCreateResult>(
   TalkClientCreateResultSchema,
 );
-/** Public constant for validate Talk Client Tool Call Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkClientToolCallParams = lazyCompile<TalkClientToolCallParams>(
   TalkClientToolCallParamsSchema,
 );
-/** Public constant for validate Talk Client Tool Call Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkClientToolCallResult = lazyCompile<TalkClientToolCallResult>(
   TalkClientToolCallResultSchema,
 );
-/** Public constant for validate Talk Client Steer Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkClientSteerParams = lazyCompile<TalkClientSteerParams>(
   TalkClientSteerParamsSchema,
 );
-/** Public constant for validate Talk Agent Control Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkAgentControlResult = lazyCompile<TalkAgentControlResult>(
   TalkAgentControlResultSchema,
 );
-/** Public constant for validate Talk Session Create Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionCreateParams = lazyCompile<TalkSessionCreateParams>(
   TalkSessionCreateParamsSchema,
 );
-/** Public constant for validate Talk Session Create Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionCreateResult = lazyCompile<TalkSessionCreateResult>(
   TalkSessionCreateResultSchema,
 );
-/** Public constant for validate Talk Session Join Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionJoinParams = lazyCompile<TalkSessionJoinParams>(
   TalkSessionJoinParamsSchema,
 );
-/** Public constant for validate Talk Session Join Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionJoinResult = lazyCompile<TalkSessionJoinResult>(
   TalkSessionJoinResultSchema,
 );
-/** Public constant for validate Talk Session Append Audio Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionAppendAudioParams = lazyCompile<TalkSessionAppendAudioParams>(
   TalkSessionAppendAudioParamsSchema,
 );
-/** Public constant for validate Talk Session Turn Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionTurnParams = lazyCompile<TalkSessionTurnParams>(
   TalkSessionTurnParamsSchema,
 );
-/** Public constant for validate Talk Session Cancel Turn Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionCancelTurnParams = lazyCompile<TalkSessionCancelTurnParams>(
   TalkSessionCancelTurnParamsSchema,
 );
-/** Public constant for validate Talk Session Cancel Output Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionCancelOutputParams = lazyCompile<TalkSessionCancelOutputParams>(
   TalkSessionCancelOutputParamsSchema,
 );
-/** Public constant for validate Talk Session Turn Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionTurnResult = lazyCompile<TalkSessionTurnResult>(
   TalkSessionTurnResultSchema,
 );
-/** Public constant for validate Talk Session Steer Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionSteerParams = lazyCompile<TalkSessionSteerParams>(
   TalkSessionSteerParamsSchema,
 );
-/** Public constant for validate Talk Session Submit Tool Result Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionSubmitToolResultParams =
   lazyCompile<TalkSessionSubmitToolResultParams>(TalkSessionSubmitToolResultParamsSchema);
-/** Public constant for validate Talk Session Close Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionCloseParams = lazyCompile<TalkSessionCloseParams>(
   TalkSessionCloseParamsSchema,
 );
-/** Public constant for validate Talk Session Ok Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSessionOkResult =
   lazyCompile<TalkSessionOkResult>(TalkSessionOkResultSchema);
-/** Public constant for validate Talk Speak Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSpeakParams = lazyCompile<TalkSpeakParams>(TalkSpeakParamsSchema);
-/** Public constant for validate Talk Speak Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateTalkSpeakResult = lazyCompile<TalkSpeakResult>(TalkSpeakResultSchema);
-/** Public constant for validate Channels Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChannelsStatusParams = lazyCompile<ChannelsStatusParams>(
   ChannelsStatusParamsSchema,
 );
-/** Public constant for validate Channels Start Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChannelsStartParams =
   lazyCompile<ChannelsStartParams>(ChannelsStartParamsSchema);
-/** Public constant for validate Channels Stop Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChannelsStopParams = lazyCompile<ChannelsStopParams>(ChannelsStopParamsSchema);
-/** Public constant for validate Channels Logout Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChannelsLogoutParams = lazyCompile<ChannelsLogoutParams>(
   ChannelsLogoutParamsSchema,
 );
-/** Public constant for validate Models List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateModelsListParams = lazyCompile<ModelsListParams>(ModelsListParamsSchema);
-/** Public constant for validate Skills Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsStatusParams = lazyCompile<SkillsStatusParams>(SkillsStatusParamsSchema);
-/** Public constant for validate Tools Catalog Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateToolsCatalogParams = lazyCompile<ToolsCatalogParams>(ToolsCatalogParamsSchema);
-/** Public constant for validate Tools Effective Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateToolsEffectiveParams = lazyCompile<ToolsEffectiveParams>(
   ToolsEffectiveParamsSchema,
 );
-/** Public constant for validate Tools Invoke Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateToolsInvokeParams = lazyCompile<ToolsInvokeParams>(ToolsInvokeParamsSchema);
-/** Public constant for validate Skills Bins Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsBinsParams = lazyCompile<SkillsBinsParams>(SkillsBinsParamsSchema);
-/** Public constant for validate Skills Install Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsInstallParams =
   lazyCompile<SkillsInstallParams>(SkillsInstallParamsSchema);
-/** Public constant for validate Skills Upload Begin Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsUploadBeginParams = lazyCompile<SkillsUploadBeginParams>(
   SkillsUploadBeginParamsSchema,
 );
-/** Public constant for validate Skills Upload Chunk Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsUploadChunkParams = lazyCompile<SkillsUploadChunkParams>(
   SkillsUploadChunkParamsSchema,
 );
-/** Public constant for validate Skills Upload Commit Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsUploadCommitParams = lazyCompile<SkillsUploadCommitParams>(
   SkillsUploadCommitParamsSchema,
 );
-/** Public constant for validate Skills Update Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsUpdateParams = lazyCompile<SkillsUpdateParams>(SkillsUpdateParamsSchema);
-/** Public constant for validate Skills Search Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsSearchParams = lazyCompile<SkillsSearchParams>(SkillsSearchParamsSchema);
-/** Public constant for validate Skills Detail Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsDetailParams = lazyCompile<SkillsDetailParams>(SkillsDetailParamsSchema);
-/** Public constant for validate Skills Security Verdicts Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsSecurityVerdictsParams = lazyCompile<SkillsSecurityVerdictsParams>(
   SkillsSecurityVerdictsParamsSchema,
 );
-/** Public constant for validate Skills Skill Card Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateSkillsSkillCardParams = lazyCompile<SkillsSkillCardParams>(
   SkillsSkillCardParamsSchema,
 );
-/** Public constant for validate Cron List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronListParams = lazyCompile<CronListParams>(CronListParamsSchema);
-/** Public constant for validate Cron Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronStatusParams = lazyCompile<CronStatusParams>(CronStatusParamsSchema);
-/** Public constant for validate Cron Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronGetParams = lazyCompile<CronGetParams>(CronGetParamsSchema);
-/** Public constant for validate Cron Add Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronAddParams = lazyCompile<CronAddParams>(CronAddParamsSchema);
-/** Public constant for validate Cron Update Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronUpdateParams = lazyCompile<CronUpdateParams>(CronUpdateParamsSchema);
-/** Public constant for validate Cron Remove Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronRemoveParams = lazyCompile<CronRemoveParams>(CronRemoveParamsSchema);
-/** Public constant for validate Cron Run Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronRunParams = lazyCompile<CronRunParams>(CronRunParamsSchema);
-/** Public constant for validate Cron Runs Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateCronRunsParams = lazyCompile<CronRunsParams>(CronRunsParamsSchema);
-/** Public constant for validate Device Pair List Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDevicePairListParams = lazyCompile<DevicePairListParams>(
   DevicePairListParamsSchema,
 );
-/** Public constant for validate Device Pair Approve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDevicePairApproveParams = lazyCompile<DevicePairApproveParams>(
   DevicePairApproveParamsSchema,
 );
-/** Public constant for validate Device Pair Reject Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDevicePairRejectParams = lazyCompile<DevicePairRejectParams>(
   DevicePairRejectParamsSchema,
 );
-/** Public constant for validate Device Pair Remove Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDevicePairRemoveParams = lazyCompile<DevicePairRemoveParams>(
   DevicePairRemoveParamsSchema,
 );
-/** Public constant for validate Device Token Rotate Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDeviceTokenRotateParams = lazyCompile<DeviceTokenRotateParams>(
   DeviceTokenRotateParamsSchema,
 );
-/** Public constant for validate Device Token Revoke Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateDeviceTokenRevokeParams = lazyCompile<DeviceTokenRevokeParams>(
   DeviceTokenRevokeParamsSchema,
 );
-/** Public constant for validate Exec Approvals Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalsGetParams = lazyCompile<ExecApprovalsGetParams>(
   ExecApprovalsGetParamsSchema,
 );
-/** Public constant for validate Exec Approvals Set Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalsSetParams = lazyCompile<ExecApprovalsSetParams>(
   ExecApprovalsSetParamsSchema,
 );
-/** Public constant for validate Exec Approval Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalGetParams = lazyCompile<ExecApprovalGetParams>(
   ExecApprovalGetParamsSchema,
 );
-/** Public constant for validate Exec Approval Request Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalRequestParams = lazyCompile<ExecApprovalRequestParams>(
   ExecApprovalRequestParamsSchema,
 );
-/** Public constant for validate Exec Approval Resolve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalResolveParams = lazyCompile<ExecApprovalResolveParams>(
   ExecApprovalResolveParamsSchema,
 );
-/** Public constant for validate Plugin Approval Request Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePluginApprovalRequestParams = lazyCompile<PluginApprovalRequestParams>(
   PluginApprovalRequestParamsSchema,
 );
-/** Public constant for validate Plugin Approval Resolve Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePluginApprovalResolveParams = lazyCompile<PluginApprovalResolveParams>(
   PluginApprovalResolveParamsSchema,
 );
-/** Public constant for validate Plugins Ui Descriptors Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePluginsUiDescriptorsParams = lazyCompile<PluginsUiDescriptorsParams>(
   PluginsUiDescriptorsParamsSchema,
 );
-/** Public constant for validate Plugins Session Action Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePluginsSessionActionParams = lazyCompile<PluginsSessionActionParams>(
   PluginsSessionActionParamsSchema,
 );
-/** Public constant for validate Plugins Session Action Result behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validatePluginsSessionActionResult = lazyCompile<PluginsSessionActionResult>(
   PluginsSessionActionResultSchema,
 );
-/** Public constant for validate Exec Approvals Node Get Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalsNodeGetParams = lazyCompile<ExecApprovalsNodeGetParams>(
   ExecApprovalsNodeGetParamsSchema,
 );
-/** Public constant for validate Exec Approvals Node Set Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateExecApprovalsNodeSetParams = lazyCompile<ExecApprovalsNodeSetParams>(
   ExecApprovalsNodeSetParamsSchema,
 );
-/** Public constant for validate Logs Tail Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateLogsTailParams = lazyCompile<LogsTailParams>(LogsTailParamsSchema);
-/** Public constant for validate Chat History Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChatHistoryParams = lazyCompile(ChatHistoryParamsSchema);
-/** Public constant for validate Chat Send Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChatSendParams = lazyCompile(ChatSendParamsSchema);
-/** Public constant for validate Chat Abort Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChatAbortParams = lazyCompile<ChatAbortParams>(ChatAbortParamsSchema);
-/** Public constant for validate Chat Inject Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChatInjectParams = lazyCompile<ChatInjectParams>(ChatInjectParamsSchema);
-/** Public constant for validate Chat Event behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateChatEvent = lazyCompile(ChatEventSchema);
-/** Public constant for validate Update Status Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateUpdateStatusParams = lazyCompile<UpdateStatusParams>(UpdateStatusParamsSchema);
-/** Public constant for validate Update Run Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateUpdateRunParams = lazyCompile<UpdateRunParams>(UpdateRunParamsSchema);
-/** Public constant for validate Web Login Start Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebLoginStartParams =
   lazyCompile<WebLoginStartParams>(WebLoginStartParamsSchema);
-/** Public constant for validate Web Login Wait Params behavior in packages/gateway-protocol. */
+/** Lazy TypeBox validator for the matching gateway protocol schema. */
 export const validateWebLoginWaitParams = lazyCompile<WebLoginWaitParams>(WebLoginWaitParamsSchema);
 
 function firstStringParam(value: unknown): string | undefined {
@@ -995,7 +995,7 @@ function firstStringParam(value: unknown): string | undefined {
   return undefined;
 }
 
-/** Public helper for format Validation Errors behavior in packages/gateway-protocol. */
+/** Format TypeBox validator errors into stable, user-facing protocol messages. */
 export function formatValidationErrors(errors: ValidationError[] | null | undefined) {
   if (!errors?.length) {
     return "unknown validation error";
