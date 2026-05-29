@@ -675,6 +675,7 @@ describe("isPrioritizedHighSignalLiveModelRef", () => {
 describe("isSmallLiveModelRef", () => {
   it("matches the small-model live matrix without requiring provider modern hooks", () => {
     expect(isSmallLiveModelRef({ provider: "lmstudio", id: "Qwen/Qwen3.5-9B" })).toBe(true);
+    expect(isSmallLiveModelRef({ provider: "ollama", id: "gemma3:4b" })).toBe(true);
     expect(isSmallLiveModelRef({ provider: "openrouter", id: "qwen/qwen3.5-9b" })).toBe(true);
     expect(isSmallLiveModelRef({ provider: "openrouter", id: "z-ai/glm-5.1" })).toBe(true);
     expect(isSmallLiveModelRef({ provider: "openai", id: "gpt-5.5" })).toBe(false);
@@ -691,6 +692,7 @@ describe("isPrioritizedSmallLiveModelRef", () => {
       { provider: "lmstudio", id: "qwen/qwen3.5-9b" },
       { provider: "vllm", id: "qwen/qwen3-8b" },
       { provider: "sglang", id: "qwen/qwen3-8b" },
+      { provider: "ollama", id: "gemma3:4b" },
       { provider: "openrouter", id: "qwen/qwen3.5-9b" },
       { provider: "openrouter", id: "z-ai/glm-5.1" },
       { provider: "openrouter", id: "z-ai/glm-5" },
@@ -777,6 +779,7 @@ describe("selectSmallLiveItems", () => {
       { provider: "openai", id: "gpt-5.5" },
       { provider: "vllm", id: "qwen/qwen3-8b" },
       { provider: "lmstudio", id: "qwen/qwen3.5-9b" },
+      { provider: "ollama", id: "gemma3:4b" },
       { provider: "openrouter", id: "qwen/qwen3.5-9b" },
     ];
 
@@ -790,7 +793,7 @@ describe("selectSmallLiveItems", () => {
     ).toEqual([
       { provider: "lmstudio", id: "qwen/qwen3.5-9b" },
       { provider: "vllm", id: "qwen/qwen3-8b" },
-      { provider: "openrouter", id: "qwen/qwen3.5-9b" },
+      { provider: "ollama", id: "gemma3:4b" },
     ]);
   });
 });
