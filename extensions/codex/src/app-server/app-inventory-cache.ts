@@ -1,3 +1,4 @@
+// extensions/codex/src/app-server app inventory cache helpers and runtime behavior.
 import { embeddedAgentLog } from "openclaw/plugin-sdk/agent-harness-runtime";
 import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
 import type { JsonValue, v2 } from "./protocol.js";

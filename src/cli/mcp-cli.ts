@@ -1,3 +1,4 @@
+/** Registers CLI commands for MCP server and config management. */
 import { Command } from "commander";
 import { parseConfigValue } from "../auto-reply/reply/config-value.js";
 import {
@@ -26,6 +27,7 @@ function printJson(value: unknown): void {
   defaultRuntime.writeJson(value);
 }
 
+/** Reused helper for register Mcp Cli behavior in src/cli. */
 export function registerMcpCli(program: Command) {
   const mcp = program.command("mcp").description("Manage OpenClaw MCP config and channel bridge");
 

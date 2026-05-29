@@ -1,3 +1,4 @@
+/** Shared fixtures and mocks for subagent spawn tests. */
 import os from "node:os";
 import { expect, vi } from "vitest";
 import type { SubagentLifecycleHookRunner } from "../plugins/hooks.js";
@@ -15,6 +16,7 @@ type SubagentSpawnModuleForTest = Awaited<typeof import("./subagent-spawn.js")> 
   resetSubagentRegistryForTests: MockFn;
 };
 
+/** Reused helper for create Subagent Spawn Test Config behavior in src/agents. */
 export function createSubagentSpawnTestConfig(
   workspaceDir = os.tmpdir(),
   overrides?: Record<string, unknown>,
@@ -43,6 +45,7 @@ export function createSubagentSpawnTestConfig(
   };
 }
 
+/** Reused helper for setup Accepted Subagent Gateway Mock behavior in src/agents. */
 export function setupAcceptedSubagentGatewayMock(callGatewayMock: MockImplementationTarget) {
   callGatewayMock.mockImplementation(async (opts: { method?: string }) => {
     if (opts.method === "sessions.patch") {
@@ -70,6 +73,7 @@ function createDefaultSessionHelperMocks() {
   };
 }
 
+/** Reused helper for install Session Store Capture Mock behavior in src/agents. */
 export function installSessionStoreCaptureMock(
   updateSessionStoreMock: {
     mockImplementation: (
@@ -92,6 +96,7 @@ export function installSessionStoreCaptureMock(
   );
 }
 
+/** Reused helper for expect Persisted Runtime Model behavior in src/agents. */
 export function expectPersistedRuntimeModel(params: {
   persistedStore: SessionStore | undefined;
   sessionKey: string | RegExp;
@@ -114,6 +119,7 @@ export function expectPersistedRuntimeModel(params: {
   }
 }
 
+/** Reused helper for load Subagent Spawn Module For Test behavior in src/agents. */
 export async function loadSubagentSpawnModuleForTest(params: {
   callGatewayMock: MockFn;
   getRuntimeConfig?: () => Record<string, unknown>;

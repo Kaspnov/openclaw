@@ -1,8 +1,10 @@
+/** Builds plugin hook context passed from agent harness execution. */
 import type {
   PluginHookAgentContext,
   PluginHookContextWindowSource,
 } from "../../plugins/hook-types.js";
 
+/** Shared type for Agent Harness Hook Context in src/agents/harness. */
 export type AgentHarnessHookContext = {
   runId: string;
   jobId?: string;
@@ -20,6 +22,7 @@ export type AgentHarnessHookContext = {
   contextWindowReferenceTokens?: number;
 };
 
+/** Converts harness-local fields into the plugin hook context contract. */
 export function buildAgentHookContext(params: AgentHarnessHookContext): PluginHookAgentContext {
   return {
     runId: params.runId,

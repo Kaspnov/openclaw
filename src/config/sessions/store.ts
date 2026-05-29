@@ -1,3 +1,4 @@
+// config/sessions store helpers and runtime behavior.
 import fs from "node:fs";
 import path from "node:path";
 import type { MsgContext } from "../../auto-reply/templating.js";
@@ -62,23 +63,28 @@ import {
   type SessionSkillPromptRef,
 } from "./types.js";
 
+/** Re-exported API for src/config/sessions. */
 export {
   clearSessionStoreCacheForTest,
   drainSessionStoreWriterQueuesForTest,
   getSessionStoreWriterQueueSizeForTest,
 } from "./store-writer-state.js";
+/** Re-exported API for src/config/sessions, starting with with Session Store Writer For Test. */
 export { withSessionStoreWriterForTest } from "./store-writer.js";
+/** Re-exported API for src/config/sessions. */
 export {
   loadSessionStore,
   readSessionEntries,
   readSessionEntry,
   readSessionStoreSnapshot,
 } from "./store-load.js";
+/** Re-exported API for src/config/sessions. */
 export type {
   SessionStoreSnapshot,
   SessionStoreSnapshotEntries,
   SessionStoreSnapshotEntry,
 } from "./store-cache.js";
+/** Re-exported API for src/config/sessions, starting with normalize Store Session Key. */
 export { normalizeStoreSessionKey, resolveSessionStoreEntry } from "./store-entry.js";
 
 const log = createSubsystemLogger("sessions/store");
@@ -111,6 +117,7 @@ function removeThreadFromDeliveryContext(context?: DeliveryContext): DeliveryCon
   return next;
 }
 
+/** Reused helper for read Session Updated At behavior in src/config/sessions. */
 export function readSessionUpdatedAt(params: {
   storePath: string;
   sessionKey: string;
@@ -127,6 +134,7 @@ export function readSessionUpdatedAt(params: {
 // Session Store Pruning, Capping & File Rotation
 // ============================================================================
 
+/** Shared type for Session Maintenance Apply Report in src/config/sessions. */
 export type SessionMaintenanceApplyReport = {
   mode: ResolvedSessionMaintenanceConfig["mode"];
   beforeCount: number;
@@ -136,6 +144,7 @@ export type SessionMaintenanceApplyReport = {
   diskBudget: SessionDiskBudgetSweepResult | null;
 };
 
+/** Re-exported API for src/config/sessions. */
 export {
   capEntryCount,
   getActiveSessionMaintenanceWarning,
@@ -143,6 +152,7 @@ export {
   pruneStaleEntries,
   resolveMaintenanceConfig,
 };
+/** Re-exported API for src/config/sessions, starting with Resolved Session Maintenance Config. */
 export type { ResolvedSessionMaintenanceConfig, SessionMaintenanceWarning };
 
 type SaveSessionStoreOptions = {
@@ -210,6 +220,7 @@ function resolveSessionWorkflowStorePath(
   });
 }
 
+/** Reused helper for get Session Entry behavior in src/config/sessions. */
 export function getSessionEntry(
   options: SessionEntryWorkflowOptions & { sessionKey: string },
 ): SessionEntry | undefined {
@@ -219,6 +230,7 @@ export function getSessionEntry(
   return entry ? cloneSessionEntry(entry) : undefined;
 }
 
+/** Reused helper for list Session Entries behavior in src/config/sessions. */
 export function listSessionEntries(
   options: SessionEntryWorkflowOptions = {},
 ): Array<{ sessionKey: string; entry: SessionEntry }> {
@@ -761,6 +773,7 @@ async function saveSessionStoreUnlocked(
   }
 }
 
+/** Reused helper for save Session Store behavior in src/config/sessions. */
 export async function saveSessionStore(
   storePath: string,
   store: Record<string, SessionEntry>,
@@ -771,6 +784,7 @@ export async function saveSessionStore(
   });
 }
 
+/** Reused helper for update Session Store behavior in src/config/sessions. */
 export async function updateSessionStore<T>(
   storePath: string,
   mutator: (store: Record<string, SessionEntry>) => Promise<T> | T,
@@ -797,6 +811,7 @@ export async function updateSessionStore<T>(
   });
 }
 
+/** Reused helper for run Quota Suspension Maintenance behavior in src/config/sessions. */
 export async function runQuotaSuspensionMaintenance(params: {
   storePath: string;
   now?: number;
@@ -835,6 +850,7 @@ function rememberRemovedSessionFile(
   }
 }
 
+/** Reused helper for archive Removed Session Transcripts behavior in src/config/sessions. */
 export async function archiveRemovedSessionTranscripts(params: {
   removedSessionFiles: Iterable<[string, string | undefined]>;
   referencedSessionIds: ReadonlySet<string>;
@@ -930,6 +946,7 @@ async function persistResolvedSessionEntry(params: {
   return entryUnchanged || params.returnDetached ? cloneSessionEntry(next) : next;
 }
 
+/** Reused helper for update Session Store Entry behavior in src/config/sessions. */
 export async function updateSessionStoreEntry(params: {
   storePath: string;
   sessionKey: string;
@@ -964,6 +981,7 @@ export async function updateSessionStoreEntry(params: {
   });
 }
 
+/** Reused helper for apply Session Store Entry Patch behavior in src/config/sessions. */
 export async function applySessionStoreEntryPatch(params: {
   storePath: string;
   sessionKey: string;
@@ -992,6 +1010,7 @@ export async function applySessionStoreEntryPatch(params: {
   });
 }
 
+/** Reused helper for patch Session Entry behavior in src/config/sessions. */
 export async function patchSessionEntry(
   params: SessionEntryWorkflowOptions & {
     sessionKey: string;
@@ -1031,6 +1050,7 @@ export async function patchSessionEntry(
   });
 }
 
+/** Reused helper for upsert Session Entry behavior in src/config/sessions. */
 export async function upsertSessionEntry(
   params: SessionEntryWorkflowOptions & {
     sessionKey: string;
@@ -1056,6 +1076,7 @@ export async function upsertSessionEntry(
   });
 }
 
+/** Reused helper for record Session Meta From Inbound behavior in src/config/sessions. */
 export async function recordSessionMetaFromInbound(params: {
   storePath: string;
   sessionKey: string;
@@ -1118,6 +1139,7 @@ export async function recordSessionMetaFromInbound(params: {
   });
 }
 
+/** Reused helper for update Last Route behavior in src/config/sessions. */
 export async function updateLastRoute(params: {
   storePath: string;
   sessionKey: string;

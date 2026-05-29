@@ -1,3 +1,4 @@
+// plugin-sdk/test-helpers node builtin mocks helpers and runtime behavior.
 type MockFactory<TModule extends object> =
   | Partial<TModule>
   | ((actual: TModule) => Partial<TModule>);

@@ -1,5 +1,8 @@
+// config types mcp helpers and runtime behavior.
+/** Shared type for Mcp Codex Tool Approval Mode in src/config. */
 export type McpCodexToolApprovalMode = "auto" | "prompt" | "approve";
 
+/** Shared type for Mcp Server Codex Config in src/config. */
 export type McpServerCodexConfig = {
   /** OpenClaw agent ids that should receive this server in Codex app-server threads. */
   agents?: string[];
@@ -9,6 +12,7 @@ export type McpServerCodexConfig = {
   default_tools_approval_mode?: McpCodexToolApprovalMode;
 };
 
+/** Shared type for Mcp Server Config in src/config. */
 export type McpServerConfig = {
   /** Stdio transport: command to spawn. */
   command?: string;
@@ -33,6 +37,7 @@ export type McpServerConfig = {
   [key: string]: unknown;
 };
 
+/** Shared type for Mcp Config in src/config. */
 export type McpConfig = {
   /** Named MCP server definitions managed by OpenClaw. */
   servers?: Record<string, McpServerConfig>;

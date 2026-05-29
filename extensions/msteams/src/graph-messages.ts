@@ -1,3 +1,4 @@
+// extensions/msteams/src graph messages helpers and runtime behavior.
 import type { OpenClawConfig } from "../runtime-api.js";
 import { createMSTeamsConversationStoreFs } from "./conversation-store-fs.js";
 import {

@@ -1,3 +1,4 @@
+// Loads model catalog rows declared in plugin manifests for `models list`.
 import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import {
   normalizeModelCatalogProviderId,
@@ -147,6 +148,7 @@ function loadManifestCatalogRowsForList(params: {
   });
 }
 
+/** Reused helper for load Static Manifest Catalog Rows For List behavior in src/commands/models. */
 export function loadStaticManifestCatalogRowsForList(params: {
   cfg: OpenClawConfig;
   providerFilter?: string;
@@ -159,6 +161,7 @@ export function loadStaticManifestCatalogRowsForList(params: {
   });
 }
 
+/** Reused helper for load Supplemental Manifest Catalog Rows For List behavior in src/commands/models. */
 export function loadSupplementalManifestCatalogRowsForList(params: {
   cfg: OpenClawConfig;
   providerFilter?: string;

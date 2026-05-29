@@ -1,3 +1,4 @@
+/** Resolves which tool runtimes and allowlists one embedded attempt needs. */
 import { TOOL_NAME_SEPARATOR } from "../../agent-bundle-mcp-names.js";
 import type { OpenClawCodingToolConstructionPlan } from "../../agent-tools.js";
 import { isToolAllowedByPolicyName } from "../../tool-policy-match.js";
@@ -88,6 +89,7 @@ function isKnownLocalCodingToolName(normalized: string): boolean {
   );
 }
 
+/** Filters tools by the resolved allowlist while keeping explicit forced tools. */
 export function applyEmbeddedAttemptToolsAllow<T extends { name: string }>(
   tools: T[],
   toolsAllow?: string[],
@@ -113,6 +115,7 @@ export function applyEmbeddedAttemptToolsAllow<T extends { name: string }>(
   return tools.filter((tool) => isToolAllowedByPolicyName(tool.name, policy));
 }
 
+/** Adds required internal tool names to a caller-provided allowlist. */
 export function mergeForcedEmbeddedAttemptToolsAllow(
   toolsAllow: string[] | undefined,
   params: { forceMessageTool?: boolean },
@@ -166,6 +169,7 @@ function resolveCodingToolConstructionPlanForAllowlist(
   };
 }
 
+/** Computes core coding, MCP, and LSP tool construction for an attempt. */
 export function resolveEmbeddedAttemptToolConstructionPlan(params: {
   disableTools?: boolean;
   isRawModelRun?: boolean;
@@ -205,10 +209,12 @@ export function resolveEmbeddedAttemptToolConstructionPlan(params: {
   };
 }
 
+/** Checks whether the allowlist still needs core coding tools built. */
 export function shouldBuildCoreCodingToolsForAllowlist(toolsAllow?: string[]): boolean {
   return resolveEmbeddedAttemptToolConstructionPlan({ toolsAllow }).includeCoreTools;
 }
 
+/** Decides whether bundled MCP runtime setup is needed for allowed tools. */
 export function shouldCreateBundleMcpRuntimeForAttempt(params: {
   toolsEnabled: boolean;
   disableTools?: boolean;
@@ -232,6 +238,7 @@ export function shouldCreateBundleMcpRuntimeForAttempt(params: {
   });
 }
 
+/** Decides whether bundled LSP runtime setup is needed for allowed tools. */
 export function shouldCreateBundleLspRuntimeForAttempt(params: {
   toolsEnabled: boolean;
   disableTools?: boolean;

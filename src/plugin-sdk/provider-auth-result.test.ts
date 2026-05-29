@@ -1,3 +1,4 @@
+/** Tests normalized provider auth result payload construction. */
 import { describe, expect, it } from "vitest";
 import { buildOauthProviderAuthResult } from "./provider-auth-result.js";
 

@@ -1,3 +1,4 @@
+/** Tests model picker selection and config application helpers. */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { testing as cliBackendsTesting } from "../agents/cli-backends.js";
 import type { ModelCatalogEntry } from "../agents/model-catalog.js";

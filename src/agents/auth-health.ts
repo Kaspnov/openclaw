@@ -18,6 +18,7 @@ import { resolveProviderIdForAuth } from "./provider-auth-aliases.js";
 
 type AuthProfileSource = "store";
 
+/** Shared type for Auth Profile Health Status in src/agents. */
 export type AuthProfileHealthStatus = "ok" | "expiring" | "expired" | "missing" | "static";
 
 type AuthProfileHealth = {
@@ -32,8 +33,10 @@ type AuthProfileHealth = {
   label: string;
 };
 
+/** Shared type for Auth Provider Health Status in src/agents. */
 export type AuthProviderHealthStatus = "ok" | "expiring" | "expired" | "missing" | "static";
 
+/** Shared type for Auth Provider Health in src/agents. */
 export type AuthProviderHealth = {
   provider: string;
   status: AuthProviderHealthStatus;
@@ -47,6 +50,7 @@ export type AuthProviderHealth = {
   profiles: AuthProfileHealth[];
 };
 
+/** Shared type for Auth Health Summary in src/agents. */
 export type AuthHealthSummary = {
   now: number;
   warnAfterMs: number;
@@ -54,12 +58,14 @@ export type AuthHealthSummary = {
   providers: AuthProviderHealth[];
 };
 
+/** Reused constant for DEFAULT OAUTH WARN MS behavior in src/agents. */
 export const DEFAULT_OAUTH_WARN_MS = 24 * 60 * 60 * 1000;
 
 function resolveAuthProfileSource(_profileId: string): AuthProfileSource {
   return "store";
 }
 
+/** Format a remaining duration for auth-health display. */
 export function formatRemainingShort(
   remainingMs?: number,
   opts?: {
@@ -204,6 +210,7 @@ function buildProfileHealth(params: {
   };
 }
 
+/** Build profile/provider auth health rollups from the auth store. */
 export function buildAuthHealthSummary(params: {
   store: AuthProfileStore;
   cfg?: OpenClawConfig;

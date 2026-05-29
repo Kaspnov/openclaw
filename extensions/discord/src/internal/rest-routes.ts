@@ -1,3 +1,4 @@
+// extensions/discord/src/internal rest routes helpers and runtime behavior.
 type QueryValue = string | number | boolean;
 
 const RATE_LIMIT_HEADER_NUMBER_RE = /^\d+(?:\.\d+)?$/;

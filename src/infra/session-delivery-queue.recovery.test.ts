@@ -1,3 +1,4 @@
+// Tests infra session delivery queue recovery test behavior.
 import { describe, expect, it, vi } from "vitest";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import {

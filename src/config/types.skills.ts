@@ -1,5 +1,7 @@
+// config types skills helpers and runtime behavior.
 import type { SecretInput } from "./types.secrets.js";
 
+/** Shared type for Skill Config in src/config. */
 export type SkillConfig = {
   enabled?: boolean;
   apiKey?: SecretInput;
@@ -7,6 +9,7 @@ export type SkillConfig = {
   config?: Record<string, unknown>;
 };
 
+/** Shared type for Skills Load Config in src/config. */
 export type SkillsLoadConfig = {
   /**
    * Additional skill folders to scan (lowest precedence).
@@ -24,6 +27,7 @@ export type SkillsLoadConfig = {
   watchDebounceMs?: number;
 };
 
+/** Shared type for Skills Install Config in src/config. */
 export type SkillsInstallConfig = {
   preferBrew?: boolean;
   nodeManager?: "npm" | "pnpm" | "yarn" | "bun";
@@ -31,6 +35,7 @@ export type SkillsInstallConfig = {
   allowUploadedArchives?: boolean;
 };
 
+/** Shared type for Skills Limits Config in src/config. */
 export type SkillsLimitsConfig = {
   /** Max number of immediate child directories to consider under a skills root before treating it as suspicious. */
   maxCandidatesPerRoot?: number;
@@ -44,6 +49,7 @@ export type SkillsLimitsConfig = {
   maxSkillFileBytes?: number;
 };
 
+/** Shared type for Skills Config in src/config. */
 export type SkillsConfig = {
   /** Optional bundled-skill allowlist (only affects bundled skills). */
   allowBundled?: string[];

@@ -1,3 +1,4 @@
+// model-catalog provider index planner helpers and runtime behavior.
 import { normalizeModelCatalogProviderRows } from "./normalize.js";
 import type { OpenClawProviderIndex } from "./provider-index/index.js";
 import { normalizeModelCatalogProviderId } from "./refs.js";
@@ -24,6 +25,7 @@ function withPreviewStatusDefaults(providerCatalog: ModelCatalogProvider): Model
   };
 }
 
+/** Reused helper for plan Provider Index Model Catalog Rows behavior in src/model-catalog. */
 export function planProviderIndexModelCatalogRows(params: {
   index: OpenClawProviderIndex;
   providerFilter?: string;

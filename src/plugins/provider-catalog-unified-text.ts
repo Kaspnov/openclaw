@@ -1,6 +1,8 @@
+// plugins provider catalog unified text helpers and runtime behavior.
 import type { UnifiedModelCatalogEntry } from "../model-catalog/types.js";
 import type { ProviderCatalogResult } from "./types.js";
 
+/** Reused helper for project Provider Catalog Result To Unified Text Rows behavior in src/plugins. */
 export function projectProviderCatalogResultToUnifiedTextRows(params: {
   providerId: string;
   result: ProviderCatalogResult;

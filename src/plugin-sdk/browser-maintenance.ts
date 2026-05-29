@@ -1,4 +1,6 @@
+/** Public SDK facade for browser cleanup maintenance tasks. */
 import { loadBundledPluginPublicSurfaceModuleSync } from "./facade-loader.js";
+/** Re-exported API for src/plugin-sdk, starting with move Path To Trash. */
 export { movePathToTrash, type MovePathToTrashOptions } from "./browser-trash.js";
 
 type CloseTrackedBrowserTabsParams = {
@@ -18,6 +20,8 @@ function hasRequestedSessionKeys(sessionKeys: Array<string | undefined>): boolea
 }
 
 function loadBrowserMaintenanceSurface(): BrowserMaintenanceSurface {
+  // Cleanup is optional at runtime; cache the facade once available and let callers decide how to
+  // surface a missing bundled browser implementation.
   cachedBrowserMaintenanceSurface ??=
     loadBundledPluginPublicSurfaceModuleSync<BrowserMaintenanceSurface>({
       dirName: "browser",
@@ -26,6 +30,7 @@ function loadBrowserMaintenanceSurface(): BrowserMaintenanceSurface {
   return cachedBrowserMaintenanceSurface;
 }
 
+/** Close tracked browser tabs for requested session keys, returning zero when cleanup is unavailable. */
 export async function closeTrackedBrowserTabsForSessions(
   params: CloseTrackedBrowserTabsParams,
 ): Promise<number> {
@@ -37,6 +42,8 @@ export async function closeTrackedBrowserTabsForSessions(
   try {
     surface = loadBrowserMaintenanceSurface();
   } catch (error) {
+    // Browser cleanup is best-effort maintenance; warn and keep command flows alive if the facade
+    // is absent or failed to load.
     params.onWarn?.(`browser cleanup unavailable: ${String(error)}`);
     return 0;
   }

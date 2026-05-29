@@ -1,3 +1,4 @@
+// extensions/msteams/src polls helpers and runtime behavior.
 import crypto from "node:crypto";
 import { parseStrictNonNegativeInteger } from "openclaw/plugin-sdk/number-runtime";
 import {

@@ -1,3 +1,4 @@
+/** Tests agent run wait and reply reading helpers. */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { addTimerTimeoutGraceMs, MAX_TIMER_TIMEOUT_MS } from "../shared/number-coercion.js";
 

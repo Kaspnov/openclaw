@@ -1,3 +1,4 @@
+/** Public SDK helpers for defining single-provider plugin entries. */
 import type { UnifiedModelCatalogEntry } from "../model-catalog/types.js";
 import { createProviderApiKeyAuthMethod } from "../plugins/provider-api-key-auth.js";
 import { projectProviderCatalogResultToUnifiedTextRows } from "../plugins/provider-catalog-unified-text.js";
@@ -21,6 +22,7 @@ import { buildSingleProviderApiKeyCatalog } from "./provider-catalog-shared.js";
 
 type ApiKeyAuthMethodOptions = Parameters<typeof createProviderApiKeyAuthMethod>[0];
 
+/** Shared type for Single Provider Plugin Api Key Auth Options in src/plugin-sdk. */
 export type SingleProviderPluginApiKeyAuthOptions = Omit<
   ApiKeyAuthMethodOptions,
   "providerId" | "expectedProviders" | "wizard"
@@ -29,6 +31,7 @@ export type SingleProviderPluginApiKeyAuthOptions = Omit<
   wizard?: false | ProviderPluginWizardSetup;
 };
 
+/** Shared type for Single Provider Plugin Catalog Options in src/plugin-sdk. */
 export type SingleProviderPluginCatalogOptions =
   | {
       buildProvider: Parameters<typeof buildSingleProviderApiKeyCatalog>[0]["buildProvider"];
@@ -47,6 +50,7 @@ export type SingleProviderPluginCatalogOptions =
       allowExplicitBaseUrl?: never;
     };
 
+/** Shared type for Single Provider Plugin Options in src/plugin-sdk. */
 export type SingleProviderPluginOptions = {
   id: string;
   name: string;
@@ -124,6 +128,7 @@ async function runUnifiedTextCatalog(params: {
   });
 }
 
+/** Reused helper for define Single Provider Plugin Entry behavior in src/plugin-sdk. */
 export function defineSingleProviderPluginEntry(options: SingleProviderPluginOptions) {
   return definePluginEntry({
     id: options.id,

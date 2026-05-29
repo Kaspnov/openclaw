@@ -1,3 +1,4 @@
+/** Tests auth profile health summaries and duration formatting. */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { OAuthCredential } from "./auth-profiles/types.js";
 

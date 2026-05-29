@@ -1,3 +1,4 @@
+// Tests extensions/telegram/src error policy test behavior.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildTelegramErrorScopeKey,

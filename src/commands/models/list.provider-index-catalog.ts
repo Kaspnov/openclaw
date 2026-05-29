@@ -1,3 +1,4 @@
+// Loads bundled provider-index catalog rows when the owning provider plugin is enabled.
 import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import {
   loadOpenClawProviderIndex,
@@ -7,6 +8,7 @@ import {
 import type { NormalizedModelCatalogRow } from "../../model-catalog/index.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "../../plugins/config-state.js";
 
+/** Reused helper for load Provider Index Catalog Rows For List behavior in src/commands/models. */
 export function loadProviderIndexCatalogRowsForList(params: {
   providerFilter?: string;
   cfg: OpenClawConfig;

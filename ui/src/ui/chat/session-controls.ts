@@ -1,3 +1,4 @@
+// ui/src/ui/chat session controls helpers and runtime behavior.
 import { html } from "lit";
 import { repeat } from "lit/directives/repeat.js";
 import { t } from "../../i18n/index.ts";
@@ -52,6 +53,7 @@ const chatSessionPickerSearchControllers = new WeakMap<
   ChatSessionPickerSearchController
 >();
 
+/** Reused helper for render Chat Session Select behavior in ui/src/ui/chat. */
 export function renderChatSessionSelect(
   state: AppViewState,
   onSwitchSession: ChatSessionSwitchHandler = () => undefined,
@@ -220,6 +222,7 @@ function closeChatSessionPicker(state: AppViewState) {
   requestHostUpdate(state);
 }
 
+/** Reused helper for reset Chat Session Picker State behavior in ui/src/ui/chat. */
 export function resetChatSessionPickerState(state: AppViewState) {
   clearChatSessionPickerSearchTimer(state);
   invalidateChatSessionPickerSearchRequests(state);
@@ -927,6 +930,7 @@ function resolveThinkingLevelOptions(
   }));
 }
 
+/** Reused helper for resolve Chat Thinking Select State behavior in ui/src/ui/chat. */
 export function resolveChatThinkingSelectState(state: AppViewState): ChatThinkingSelectState {
   const activeRow = state.sessionsResult?.sessions?.find((row) => row.key === state.sessionKey);
   const persisted = activeRow?.thinkingLevel;
@@ -960,6 +964,7 @@ export function resolveChatThinkingSelectState(state: AppViewState): ChatThinkin
   };
 }
 
+/** Reused helper for render Chat Thinking Select behavior in ui/src/ui/chat. */
 export function renderChatThinkingSelect(state: AppViewState) {
   const { currentOverride, defaultLabel, options } = resolveChatThinkingSelectState(state);
   const busy =
@@ -1104,6 +1109,7 @@ type SessionOptionEntry = {
   title: string;
 };
 
+/** Shared type for Session Option Group in ui/src/ui/chat. */
 export type SessionOptionGroup = {
   id: string;
   label: string;
@@ -1184,6 +1190,7 @@ function resolveChatAgentFilterOptions(state: AppViewState): ChatAgentFilterOpti
   return options;
 }
 
+/** Reused helper for resolve Session Option Groups behavior in ui/src/ui/chat. */
 export function resolveSessionOptionGroups(
   state: AppViewState,
   sessionKey: string,

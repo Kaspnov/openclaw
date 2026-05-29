@@ -1,3 +1,4 @@
+/** Reads and writes OAuth credentials mirrored from local CLI tools. */
 import { execFileSync, execSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
@@ -31,6 +32,7 @@ let codexCliCache: CachedValue<CodexCliCredential> | null = null;
 let minimaxCliCache: CachedValue<MiniMaxCliCredential> | null = null;
 let geminiCliCache: CachedValue<GeminiCliCredential> | null = null;
 
+/** Clear cached CLI credential reads between tests. */
 export function resetCliCredentialCachesForTest(): void {
   claudeCliCache = null;
   codexCliCache = null;
@@ -38,6 +40,7 @@ export function resetCliCredentialCachesForTest(): void {
   geminiCliCache = null;
 }
 
+/** Claude CLI credential shape imported from local OAuth/token stores. */
 export type ClaudeCliCredential =
   | {
       type: "oauth";
@@ -53,6 +56,7 @@ export type ClaudeCliCredential =
       expires: number;
     };
 
+/** Codex CLI OAuth credential resolved from its auth file or keychain entry. */
 export type CodexCliCredential = {
   type: "oauth";
   provider: OAuthProvider;
@@ -63,6 +67,7 @@ export type CodexCliCredential = {
   idToken?: string;
 };
 
+/** MiniMax CLI OAuth credential resolved from local CLI state. */
 export type MiniMaxCliCredential = {
   type: "oauth";
   provider: "minimax-portal";
@@ -71,6 +76,7 @@ export type MiniMaxCliCredential = {
   expires: number;
 };
 
+/** Gemini CLI OAuth credential resolved from local CLI state. */
 export type GeminiCliCredential = {
   type: "oauth";
   provider: "google-gemini-cli";
@@ -425,6 +431,7 @@ function readClaudeCliKeychainCredentials(
   }
 }
 
+/** Read Claude CLI credentials from macOS keychain when allowed, then file fallback. */
 export function readClaudeCliCredentials(options?: {
   allowKeychainPrompt?: boolean;
   platform?: NodeJS.Platform;
@@ -482,6 +489,7 @@ export function readClaudeCliCredentialsCached(options?: {
   });
 }
 
+/** Update the Claude CLI macOS keychain credential with refreshed OAuth tokens. */
 export function writeClaudeCliKeychainCredentials(
   newCredentials: OAuthCredentials,
   options?: { execFileSync?: ExecFileSyncFn },
@@ -538,6 +546,7 @@ export function writeClaudeCliKeychainCredentials(
   }
 }
 
+/** Update the Claude CLI credentials file with refreshed OAuth tokens. */
 export function writeClaudeCliFileCredentials(
   newCredentials: OAuthCredentials,
   options?: ClaudeCliFileOptions,
@@ -580,6 +589,7 @@ export function writeClaudeCliFileCredentials(
   }
 }
 
+/** Write refreshed Claude CLI credentials to the best available local store. */
 export function writeClaudeCliCredentials(
   newCredentials: OAuthCredentials,
   options?: ClaudeCliWriteOptions,
@@ -600,6 +610,7 @@ export function writeClaudeCliCredentials(
   return writeFile(newCredentials, { homeDir: options?.homeDir });
 }
 
+/** Read Codex CLI OAuth credentials from keychain or auth.json. */
 export function readCodexCliCredentials(options?: {
   codexHome?: string;
   allowKeychainPrompt?: boolean;
@@ -658,6 +669,7 @@ export function readCodexCliCredentials(options?: {
   };
 }
 
+/** Read Codex CLI credentials with an mtime-backed cache. */
 export function readCodexCliCredentialsCached(options?: {
   codexHome?: string;
   allowKeychainPrompt?: boolean;
@@ -688,6 +700,7 @@ export function readCodexCliCredentialsCached(options?: {
   });
 }
 
+/** Read MiniMax CLI credentials with an mtime-backed cache. */
 export function readMiniMaxCliCredentialsCached(options?: {
   ttlMs?: number;
   homeDir?: string;
@@ -705,6 +718,7 @@ export function readMiniMaxCliCredentialsCached(options?: {
   });
 }
 
+/** Read Gemini CLI credentials with an mtime-backed cache. */
 export function readGeminiCliCredentialsCached(options?: {
   ttlMs?: number;
   homeDir?: string;

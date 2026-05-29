@@ -1,3 +1,4 @@
+// gateway model pricing cache helpers and runtime behavior.
 import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import {
   buildModelAliasIndex,
@@ -79,6 +80,7 @@ type ExternalPricingSourcePolicy = {
   modelIdTransforms: readonly PluginManifestModelPricingModelIdTransform[];
 };
 
+/** Re-exported API for src/gateway, starting with get Cached Gateway Model Pricing. */
 export { getCachedGatewayModelPricing };
 
 type PricingModelNormalizationOptions = {
@@ -886,6 +888,7 @@ function filterExternalPricingRefs(params: {
   );
 }
 
+/** Reused helper for collect Configured Model Pricing Refs behavior in src/gateway. */
 export function collectConfiguredModelPricingRefs(
   config: OpenClawConfig,
   options: { manifestRegistry?: PluginManifestRegistry } = {},
@@ -1188,6 +1191,7 @@ function collectSeededPricing(params: {
   return seeded;
 }
 
+/** Reused helper for refresh Gateway Model Pricing Cache behavior in src/gateway. */
 export async function refreshGatewayModelPricingCache(
   params: GatewayModelPricingRefreshParams,
 ): Promise<void> {
@@ -1381,6 +1385,7 @@ export async function refreshGatewayModelPricingCache(
   }
 }
 
+/** Reused helper for start Gateway Model Pricing Refresh behavior in src/gateway. */
 export function startGatewayModelPricingRefresh(
   params: GatewayModelPricingRefreshParams,
 ): () => void {
@@ -1412,6 +1417,7 @@ export function startGatewayModelPricingRefresh(
   };
 }
 
+/** Reused helper for reset Gateway Model Pricing Cache For Test behavior in src/gateway. */
 export function resetGatewayModelPricingCacheForTest(): void {
   clearGatewayModelPricingCacheState();
   clearLoadPluginMetadataSnapshotMemo();

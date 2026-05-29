@@ -1,3 +1,4 @@
+// Tests web provider runtime shared test behavior.
 import { describe, expect, it } from "vitest";
 import { resolveWebProviderDefinition } from "./provider-runtime-shared.js";
 

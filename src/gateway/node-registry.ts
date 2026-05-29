@@ -1,9 +1,11 @@
+// gateway node registry helpers and runtime behavior.
 import { randomUUID } from "node:crypto";
 import { logRejectedLargePayload } from "../logging/diagnostic-payload.js";
 import { addTimerTimeoutGraceMs, resolveTimerTimeoutMs } from "../shared/number-coercion.js";
 import { MAX_BUFFERED_BYTES } from "./server-constants.js";
 import type { GatewayWsClient } from "./server/ws-types.js";
 
+/** Shared type for Node Session in src/gateway. */
 export type NodeSession = {
   nodeId: string;
   connId: string;
@@ -77,11 +79,13 @@ const AUTHORIZED_SYSTEM_RUN_EVENT_GRACE_MS = 5 * 60 * 1000;
 const WEBSOCKET_OPEN_READY_STATE = 1;
 const SLOW_CONSUMER_CLOSE_CODE = 1008;
 
+/** Shared type for Serialized Event Payload in src/gateway. */
 export type SerializedEventPayload = {
   readonly json: string;
   readonly [SERIALIZED_EVENT_PAYLOAD]: true;
 };
 
+/** Reused helper for serialize Event Payload behavior in src/gateway. */
 export function serializeEventPayload(payload: unknown): SerializedEventPayload | null {
   if (!payload) {
     return null;
@@ -151,6 +155,7 @@ function withSystemRunEventRunId(params: { command: string; params?: unknown }):
   return { ...obj, runId: randomUUID() };
 }
 
+/** Reused class for Node Registry behavior in src/gateway. */
 export class NodeRegistry {
   private nodesById = new Map<string, NodeSession>();
   private nodesByConn = new Map<string, string>();

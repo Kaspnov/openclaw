@@ -1,3 +1,4 @@
+// Coverage for browser session cleanup on lifecycle end.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const closeTrackedBrowserTabsForSessions = vi.hoisted(() => vi.fn(async () => 0));

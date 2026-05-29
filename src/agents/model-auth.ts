@@ -1,3 +1,4 @@
+/** Resolves model provider auth from profiles, env vars, config, and synthetic auth. */
 import path from "node:path";
 import { formatCliCommand } from "../cli/command-format.js";
 import { getRuntimeConfigSnapshot } from "../config/config.js";
@@ -49,19 +50,24 @@ import {
 import { type ResolvedProviderAuth } from "./model-auth-runtime-shared.js";
 import { normalizeProviderId } from "./model-selection.js";
 
+/** Re-exported API for src/agents. */
 export {
   ensureAuthProfileStore,
   ensureAuthProfileStoreWithoutExternalProfiles,
   resolveAuthProfileOrder,
 } from "./auth-profiles.js";
+/** Re-exported API for src/agents. */
 export {
   formatMissingAuthError,
   requireApiKey,
   resolveAwsSdkEnvVarName,
 } from "./model-auth-runtime-shared.js";
+/** Re-exported API for src/agents, starting with Resolved Provider Auth. */
 export type { ResolvedProviderAuth } from "./model-auth-runtime-shared.js";
+/** Provider credential precedence policy. */
 export type ProviderCredentialPrecedence = "profile-first" | "env-first";
 
+/** Runtime lookup metadata for provider auth. */
 export type RuntimeProviderAuthLookup = {
   envApiKey: Pick<EnvApiKeyLookupOptions, "aliasMap" | "candidateMap" | "authEvidenceMap">;
   syntheticAuthProviderRefs?: readonly string[];
@@ -135,6 +141,7 @@ function resolveProviderConfig(
   );
 }
 
+/** Create provider auth lookup maps from config and workspace context. */
 export function createRuntimeProviderAuthLookup(params: {
   cfg?: OpenClawConfig;
   workspaceDir?: string;
@@ -165,6 +172,7 @@ export function createRuntimeProviderAuthLookup(params: {
   };
 }
 
+/** Resolve an explicit custom provider API key from config/env. */
 export function getCustomProviderApiKey(
   cfg: OpenClawConfig | undefined,
   provider: string,
@@ -206,6 +214,7 @@ function canResolveEnvSecretRefInReadOnlyPath(params: {
   return !allowlist || allowlist.includes(params.id);
 }
 
+/** Resolve a custom provider API key only when it is usable for requests. */
 export function resolveUsableCustomProviderApiKey(params: {
   cfg: OpenClawConfig | undefined;
   provider: string;
@@ -282,6 +291,7 @@ export function resolveUsableCustomProviderApiKey(params: {
   return null;
 }
 
+/** Return whether custom provider config supplies usable API key auth. */
 export function hasUsableCustomProviderApiKey(
   cfg: OpenClawConfig | undefined,
   provider: string,
@@ -290,6 +300,7 @@ export function hasUsableCustomProviderApiKey(
   return Boolean(resolveUsableCustomProviderApiKey({ cfg, provider, env }));
 }
 
+/** Return whether explicit config API key auth should outrank profiles. */
 export function shouldPreferExplicitConfigApiKeyAuth(
   cfg: OpenClawConfig | undefined,
   provider: string,
@@ -409,6 +420,7 @@ function isManagedSecretRefApiKeyMarker(apiKey: string | undefined): boolean {
   return apiKey?.trim() === NON_ENV_SECRETREF_MARKER;
 }
 
+/** Return whether provider config represents local synthetic auth. */
 export function hasSyntheticLocalProviderAuthConfig(params: {
   cfg: OpenClawConfig | undefined;
   provider: string;
@@ -474,6 +486,7 @@ function shouldResolvePluginSyntheticAuth(params: {
   return listProviderSyntheticAuthRefs(params).some((ref) => eligibleRefs.has(ref));
 }
 
+/** Return whether runtime/plugin auth can satisfy a provider without static API key. */
 export function hasRuntimeAvailableProviderAuth(params: {
   provider: string;
   cfg?: OpenClawConfig;
@@ -685,6 +698,7 @@ function resolveScopedAuthProfileStore(params: {
   });
 }
 
+/** Resolve provider auth from profiles, env, config, and plugin runtime sources. */
 export async function resolveApiKeyForProvider(params: {
   provider: string;
   cfg?: OpenClawConfig;
@@ -996,11 +1010,15 @@ export async function resolveApiKeyForProvider(params: {
   );
 }
 
+/** High-level auth mode label for model/provider displays. */
 export type ModelAuthMode = "api-key" | "oauth" | "token" | "mixed" | "aws-sdk" | "unknown";
 
+/** Re-exported API for src/agents, starting with resolve Env Api Key. */
 export { resolveEnvApiKey } from "./model-auth-env.js";
+/** Re-exported API for src/agents, starting with Env Api Key Result. */
 export type { EnvApiKeyResult } from "./model-auth-env.js";
 
+/** Resolve the display/auth mode for a model provider. */
 export function resolveModelAuthMode(
   provider?: string,
   cfg?: OpenClawConfig,
@@ -1066,6 +1084,7 @@ export function resolveModelAuthMode(
   return "unknown";
 }
 
+/** Return whether any usable auth exists for a provider. */
 export async function hasAvailableAuthForProvider(params: {
   provider: string;
   cfg?: OpenClawConfig;
@@ -1141,6 +1160,7 @@ export async function hasAvailableAuthForProvider(params: {
   return false;
 }
 
+/** Resolve an API key for a concrete model/provider pair. */
 export async function getApiKeyForModel(params: {
   model: Model;
   cfg?: OpenClawConfig;
@@ -1166,6 +1186,7 @@ export async function getApiKeyForModel(params: {
   });
 }
 
+/** Apply no-auth headers for local providers that do not require credentials. */
 export function applyLocalNoAuthHeaderOverride<T extends Model>(
   model: T,
   auth: ResolvedProviderAuth | null | undefined,
@@ -1198,6 +1219,7 @@ export function applyLocalNoAuthHeaderOverride<T extends Model>(
  * available, or when the API key is a synthetic marker (e.g. local-server
  * placeholders) rather than a real credential.
  */
+/** Apply provider auth header overrides to a model definition. */
 export function applyAuthHeaderOverride<T extends Model>(
   model: T,
   auth: ResolvedProviderAuth | null | undefined,

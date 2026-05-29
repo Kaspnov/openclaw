@@ -1,3 +1,4 @@
+// Tests model-catalog normalize test behavior.
 import { describe, expect, it } from "vitest";
 import {
   buildModelCatalogMergeKey,

@@ -1,3 +1,4 @@
+// Tests extensions/discord/src/internal rest routes test behavior.
 import { describe, expect, it, vi } from "vitest";
 import { readHeaderNumber, readResetAt } from "./rest-routes.js";
 

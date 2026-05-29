@@ -1,3 +1,4 @@
+/** Before-tool-call hook, approval, diagnostics, and wrapper pipeline. */
 import os from "node:os";
 import path from "node:path";
 import type { OpenClawConfig } from "../config/types.openclaw.js";
@@ -56,14 +57,17 @@ import { normalizeToolName } from "./tool-policy.js";
 import type { AnyAgentTool } from "./tools/common.js";
 import { callGatewayTool } from "./tools/gateway.js";
 
+/** Shared type for Tool Outcome Observation in src/agents. */
 export type ToolOutcomeObservation = {
   toolName: string;
   argsHash: string;
   resultHash: string;
 };
 
+/** Shared type for Tool Outcome Observer in src/agents. */
 export type ToolOutcomeObserver = (observation: ToolOutcomeObservation) => void;
 
+/** Return whether a thrown error is the expected cancellation for an abort signal. */
 export function isAbortSignalCancellation(err: unknown, signal?: AbortSignal): boolean {
   if (!signal?.aborted) {
     return false;
@@ -74,6 +78,7 @@ export function isAbortSignalCancellation(err: unknown, signal?: AbortSignal): b
   return err instanceof Error && err.name === "AbortError";
 }
 
+/** Shared type for Hook Context in src/agents. */
 export type HookContext = {
   agentId?: string;
   config?: OpenClawConfig;
@@ -149,6 +154,7 @@ type BeforeToolCallWrapperOptions = {
   emitDiagnostics: boolean;
 };
 
+/** Shared type for Before Tool Call Policy Diagnostic State in src/agents. */
 export type BeforeToolCallPolicyDiagnosticState = {
   hasBeforeToolCallHook: boolean;
   trustedToolPolicies: Array<{
@@ -158,6 +164,7 @@ export type BeforeToolCallPolicyDiagnosticState = {
   }>;
 };
 
+/** Snapshot active before-tool-call hooks and trusted tool policies for diagnostics. */
 export function getBeforeToolCallPolicyDiagnosticState(): BeforeToolCallPolicyDiagnosticState {
   const trustedToolPolicies = (getActivePluginRegistry()?.trustedToolPolicies ?? []).map(
     (entry) => {
@@ -177,6 +184,7 @@ export function getBeforeToolCallPolicyDiagnosticState(): BeforeToolCallPolicyDi
   };
 }
 
+/** Return whether any before-tool-call hook or trusted tool policy is active. */
 export function hasBeforeToolCallPolicy(): boolean {
   const state = getBeforeToolCallPolicyDiagnosticState();
   return state.hasBeforeToolCallHook || state.trustedToolPolicies.length > 0;
@@ -203,6 +211,7 @@ export class BeforeToolCallBlockedError extends Error {
   }
 }
 
+/** Remember hook-adjusted params so later tool-result paths can read them. */
 export function recordAdjustedParamsForToolCall(
   toolCallId: string | undefined,
   params: unknown,
@@ -581,6 +590,7 @@ async function requestPluginToolApproval(params: {
   }
 }
 
+/** Request a deferred plugin approval and return the hook outcome. */
 export async function requestDeferredPluginToolApproval(params: {
   deferredApproval: DeferredPluginToolApproval;
   signal?: AbortSignal;
@@ -597,12 +607,14 @@ export async function requestDeferredPluginToolApproval(params: {
   });
 }
 
+/** Mark a deferred plugin approval as cancelled without executing the tool. */
 export function cancelDeferredPluginToolApproval(
   deferredApproval: DeferredPluginToolApproval,
 ): void {
   notifyPluginApprovalResolution(deferredApproval.approval, PluginApprovalResolutions.CANCELLED);
 }
 
+/** Build the standard blocked-tool result returned for vetoed calls. */
 export function buildBlockedToolResult(params: {
   reason: string;
   deniedReason?: HookBlockedReason;
@@ -703,6 +715,7 @@ async function recordLoopOutcome(args: {
   }
 }
 
+/** Run loop detection, trusted policies, approvals, and before_tool_call hooks. */
 export async function runBeforeToolCallHook(args: {
   toolName: string;
   params: unknown;
@@ -1015,6 +1028,7 @@ export async function runBeforeToolCallHook(args: {
   }
 }
 
+/** Wrap a tool execute function with before-tool-call policy and diagnostics. */
 export function wrapToolWithBeforeToolCallHook(
   tool: AnyAgentTool,
   ctx?: HookContext,
@@ -1186,11 +1200,13 @@ export function wrapToolWithBeforeToolCallHook(
   return wrappedTool;
 }
 
+/** Return whether a tool has the before-tool-call wrapper marker. */
 export function isToolWrappedWithBeforeToolCallHook(tool: AnyAgentTool): boolean {
   const taggedTool = tool as unknown as Record<symbol, unknown>;
   return taggedTool[BEFORE_TOOL_CALL_WRAPPED] === true;
 }
 
+/** Toggle diagnostics emission on a wrapped before-tool-call tool. */
 export function setBeforeToolCallDiagnosticsEnabled(tool: AnyAgentTool, enabled: boolean): void {
   const taggedTool = tool as unknown as Record<symbol, unknown>;
   const options = taggedTool[BEFORE_TOOL_CALL_DIAGNOSTIC_OPTIONS];
@@ -1199,6 +1215,7 @@ export function setBeforeToolCallDiagnosticsEnabled(tool: AnyAgentTool, enabled:
   }
 }
 
+/** Rewrap a tool while preserving source tool/context markers when present. */
 export function rewrapToolWithBeforeToolCallHook(
   tool: AnyAgentTool,
   ctx?: HookContext,
@@ -1218,6 +1235,7 @@ export function rewrapToolWithBeforeToolCallHook(
   );
 }
 
+/** Copy before-tool-call wrapper metadata from one tool object to another. */
 export function copyBeforeToolCallHookMarker(source: AnyAgentTool, target: AnyAgentTool): void {
   if (!isToolWrappedWithBeforeToolCallHook(source)) {
     return;
@@ -1241,6 +1259,7 @@ export function copyBeforeToolCallHookMarker(source: AnyAgentTool, target: AnyAg
   });
 }
 
+/** Consume and clear adjusted params recorded for a tool call. */
 export function consumeAdjustedParamsForToolCall(toolCallId: string, runId?: string): unknown {
   const adjustedParamsKey = buildAdjustedParamsKey({ runId, toolCallId });
   const params = adjustedParamsByToolCallId.get(adjustedParamsKey);
@@ -1248,6 +1267,7 @@ export function consumeAdjustedParamsForToolCall(toolCallId: string, runId?: str
   return params;
 }
 
+/** Reused constant for testing behavior in src/agents. */
 export const testing = {
   BEFORE_TOOL_CALL_DIAGNOSTIC_OPTIONS,
   BEFORE_TOOL_CALL_HOOK_CONTEXT,
@@ -1259,4 +1279,5 @@ export const testing = {
   mergeParamsWithApprovalOverrides,
   isPlainObject,
 };
+/** Re-exported API for src/agents, starting with testing. */
 export { testing as __testing };

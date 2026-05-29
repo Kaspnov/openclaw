@@ -1,6 +1,8 @@
+// packages/gateway-protocol/src/schema agents models skills helpers and runtime behavior.
 import { Type } from "typebox";
 import { NonEmptyString } from "./primitives.js";
 
+/** Public constant for Model Choice Schema behavior in packages/gateway-protocol. */
 export const ModelChoiceSchema = Type.Object(
   {
     id: NonEmptyString,
@@ -13,6 +15,7 @@ export const ModelChoiceSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agent Summary Schema behavior in packages/gateway-protocol. */
 export const AgentSummarySchema = Type.Object(
   {
     id: NonEmptyString,
@@ -60,8 +63,10 @@ export const AgentSummarySchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents List Params Schema behavior in packages/gateway-protocol. */
 export const AgentsListParamsSchema = Type.Object({}, { additionalProperties: false });
 
+/** Public constant for Agents List Result Schema behavior in packages/gateway-protocol. */
 export const AgentsListResultSchema = Type.Object(
   {
     defaultId: NonEmptyString,
@@ -72,6 +77,7 @@ export const AgentsListResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Create Params Schema behavior in packages/gateway-protocol. */
 export const AgentsCreateParamsSchema = Type.Object(
   {
     name: NonEmptyString,
@@ -83,6 +89,7 @@ export const AgentsCreateParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Create Result Schema behavior in packages/gateway-protocol. */
 export const AgentsCreateResultSchema = Type.Object(
   {
     ok: Type.Literal(true),
@@ -94,6 +101,7 @@ export const AgentsCreateResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Update Params Schema behavior in packages/gateway-protocol. */
 export const AgentsUpdateParamsSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -106,6 +114,7 @@ export const AgentsUpdateParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Update Result Schema behavior in packages/gateway-protocol. */
 export const AgentsUpdateResultSchema = Type.Object(
   {
     ok: Type.Literal(true),
@@ -114,6 +123,7 @@ export const AgentsUpdateResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Delete Params Schema behavior in packages/gateway-protocol. */
 export const AgentsDeleteParamsSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -122,6 +132,7 @@ export const AgentsDeleteParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Delete Result Schema behavior in packages/gateway-protocol. */
 export const AgentsDeleteResultSchema = Type.Object(
   {
     ok: Type.Literal(true),
@@ -131,6 +142,7 @@ export const AgentsDeleteResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents File Entry Schema behavior in packages/gateway-protocol. */
 export const AgentsFileEntrySchema = Type.Object(
   {
     name: NonEmptyString,
@@ -143,6 +155,7 @@ export const AgentsFileEntrySchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files List Params Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesListParamsSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -150,6 +163,7 @@ export const AgentsFilesListParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files List Result Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesListResultSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -159,6 +173,7 @@ export const AgentsFilesListResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files Get Params Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesGetParamsSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -167,6 +182,7 @@ export const AgentsFilesGetParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files Get Result Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesGetResultSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -176,6 +192,7 @@ export const AgentsFilesGetResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files Set Params Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesSetParamsSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -185,6 +202,7 @@ export const AgentsFilesSetParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Agents Files Set Result Schema behavior in packages/gateway-protocol. */
 export const AgentsFilesSetResultSchema = Type.Object(
   {
     ok: Type.Literal(true),
@@ -195,6 +213,7 @@ export const AgentsFilesSetResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Models List Params Schema behavior in packages/gateway-protocol. */
 export const ModelsListParamsSchema = Type.Object(
   {
     view: Type.Optional(
@@ -204,6 +223,7 @@ export const ModelsListParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Models List Result Schema behavior in packages/gateway-protocol. */
 export const ModelsListResultSchema = Type.Object(
   {
     models: Type.Array(ModelChoiceSchema),
@@ -211,6 +231,7 @@ export const ModelsListResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Status Params Schema behavior in packages/gateway-protocol. */
 export const SkillsStatusParamsSchema = Type.Object(
   {
     agentId: Type.Optional(NonEmptyString),
@@ -218,8 +239,10 @@ export const SkillsStatusParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Bins Params Schema behavior in packages/gateway-protocol. */
 export const SkillsBinsParamsSchema = Type.Object({}, { additionalProperties: false });
 
+/** Public constant for Skills Bins Result Schema behavior in packages/gateway-protocol. */
 export const SkillsBinsResultSchema = Type.Object(
   {
     bins: Type.Array(NonEmptyString),
@@ -241,6 +264,7 @@ const SkillUploadDataBase64String = Type.String({
   maxLength: 5_592_408,
 });
 
+/** Public constant for Skills Upload Begin Params Schema behavior in packages/gateway-protocol. */
 export const SkillsUploadBeginParamsSchema = Type.Object(
   {
     kind: Type.Literal("skill-archive"),
@@ -253,6 +277,7 @@ export const SkillsUploadBeginParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Upload Chunk Params Schema behavior in packages/gateway-protocol. */
 export const SkillsUploadChunkParamsSchema = Type.Object(
   {
     uploadId: NonEmptyString,
@@ -262,6 +287,7 @@ export const SkillsUploadChunkParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Upload Commit Params Schema behavior in packages/gateway-protocol. */
 export const SkillsUploadCommitParamsSchema = Type.Object(
   {
     uploadId: NonEmptyString,
@@ -270,6 +296,7 @@ export const SkillsUploadCommitParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Install Params Schema behavior in packages/gateway-protocol. */
 export const SkillsInstallParamsSchema = Type.Union([
   Type.Object(
     {
@@ -303,6 +330,7 @@ export const SkillsInstallParamsSchema = Type.Union([
   ),
 ]);
 
+/** Public constant for Skills Update Params Schema behavior in packages/gateway-protocol. */
 export const SkillsUpdateParamsSchema = Type.Union([
   Type.Object(
     {
@@ -323,6 +351,7 @@ export const SkillsUpdateParamsSchema = Type.Union([
   ),
 ]);
 
+/** Public constant for Skills Search Params Schema behavior in packages/gateway-protocol. */
 export const SkillsSearchParamsSchema = Type.Object(
   {
     query: Type.Optional(NonEmptyString),
@@ -331,6 +360,7 @@ export const SkillsSearchParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Search Result Schema behavior in packages/gateway-protocol. */
 export const SkillsSearchResultSchema = Type.Object(
   {
     results: Type.Array(
@@ -350,6 +380,7 @@ export const SkillsSearchResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Detail Params Schema behavior in packages/gateway-protocol. */
 export const SkillsDetailParamsSchema = Type.Object(
   {
     slug: NonEmptyString,
@@ -357,6 +388,7 @@ export const SkillsDetailParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Security Verdicts Params Schema behavior in packages/gateway-protocol. */
 export const SkillsSecurityVerdictsParamsSchema = Type.Object(
   {
     agentId: Type.Optional(NonEmptyString),
@@ -364,6 +396,7 @@ export const SkillsSecurityVerdictsParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Detail Result Schema behavior in packages/gateway-protocol. */
 export const SkillsDetailResultSchema = Type.Object(
   {
     skill: Type.Union([
@@ -422,6 +455,7 @@ export const SkillsDetailResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Security Verdicts Result Schema behavior in packages/gateway-protocol. */
 export const SkillsSecurityVerdictsResultSchema = Type.Object(
   {
     schema: Type.Literal("openclaw.skills.security-verdicts.v1"),
@@ -462,6 +496,7 @@ export const SkillsSecurityVerdictsResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Skill Card Params Schema behavior in packages/gateway-protocol. */
 export const SkillsSkillCardParamsSchema = Type.Object(
   {
     agentId: Type.Optional(NonEmptyString),
@@ -470,6 +505,7 @@ export const SkillsSkillCardParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Skills Skill Card Result Schema behavior in packages/gateway-protocol. */
 export const SkillsSkillCardResultSchema = Type.Object(
   {
     schema: Type.Literal("openclaw.skills.skill-card.v1"),
@@ -481,6 +517,7 @@ export const SkillsSkillCardResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Catalog Params Schema behavior in packages/gateway-protocol. */
 export const ToolsCatalogParamsSchema = Type.Object(
   {
     agentId: Type.Optional(NonEmptyString),
@@ -489,6 +526,7 @@ export const ToolsCatalogParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Effective Params Schema behavior in packages/gateway-protocol. */
 export const ToolsEffectiveParamsSchema = Type.Object(
   {
     agentId: Type.Optional(NonEmptyString),
@@ -497,6 +535,7 @@ export const ToolsEffectiveParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Invoke Params Schema behavior in packages/gateway-protocol. */
 export const ToolsInvokeParamsSchema = Type.Object(
   {
     name: NonEmptyString,
@@ -509,6 +548,7 @@ export const ToolsInvokeParamsSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tool Catalog Profile Schema behavior in packages/gateway-protocol. */
 export const ToolCatalogProfileSchema = Type.Object(
   {
     id: Type.Union([
@@ -522,6 +562,7 @@ export const ToolCatalogProfileSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tool Catalog Entry Schema behavior in packages/gateway-protocol. */
 export const ToolCatalogEntrySchema = Type.Object(
   {
     id: NonEmptyString,
@@ -546,6 +587,7 @@ export const ToolCatalogEntrySchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tool Catalog Group Schema behavior in packages/gateway-protocol. */
 export const ToolCatalogGroupSchema = Type.Object(
   {
     id: NonEmptyString,
@@ -557,6 +599,7 @@ export const ToolCatalogGroupSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Catalog Result Schema behavior in packages/gateway-protocol. */
 export const ToolsCatalogResultSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -566,6 +609,7 @@ export const ToolsCatalogResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Effective Entry Schema behavior in packages/gateway-protocol. */
 export const ToolsEffectiveEntrySchema = Type.Object(
   {
     id: NonEmptyString,
@@ -588,6 +632,7 @@ export const ToolsEffectiveEntrySchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Effective Group Schema behavior in packages/gateway-protocol. */
 export const ToolsEffectiveGroupSchema = Type.Object(
   {
     id: Type.Union([
@@ -608,6 +653,7 @@ export const ToolsEffectiveGroupSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Effective Notice Schema behavior in packages/gateway-protocol. */
 export const ToolsEffectiveNoticeSchema = Type.Object(
   {
     id: NonEmptyString,
@@ -617,6 +663,7 @@ export const ToolsEffectiveNoticeSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Effective Result Schema behavior in packages/gateway-protocol. */
 export const ToolsEffectiveResultSchema = Type.Object(
   {
     agentId: NonEmptyString,
@@ -627,6 +674,7 @@ export const ToolsEffectiveResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Invoke Error Schema behavior in packages/gateway-protocol. */
 export const ToolsInvokeErrorSchema = Type.Object(
   {
     code: NonEmptyString,
@@ -636,6 +684,7 @@ export const ToolsInvokeErrorSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Public constant for Tools Invoke Result Schema behavior in packages/gateway-protocol. */
 export const ToolsInvokeResultSchema = Type.Object(
   {
     ok: Type.Boolean(),

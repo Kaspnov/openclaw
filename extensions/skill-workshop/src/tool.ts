@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src tool helpers and runtime behavior.
 import { randomUUID } from "node:crypto";
 import { normalizeOptionalString as readString } from "openclaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";

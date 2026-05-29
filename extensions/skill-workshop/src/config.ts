@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src config helpers and runtime behavior.
 import { asNullableRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
 
 export type SkillWorkshopConfig = {

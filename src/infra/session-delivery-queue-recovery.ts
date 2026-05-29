@@ -1,3 +1,4 @@
+// infra session delivery queue recovery helpers and runtime behavior.
 import { formatErrorMessage } from "./errors.js";
 import {
   ackSessionDelivery,
@@ -17,6 +18,7 @@ type SessionDeliveryRecoverySummary = {
 
 type DeliverSessionDeliveryFn = (entry: QueuedSessionDelivery) => Promise<void>;
 
+/** Shared type for Session Delivery Recovery Logger in src/infra. */
 export interface SessionDeliveryRecoveryLogger {
   info(msg: string): void;
   warn(msg: string): void;
@@ -72,6 +74,7 @@ function resolveSessionDeliveryMaxRetries(entry: QueuedSessionDelivery): number 
   return entry.maxRetries ?? MAX_SESSION_DELIVERY_RETRIES;
 }
 
+/** Reused helper for is Session Delivery Eligible For Retry behavior in src/infra. */
 export function isSessionDeliveryEligibleForRetry(
   entry: QueuedSessionDelivery,
   now: number,
@@ -123,6 +126,7 @@ async function drainQueuedEntry(opts: {
   }
 }
 
+/** Reused helper for drain Pending Session Deliveries behavior in src/infra. */
 export async function drainPendingSessionDeliveries(opts: {
   drainKey: string;
   logLabel: string;
@@ -198,6 +202,7 @@ export async function drainPendingSessionDeliveries(opts: {
   }
 }
 
+/** Reused helper for recover Pending Session Deliveries behavior in src/infra. */
 export async function recoverPendingSessionDeliveries(opts: {
   deliver: DeliverSessionDeliveryFn;
   log: SessionDeliveryRecoveryLogger;

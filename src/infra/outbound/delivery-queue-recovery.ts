@@ -1,3 +1,4 @@
+// infra/outbound delivery queue recovery helpers and runtime behavior.
 import type {
   ChannelMessageSendCommitContext,
   ChannelMessageUnknownSendReconciliationResult,
@@ -20,6 +21,7 @@ import {
   type QueuedDeliveryPayload,
 } from "./delivery-queue-storage.js";
 
+/** Shared type for Recovery Summary in src/infra/outbound. */
 export type RecoverySummary = {
   recovered: number;
   failed: number;
@@ -27,6 +29,7 @@ export type RecoverySummary = {
   deferredBackoff: number;
 };
 
+/** Shared type for Deliver Fn in src/infra/outbound. */
 export type DeliverFn = (
   params: {
     cfg: OpenClawConfig;
@@ -38,17 +41,20 @@ export type DeliverFn = (
     },
 ) => Promise<unknown>;
 
+/** Shared type for Recovery Logger in src/infra/outbound. */
 export interface RecoveryLogger {
   info(msg: string): void;
   warn(msg: string): void;
   error(msg: string): void;
 }
 
+/** Shared type for Pending Delivery Drain Decision in src/infra/outbound. */
 export interface PendingDeliveryDrainDecision {
   match: boolean;
   bypassBackoff?: boolean;
 }
 
+/** Shared type for Active Delivery Claim Result in src/infra/outbound. */
 export type ActiveDeliveryClaimResult<T> =
   | { status: "claimed"; value: T }
   | { status: "claimed-by-other-owner" };
@@ -107,6 +113,7 @@ function releaseRecoveryEntry(entryId: string): void {
   entriesInProgress.delete(entryId);
 }
 
+/** Reused helper for with Active Delivery Claim behavior in src/infra/outbound. */
 export async function withActiveDeliveryClaim<T>(
   entryId: string,
   fn: () => Promise<T>,
@@ -328,6 +335,7 @@ export function computeBackoffMs(retryCount: number): number {
   return BACKOFF_MS[Math.min(retryCount - 1, BACKOFF_MS.length - 1)] ?? BACKOFF_MS.at(-1) ?? 0;
 }
 
+/** Reused helper for is Entry Eligible For Recovery Retry behavior in src/infra/outbound. */
 export function isEntryEligibleForRecoveryRetry(
   entry: QueuedDelivery,
   now: number,
@@ -354,6 +362,7 @@ export function isEntryEligibleForRecoveryRetry(
   return { eligible: false, remainingBackoffMs: nextEligibleAt - now };
 }
 
+/** Reused helper for is Permanent Delivery Error behavior in src/infra/outbound. */
 export function isPermanentDeliveryError(error: string): boolean {
   return PERMANENT_ERROR_PATTERNS.some((re) => re.test(error));
 }
@@ -474,6 +483,7 @@ async function drainQueuedEntry(opts: {
   }
 }
 
+/** Reused helper for drain Pending Deliveries behavior in src/infra/outbound. */
 export async function drainPendingDeliveries(opts: {
   drainKey: string;
   logLabel: string;
@@ -679,4 +689,5 @@ export async function recoverPendingDeliveries(opts: {
   return summary;
 }
 
+/** Re-exported API for src/infra/outbound, starting with MAX RETRIES. */
 export { MAX_RETRIES };

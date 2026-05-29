@@ -1,3 +1,4 @@
+// plugins hook types helpers and runtime behavior.
 import type { AgentMessage } from "../agents/runtime/index.js";
 import type { SourceReplyDeliveryMode } from "../auto-reply/get-reply-options.types.js";
 import type { ReplyPayload } from "../auto-reply/reply-payload.js";
@@ -35,6 +36,7 @@ import type {
   PluginHeartbeatPromptContributionResult,
 } from "./host-hook-turn-types.js";
 
+/** Re-exported API for src/plugins. */
 export type {
   PluginHookBeforeAgentStartEvent,
   PluginHookBeforeAgentStartOverrideResult,
@@ -45,16 +47,19 @@ export type {
   PluginHookBeforePromptBuildEvent,
   PluginHookBeforePromptBuildResult,
 } from "./hook-before-agent-start.types.js";
+/** Re-exported API for src/plugins. */
 export {
   PLUGIN_PROMPT_MUTATION_RESULT_FIELDS,
   stripPromptMutationFieldsFromLegacyHookResult,
 } from "./hook-before-agent-start.types.js";
+/** Re-exported API for src/plugins. */
 export type {
   PluginAgentTurnPrepareEvent,
   PluginAgentTurnPrepareResult,
   PluginHeartbeatPromptContributionEvent,
   PluginHeartbeatPromptContributionResult,
 } from "./host-hook-turn-types.js";
+/** Re-exported API for src/plugins. */
 export type {
   PluginHookInboundClaimContext,
   PluginHookInboundClaimEvent,
@@ -65,6 +70,7 @@ export type {
   PluginHookMessageSentEvent,
 } from "./hook-message.types.js";
 
+/** Shared type for Plugin Hook Name in src/plugins. */
 export type PluginHookName =
   | "before_model_resolve"
   | "agent_turn_prepare"
@@ -106,6 +112,7 @@ export type PluginHookName =
   | "before_install"
   | "before_agent_run";
 
+/** Reused constant for PLUGIN HOOK NAMES behavior in src/plugins. */
 export const PLUGIN_HOOK_NAMES = [
   "before_model_resolve",
   "agent_turn_prepare",
@@ -154,9 +161,11 @@ void assertAllPluginHookNamesListed;
 
 const pluginHookNameSet = new Set<PluginHookName>(PLUGIN_HOOK_NAMES);
 
+/** Reused constant for is Plugin Hook Name behavior in src/plugins. */
 export const isPluginHookName = (hookName: unknown): hookName is PluginHookName =>
   typeof hookName === "string" && pluginHookNameSet.has(hookName as PluginHookName);
 
+/** Reused constant for PROMPT INJECTION HOOK NAMES behavior in src/plugins. */
 export const PROMPT_INJECTION_HOOK_NAMES = [
   "agent_turn_prepare",
   "before_prompt_build",
@@ -164,13 +173,16 @@ export const PROMPT_INJECTION_HOOK_NAMES = [
   "heartbeat_prompt_contribution",
 ] as const satisfies readonly PluginHookName[];
 
+/** Shared type for Prompt Injection Hook Name in src/plugins. */
 export type PromptInjectionHookName = (typeof PROMPT_INJECTION_HOOK_NAMES)[number];
 
 const promptInjectionHookNameSet = new Set<PluginHookName>(PROMPT_INJECTION_HOOK_NAMES);
 
+/** Reused constant for is Prompt Injection Hook Name behavior in src/plugins. */
 export const isPromptInjectionHookName = (hookName: PluginHookName): boolean =>
   promptInjectionHookNameSet.has(hookName);
 
+/** Reused constant for CONVERSATION HOOK NAMES behavior in src/plugins. */
 export const CONVERSATION_HOOK_NAMES = [
   "before_model_resolve",
   "before_agent_reply",
@@ -181,13 +193,16 @@ export const CONVERSATION_HOOK_NAMES = [
   "before_agent_run",
 ] as const satisfies readonly PluginHookName[];
 
+/** Shared type for Conversation Hook Name in src/plugins. */
 export type ConversationHookName = (typeof CONVERSATION_HOOK_NAMES)[number];
 
 const conversationHookNameSet = new Set<PluginHookName>(CONVERSATION_HOOK_NAMES);
 
+/** Reused constant for is Conversation Hook Name behavior in src/plugins. */
 export const isConversationHookName = (hookName: PluginHookName): boolean =>
   conversationHookNameSet.has(hookName);
 
+/** Shared type for Plugin Hook Agent Context in src/plugins. */
 export type PluginHookAgentContext = {
   runId?: string;
   jobId?: string;
@@ -209,22 +224,26 @@ export type PluginHookAgentContext = {
   contextWindowReferenceTokens?: number;
 };
 
+/** Shared type for Plugin Hook Context Window Source in src/plugins. */
 export type PluginHookContextWindowSource =
   | "model"
   | "modelsConfig"
   | "agentContextTokens"
   | "default";
 
+/** Shared type for Plugin Hook Before Agent Reply Event in src/plugins. */
 export type PluginHookBeforeAgentReplyEvent = {
   cleanedBody: string;
 };
 
+/** Shared type for Plugin Hook Before Agent Reply Result in src/plugins. */
 export type PluginHookBeforeAgentReplyResult = {
   handled: boolean;
   reply?: ReplyPayload;
   reason?: string;
 };
 
+/** Shared type for Plugin Hook Llm Input Event in src/plugins. */
 export type PluginHookLlmInputEvent = {
   runId: string;
   sessionId: string;
@@ -237,6 +256,7 @@ export type PluginHookLlmInputEvent = {
   tools?: unknown[];
 };
 
+/** Shared type for Plugin Hook Model Call Base Event in src/plugins. */
 export type PluginHookModelCallBaseEvent = {
   runId: string;
   callId: string;
@@ -254,8 +274,10 @@ export type PluginHookModelCallBaseEvent = {
   contextWindowReferenceTokens?: number;
 };
 
+/** Shared type for Plugin Hook Model Call Started Event in src/plugins. */
 export type PluginHookModelCallStartedEvent = PluginHookModelCallBaseEvent;
 
+/** Shared type for Plugin Hook Model Call Ended Event in src/plugins. */
 export type PluginHookModelCallEndedEvent = PluginHookModelCallBaseEvent & {
   durationMs: number;
   outcome: "completed" | "error";
@@ -267,6 +289,7 @@ export type PluginHookModelCallEndedEvent = PluginHookModelCallBaseEvent & {
   upstreamRequestIdHash?: string;
 };
 
+/** Shared type for Plugin Hook Llm Output Event in src/plugins. */
 export type PluginHookLlmOutputEvent = {
   runId: string;
   sessionId: string;
@@ -304,6 +327,7 @@ export type PluginHookLlmOutputEvent = {
   };
 };
 
+/** Shared type for Plugin Hook Agent End Event in src/plugins. */
 export type PluginHookAgentEndEvent = {
   runId?: string;
   messages: unknown[];
@@ -312,6 +336,7 @@ export type PluginHookAgentEndEvent = {
   durationMs?: number;
 };
 
+/** Shared type for Plugin Hook Before Agent Finalize Event in src/plugins. */
 export type PluginHookBeforeAgentFinalizeEvent = {
   runId?: string;
   sessionId: string;
@@ -326,6 +351,7 @@ export type PluginHookBeforeAgentFinalizeEvent = {
   messages?: unknown[];
 };
 
+/** Shared type for Plugin Hook Before Agent Finalize Result in src/plugins. */
 export type PluginHookBeforeAgentFinalizeResult = {
   /**
    * continue: accept normal finalization.
@@ -341,6 +367,7 @@ export type PluginHookBeforeAgentFinalizeResult = {
   };
 };
 
+/** Shared type for Plugin Hook Before Compaction Event in src/plugins. */
 export type PluginHookBeforeCompactionEvent = {
   messageCount: number;
   compactingCount?: number;
@@ -349,12 +376,14 @@ export type PluginHookBeforeCompactionEvent = {
   sessionFile?: string;
 };
 
+/** Shared type for Plugin Hook Before Reset Event in src/plugins. */
 export type PluginHookBeforeResetEvent = {
   sessionFile?: string;
   messages?: unknown[];
   reason?: string;
 };
 
+/** Shared type for Plugin Hook After Compaction Event in src/plugins. */
 export type PluginHookAfterCompactionEvent = {
   messageCount: number;
   tokenCount?: number;
@@ -362,11 +391,13 @@ export type PluginHookAfterCompactionEvent = {
   sessionFile?: string;
 };
 
+/** Shared type for Plugin Hook Inbound Claim Result in src/plugins. */
 export type PluginHookInboundClaimResult = {
   handled: boolean;
   reply?: ReplyPayload;
 };
 
+/** Shared type for Plugin Hook Before Dispatch Event in src/plugins. */
 export type PluginHookBeforeDispatchEvent = {
   content: string;
   body?: string;
@@ -377,6 +408,7 @@ export type PluginHookBeforeDispatchEvent = {
   timestamp?: number;
 };
 
+/** Shared type for Plugin Hook Before Dispatch Context in src/plugins. */
 export type PluginHookBeforeDispatchContext = {
   channelId?: string;
   accountId?: string;
@@ -385,11 +417,13 @@ export type PluginHookBeforeDispatchContext = {
   senderId?: string;
 };
 
+/** Shared type for Plugin Hook Before Dispatch Result in src/plugins. */
 export type PluginHookBeforeDispatchResult = {
   handled: boolean;
   text?: string;
 };
 
+/** Shared type for Plugin Hook Reply Dispatch Event in src/plugins. */
 export type PluginHookReplyDispatchEvent = {
   ctx: FinalizedMsgContext;
   runId?: string;
@@ -409,6 +443,7 @@ export type PluginHookReplyDispatchEvent = {
   isTailDispatch?: boolean;
 };
 
+/** Shared type for Plugin Hook Reply Dispatch Context in src/plugins. */
 export type PluginHookReplyDispatchContext = {
   cfg: OpenClawConfig;
   dispatcher: ReplyDispatcher;
@@ -424,12 +459,14 @@ export type PluginHookReplyDispatchContext = {
   markIdle: (reason: string) => void;
 };
 
+/** Shared type for Plugin Hook Reply Dispatch Result in src/plugins. */
 export type PluginHookReplyDispatchResult = {
   handled: boolean;
   queuedFinal: boolean;
   counts: Record<ReplyDispatchKind, number>;
 };
 
+/** Shared type for Plugin Hook Reply Payload Sending Event in src/plugins. */
 export type PluginHookReplyPayloadSendingEvent = {
   payload: PluginHookReplyPayload;
   kind: ReplyDispatchKind;
@@ -438,18 +475,24 @@ export type PluginHookReplyPayloadSendingEvent = {
   runId?: string;
 };
 
+/** Shared type for Plugin Hook Reply Payload in src/plugins. */
 export type PluginHookReplyPayload = Omit<ReplyPayload, "trustedLocalMedia">;
+/** Shared type for Plugin Hook Reply Payload Sending Context in src/plugins. */
 export type PluginHookReplyPayloadSendingContext = PluginHookMessageContext;
 
+/** Shared type for Plugin Hook Reply Payload Sending Result in src/plugins. */
 export type PluginHookReplyPayloadSendingResult = {
   payload?: PluginHookReplyPayload;
   cancel?: boolean;
   reason?: string;
 };
 
+/** Shared type for Plugin Hook Tool Kind in src/plugins. */
 export type PluginHookToolKind = "code_mode_exec";
+/** Shared type for Plugin Hook Tool Input Kind in src/plugins. */
 export type PluginHookToolInputKind = "javascript" | "typescript";
 
+/** Shared type for Plugin Hook Tool Context in src/plugins. */
 export type PluginHookToolContext = {
   agentId?: string;
   sessionKey?: string;
@@ -466,6 +509,7 @@ export type PluginHookToolContext = {
   channelId?: string;
 };
 
+/** Shared type for Plugin Hook Before Tool Call Event in src/plugins. */
 export type PluginHookBeforeToolCallEvent = {
   toolName: string;
   params: Record<string, unknown>;
@@ -489,6 +533,7 @@ export type PluginHookBeforeToolCallEvent = {
   derivedPaths?: readonly string[];
 };
 
+/** Reused constant for Plugin Approval Resolutions behavior in src/plugins. */
 export const PluginApprovalResolutions = {
   ALLOW_ONCE: "allow-once",
   ALLOW_ALWAYS: "allow-always",
@@ -497,9 +542,11 @@ export const PluginApprovalResolutions = {
   CANCELLED: "cancelled",
 } as const;
 
+/** Shared type for Plugin Approval Resolution in src/plugins. */
 export type PluginApprovalResolution =
   (typeof PluginApprovalResolutions)[keyof typeof PluginApprovalResolutions];
 
+/** Shared type for Plugin Hook Before Tool Call Result in src/plugins. */
 export type PluginHookBeforeToolCallResult = {
   params?: Record<string, unknown>;
   block?: boolean;
@@ -516,6 +563,7 @@ export type PluginHookBeforeToolCallResult = {
   };
 };
 
+/** Shared type for Plugin Hook After Tool Call Event in src/plugins. */
 export type PluginHookAfterToolCallEvent = {
   toolName: string;
   params: Record<string, unknown>;
@@ -526,6 +574,7 @@ export type PluginHookAfterToolCallEvent = {
   durationMs?: number;
 };
 
+/** Shared type for Plugin Hook Tool Result Persist Context in src/plugins. */
 export type PluginHookToolResultPersistContext = {
   agentId?: string;
   sessionKey?: string;
@@ -533,6 +582,7 @@ export type PluginHookToolResultPersistContext = {
   toolCallId?: string;
 };
 
+/** Shared type for Plugin Hook Tool Result Persist Event in src/plugins. */
 export type PluginHookToolResultPersistEvent = {
   toolName?: string;
   toolCallId?: string;
@@ -540,33 +590,39 @@ export type PluginHookToolResultPersistEvent = {
   isSynthetic?: boolean;
 };
 
+/** Shared type for Plugin Hook Tool Result Persist Result in src/plugins. */
 export type PluginHookToolResultPersistResult = {
   message?: AgentMessage;
 };
 
+/** Shared type for Plugin Hook Before Message Write Event in src/plugins. */
 export type PluginHookBeforeMessageWriteEvent = {
   message: AgentMessage;
   sessionKey?: string;
   agentId?: string;
 };
 
+/** Shared type for Plugin Hook Before Message Write Result in src/plugins. */
 export type PluginHookBeforeMessageWriteResult = {
   block?: boolean;
   message?: AgentMessage;
 };
 
+/** Shared type for Plugin Hook Session Context in src/plugins. */
 export type PluginHookSessionContext = {
   agentId?: string;
   sessionId: string;
   sessionKey?: string;
 };
 
+/** Shared type for Plugin Hook Session Start Event in src/plugins. */
 export type PluginHookSessionStartEvent = {
   sessionId: string;
   sessionKey?: string;
   resumedFrom?: string;
 };
 
+/** Shared type for Plugin Hook Session End Reason in src/plugins. */
 export type PluginHookSessionEndReason =
   | "new"
   | "reset"
@@ -578,6 +634,7 @@ export type PluginHookSessionEndReason =
   | "restart"
   | "unknown";
 
+/** Shared type for Plugin Hook Session End Event in src/plugins. */
 export type PluginHookSessionEndEvent = {
   sessionId: string;
   sessionKey?: string;
@@ -590,12 +647,14 @@ export type PluginHookSessionEndEvent = {
   nextSessionKey?: string;
 };
 
+/** Shared type for Plugin Hook Subagent Context in src/plugins. */
 export type PluginHookSubagentContext = {
   runId?: string;
   childSessionKey?: string;
   requesterSessionKey?: string;
 };
 
+/** Shared type for Plugin Hook Subagent Target Kind in src/plugins. */
 export type PluginHookSubagentTargetKind = "subagent" | "acp";
 
 type PluginHookSubagentSpawnBase = {
@@ -612,8 +671,10 @@ type PluginHookSubagentSpawnBase = {
   threadRequested: boolean;
 };
 
+/** Shared type for Plugin Hook Subagent Spawning Event in src/plugins. */
 export type PluginHookSubagentSpawningEvent = PluginHookSubagentSpawnBase;
 
+/** Shared type for Plugin Hook Subagent Spawning Result in src/plugins. */
 export type PluginHookSubagentSpawningResult =
   | {
       status: "ok";
@@ -640,6 +701,7 @@ export type PluginHookSubagentSpawningResult =
       error: string;
     };
 
+/** Shared type for Plugin Hook Subagent Delivery Target Event in src/plugins. */
 export type PluginHookSubagentDeliveryTargetEvent = {
   childSessionKey: string;
   requesterSessionKey: string;
@@ -668,10 +730,12 @@ export type PluginHookSubagentDeliveryTargetResult = {
   };
 };
 
+/** Shared type for Plugin Hook Subagent Spawned Event in src/plugins. */
 export type PluginHookSubagentSpawnedEvent = PluginHookSubagentSpawnBase & {
   runId: string;
 };
 
+/** Shared type for Plugin Hook Subagent Ended Event in src/plugins. */
 export type PluginHookSubagentEndedEvent = {
   targetSessionKey: string;
   targetKind: PluginHookSubagentTargetKind;
@@ -684,6 +748,7 @@ export type PluginHookSubagentEndedEvent = {
   error?: string;
 };
 
+/** Shared type for Plugin Hook Gateway Context in src/plugins. */
 export type PluginHookGatewayContext = {
   port?: number;
   config?: OpenClawConfig;
@@ -691,22 +756,27 @@ export type PluginHookGatewayContext = {
   getCron?: () => PluginHookGatewayCronService | undefined;
 };
 
+/** Shared type for Plugin Hook Gateway Start Event in src/plugins. */
 export type PluginHookGatewayStartEvent = {
   port: number;
 };
 
+/** Shared type for Plugin Hook Gateway Stop Event in src/plugins. */
 export type PluginHookGatewayStopEvent = {
   reason?: string;
 };
 
+/** Shared type for Plugin Hook Gateway Cron Run Status in src/plugins. */
 export type PluginHookGatewayCronRunStatus = "ok" | "error" | "skipped";
 
+/** Shared type for Plugin Hook Gateway Cron Delivery Status in src/plugins. */
 export type PluginHookGatewayCronDeliveryStatus =
   | "not-requested"
   | "delivered"
   | "not-delivered"
   | "unknown";
 
+/** Shared type for Plugin Hook Gateway Cron Job State in src/plugins. */
 export type PluginHookGatewayCronJobState = {
   nextRunAtMs?: number;
   runningAtMs?: number;
@@ -722,6 +792,7 @@ export type PluginHookGatewayCronJobState = {
   lastFailureNotificationDeliveryError?: string;
 };
 
+/** Shared type for Plugin Hook Gateway Cron Job in src/plugins. */
 export type PluginHookGatewayCronJob = {
   id: string;
   /** Agent id that owns this cron job. */
@@ -756,6 +827,7 @@ export type PluginHookGatewayCronJob = {
   updatedAtMs?: number;
 };
 
+/** Shared type for Plugin Hook Cron Changed Event in src/plugins. */
 export type PluginHookCronChangedEvent = {
   action: "added" | "updated" | "removed" | "started" | "finished";
   jobId: string;
@@ -780,6 +852,7 @@ export type PluginHookCronChangedEvent = {
   provider?: string;
 };
 
+/** Shared type for Plugin Hook Gateway Cron Create Input in src/plugins. */
 export type PluginHookGatewayCronCreateInput = {
   name: string;
   description: string;
@@ -797,12 +870,15 @@ export type PluginHookGatewayCronCreateInput = {
   };
 };
 
+/** Shared type for Plugin Hook Gateway Cron Update Input in src/plugins. */
 export type PluginHookGatewayCronUpdateInput = Partial<PluginHookGatewayCronCreateInput>;
 
+/** Shared type for Plugin Hook Gateway Cron Remove Result in src/plugins. */
 export type PluginHookGatewayCronRemoveResult = {
   removed?: boolean;
 };
 
+/** Shared type for Plugin Hook Gateway Cron Service in src/plugins. */
 export type PluginHookGatewayCronService = {
   list: (opts?: { includeDisabled?: boolean }) => Promise<PluginHookGatewayCronJob[]>;
   add: (input: PluginHookGatewayCronCreateInput) => Promise<unknown>;
@@ -810,7 +886,9 @@ export type PluginHookGatewayCronService = {
   remove: (id: string) => Promise<PluginHookGatewayCronRemoveResult>;
 };
 
+/** Shared type for Plugin Install Target Type in src/plugins. */
 export type PluginInstallTargetType = "skill" | "plugin";
+/** Shared type for Plugin Install Request Kind in src/plugins. */
 export type PluginInstallRequestKind =
   | "skill-install"
   | "plugin-dir"
@@ -818,8 +896,10 @@ export type PluginInstallRequestKind =
   | "plugin-file"
   | "plugin-npm"
   | "plugin-git";
+/** Shared type for Plugin Install Source Path Kind in src/plugins. */
 export type PluginInstallSourcePathKind = "file" | "directory";
 
+/** Shared type for Plugin Install Finding in src/plugins. */
 export type PluginInstallFinding = {
   ruleId: string;
   severity: "info" | "warn" | "critical";
@@ -828,12 +908,14 @@ export type PluginInstallFinding = {
   message: string;
 };
 
+/** Shared type for Plugin Hook Before Install Request in src/plugins. */
 export type PluginHookBeforeInstallRequest = {
   kind: PluginInstallRequestKind;
   mode: "install" | "update";
   requestedSpecifier?: string;
 };
 
+/** Shared type for Plugin Hook Before Install Builtin Scan in src/plugins. */
 export type PluginHookBeforeInstallBuiltinScan = {
   status: "ok" | "error";
   scannedFiles: number;
@@ -844,6 +926,7 @@ export type PluginHookBeforeInstallBuiltinScan = {
   error?: string;
 };
 
+/** Shared type for Plugin Hook Before Install Skill Install Spec in src/plugins. */
 export type PluginHookBeforeInstallSkillInstallSpec = {
   id?: string;
   kind: "brew" | "node" | "go" | "uv" | "download";
@@ -860,11 +943,13 @@ export type PluginHookBeforeInstallSkillInstallSpec = {
   targetDir?: string;
 };
 
+/** Shared type for Plugin Hook Before Install Skill in src/plugins. */
 export type PluginHookBeforeInstallSkill = {
   installId: string;
   installSpec?: PluginHookBeforeInstallSkillInstallSpec;
 };
 
+/** Shared type for Plugin Hook Before Install Plugin in src/plugins. */
 export type PluginHookBeforeInstallPlugin = {
   pluginId: string;
   contentType: "bundle" | "package" | "file";
@@ -874,12 +959,14 @@ export type PluginHookBeforeInstallPlugin = {
   extensions?: string[];
 };
 
+/** Shared type for Plugin Hook Before Install Context in src/plugins. */
 export type PluginHookBeforeInstallContext = {
   targetType: PluginInstallTargetType;
   requestKind: PluginInstallRequestKind;
   origin?: string;
 };
 
+/** Shared type for Plugin Hook Before Install Event in src/plugins. */
 export type PluginHookBeforeInstallEvent = {
   targetType: PluginInstallTargetType;
   targetName: string;
@@ -892,6 +979,7 @@ export type PluginHookBeforeInstallEvent = {
   plugin?: PluginHookBeforeInstallPlugin;
 };
 
+/** Shared type for Plugin Hook Before Install Result in src/plugins. */
 export type PluginHookBeforeInstallResult = {
   findings?: PluginInstallFinding[];
   block?: boolean;
@@ -923,6 +1011,7 @@ export type PluginHookBeforeAgentRunEvent = {
 /** Result type for before_agent_run. Returns pass/block or void (= pass). */
 export type PluginHookBeforeAgentRunResult = InputGateDecision | void;
 
+/** Shared type for Plugin Hook Handler Map in src/plugins. */
 export type PluginHookHandlerMap = {
   agent_turn_prepare: (
     event: PluginAgentTurnPrepareEvent,
@@ -1097,6 +1186,7 @@ export type PluginHookHandlerMap = {
   ) => Promise<PluginHookBeforeAgentRunResult> | PluginHookBeforeAgentRunResult;
 };
 
+/** Shared type for Plugin Hook Registration in src/plugins. */
 export type PluginHookRegistration<K extends PluginHookName = PluginHookName> = {
   pluginId: string;
   hookName: K;

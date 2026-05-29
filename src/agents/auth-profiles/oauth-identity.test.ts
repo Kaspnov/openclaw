@@ -1,3 +1,4 @@
+/** Regression coverage for OAuth identity comparison and mirror decisions. */
 import { describe, expect, it } from "vitest";
 import {
   isSafeToCopyOAuthIdentity,

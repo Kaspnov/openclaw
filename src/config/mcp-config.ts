@@ -1,3 +1,4 @@
+// config mcp config helpers and runtime behavior.
 import { isRecord } from "../utils.js";
 import { readSourceConfigSnapshot } from "./io.js";
 import {
@@ -30,6 +31,7 @@ type ConfigMcpWriteResult =
     }
   | { ok: false; path: string; error: string };
 
+/** Reused helper for list Configured Mcp Servers behavior in src/config. */
 export async function listConfiguredMcpServers(): Promise<ConfigMcpReadResult> {
   const snapshot = await readSourceConfigSnapshot();
   if (!snapshot.valid) {
@@ -49,6 +51,7 @@ export async function listConfiguredMcpServers(): Promise<ConfigMcpReadResult> {
   };
 }
 
+/** Reused helper for set Configured Mcp Server behavior in src/config. */
 export async function setConfiguredMcpServer(params: {
   name: string;
   server: unknown;
@@ -95,6 +98,7 @@ export async function setConfiguredMcpServer(params: {
   };
 }
 
+/** Reused helper for unset Configured Mcp Server behavior in src/config. */
 export async function unsetConfiguredMcpServer(params: {
   name: string;
 }): Promise<ConfigMcpWriteResult> {

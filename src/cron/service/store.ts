@@ -1,3 +1,4 @@
+// cron/service store helpers and runtime behavior.
 import fs from "node:fs";
 import { normalizeCronJobIdentityFields } from "../normalize-job-identity.js";
 import { normalizeCronJobInput } from "../normalize.js";
@@ -91,6 +92,7 @@ async function flushPendingQuarantine(
   }
 }
 
+/** Reused helper for ensure Loaded behavior in src/cron/service. */
 export async function ensureLoaded(
   state: CronServiceState,
   opts?: {
@@ -253,6 +255,7 @@ export async function ensureLoaded(
   }
 }
 
+/** Reused helper for warn If Disabled behavior in src/cron/service. */
 export function warnIfDisabled(state: CronServiceState, action: string) {
   if (state.deps.cronEnabled) {
     return;
@@ -267,6 +270,7 @@ export function warnIfDisabled(state: CronServiceState, action: string) {
   );
 }
 
+/** Reused helper for persist behavior in src/cron/service. */
 export async function persist(
   state: CronServiceState,
   opts?: { skipBackup?: boolean; stateOnly?: boolean },

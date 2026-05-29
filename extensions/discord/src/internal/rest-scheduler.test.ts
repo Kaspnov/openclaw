@@ -1,3 +1,4 @@
+// Tests extensions/discord/src/internal rest scheduler test behavior.
 import { describe, expect, it, vi } from "vitest";
 import { RateLimitError } from "./rest-errors.js";
 import { RestScheduler, type RestSchedulerOptions } from "./rest-scheduler.js";

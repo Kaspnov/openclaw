@@ -1,3 +1,4 @@
+// Tests gateway node pending work test behavior.
 import { describe, expect, it, beforeEach } from "vitest";
 import {
   acknowledgeNodePendingWork,

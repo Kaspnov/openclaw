@@ -1,3 +1,4 @@
+// cron run log helpers and runtime behavior.
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -23,6 +24,7 @@ import type {
   CronRunTelemetry,
 } from "./types.js";
 
+/** Shared type for Cron Run Log Entry in src/cron. */
 export type CronRunLogEntry = {
   ts: number;
   jobId: string;
@@ -109,6 +111,7 @@ function assertSafeCronRunLogJobId(jobId: string): string {
   return trimmed;
 }
 
+/** Reused helper for resolve Cron Run Log Path behavior in src/cron. */
 export function resolveCronRunLogPath(params: { storePath: string; jobId: string }) {
   const storePath = path.resolve(params.storePath);
   const dir = path.dirname(storePath);
@@ -127,9 +130,12 @@ async function setSecureFileMode(filePath: string): Promise<void> {
   await fs.chmod(filePath, 0o600).catch(() => undefined);
 }
 
+/** Reused constant for DEFAULT CRON RUN LOG MAX BYTES behavior in src/cron. */
 export const DEFAULT_CRON_RUN_LOG_MAX_BYTES = 2_000_000;
+/** Reused constant for DEFAULT CRON RUN LOG KEEP LINES behavior in src/cron. */
 export const DEFAULT_CRON_RUN_LOG_KEEP_LINES = 2_000;
 
+/** Reused helper for resolve Cron Run Log Prune Options behavior in src/cron. */
 export function resolveCronRunLogPruneOptions(cfg?: CronConfig["runLog"]): {
   maxBytes: number;
   keepLines: number;
@@ -154,6 +160,7 @@ export function resolveCronRunLogPruneOptions(cfg?: CronConfig["runLog"]): {
   return { maxBytes, keepLines };
 }
 
+/** Reused helper for get Pending Cron Run Log Write Count For Tests behavior in src/cron. */
 export function getPendingCronRunLogWriteCountForTests() {
   return writesByPath.size;
 }
@@ -181,6 +188,7 @@ async function pruneIfNeeded(filePath: string, opts: { maxBytes: number; keepLin
   );
 }
 
+/** Reused helper for append Cron Run Log behavior in src/cron. */
 export async function appendCronRunLog(
   filePath: string,
   entry: CronRunLogEntry,
@@ -215,6 +223,7 @@ export async function appendCronRunLog(
   }
 }
 
+/** Reused helper for read Cron Run Log Entries behavior in src/cron. */
 export async function readCronRunLogEntries(
   filePath: string,
   opts?: { limit?: number; jobId?: string },
@@ -231,6 +240,7 @@ export async function readCronRunLogEntries(
   return page.entries.toReversed();
 }
 
+/** Reused helper for read Cron Run Log Entries Sync behavior in src/cron. */
 export function readCronRunLogEntriesSync(
   filePath: string,
   opts?: { limit?: number; jobId?: string },
@@ -459,6 +469,7 @@ function filterRunLogEntries(
   });
 }
 
+/** Reused helper for read Cron Run Log Entries Page behavior in src/cron. */
 export async function readCronRunLogEntriesPage(
   filePath: string,
   opts?: ReadCronRunLogPageOptions,
@@ -507,6 +518,7 @@ export async function readCronRunLogEntriesPage(
   };
 }
 
+/** Reused helper for read Cron Run Log Entries Page All behavior in src/cron. */
 export async function readCronRunLogEntriesPageAll(
   opts: ReadCronRunLogAllPageOptions,
 ): Promise<CronRunLogPageResult> {

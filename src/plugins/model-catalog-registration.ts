@@ -1,3 +1,4 @@
+// plugins model catalog registration helpers and runtime behavior.
 import {
   synthesizeMediaGenerationCatalogEntries,
   type MediaGenerationCatalogKind,
@@ -58,6 +59,7 @@ function mergeModelCatalogHooks(
   };
 }
 
+/** Reused helper for create Model Catalog Registration Handlers behavior in src/plugins. */
 export function createModelCatalogRegistrationHandlers(params: {
   registry: PluginRegistry;
   pushDiagnostic: (diagnostic: PluginDiagnostic) => void;

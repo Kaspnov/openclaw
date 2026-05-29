@@ -1,3 +1,4 @@
+// model-catalog manifest planner helpers and runtime behavior.
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { normalizeUniqueStringEntries } from "../shared/string-normalization.js";
 import { normalizeModelCatalogProviderRows } from "./normalize.js";
@@ -44,6 +45,7 @@ type ManifestModelCatalogPlan = {
   conflicts: readonly ManifestModelCatalogConflict[];
 };
 
+/** Shared type for Manifest Model Catalog Suppression Entry in src/model-catalog. */
 export type ManifestModelCatalogSuppressionEntry = {
   pluginId: string;
   provider: string;
@@ -57,6 +59,7 @@ type ManifestModelCatalogSuppressionPlan = {
   suppressions: readonly ManifestModelCatalogSuppressionEntry[];
 };
 
+/** Reused helper for plan Manifest Model Catalog Rows behavior in src/model-catalog. */
 export function planManifestModelCatalogRows(params: {
   registry: ManifestModelCatalogRegistry;
   providerFilter?: string;
@@ -211,6 +214,7 @@ function applyModelCatalogAliasOverrides(params: {
   }));
 }
 
+/** Reused helper for plan Manifest Model Catalog Suppressions behavior in src/model-catalog. */
 export function planManifestModelCatalogSuppressions(params: {
   registry: ManifestModelCatalogRegistry;
   providerFilter?: string;

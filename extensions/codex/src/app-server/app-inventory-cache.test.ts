@@ -1,3 +1,4 @@
+// Tests extensions/codex/src/app-server app inventory cache test behavior.
 import { describe, expect, it, vi } from "vitest";
 import {
   CodexAppInventoryCache,

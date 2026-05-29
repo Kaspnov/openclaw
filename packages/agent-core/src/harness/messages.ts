@@ -2,21 +2,26 @@ import type { ImageContent, Message, TextContent } from "../../../llm-core/src/i
 import type { AgentMessage } from "../types.js";
 import { requireSessionTimestampMs } from "./session/timestamps.js";
 
+/** Public constant for COMPACTION SUMMARY PREFIX behavior in packages/agent-core. */
 export const COMPACTION_SUMMARY_PREFIX = `The conversation history before this point was compacted into the following summary:
 
 <summary>
 `;
 
+/** Public constant for COMPACTION SUMMARY SUFFIX behavior in packages/agent-core. */
 export const COMPACTION_SUMMARY_SUFFIX = `
 </summary>`;
 
+/** Public constant for BRANCH SUMMARY PREFIX behavior in packages/agent-core. */
 export const BRANCH_SUMMARY_PREFIX = `The following is a summary of a branch that this conversation came back from:
 
 <summary>
 `;
 
+/** Public constant for BRANCH SUMMARY SUFFIX behavior in packages/agent-core. */
 export const BRANCH_SUMMARY_SUFFIX = `</summary>`;
 
+/** Public type describing Bash Execution Message for packages/agent-core. */
 export interface BashExecutionMessage {
   role: "bashExecution";
   command: string;
@@ -29,6 +34,7 @@ export interface BashExecutionMessage {
   excludeFromContext?: boolean;
 }
 
+/** Public type describing Custom Message for packages/agent-core. */
 export interface CustomMessage<T = unknown> {
   role: "custom";
   customType: string;
@@ -38,6 +44,7 @@ export interface CustomMessage<T = unknown> {
   timestamp: number;
 }
 
+/** Public type describing Branch Summary Message for packages/agent-core. */
 export interface BranchSummaryMessage {
   role: "branchSummary";
   summary: string;
@@ -45,6 +52,7 @@ export interface BranchSummaryMessage {
   timestamp: number;
 }
 
+/** Public type describing Compaction Summary Message for packages/agent-core. */
 export interface CompactionSummaryMessage {
   role: "compactionSummary";
   summary: string;
@@ -61,6 +69,7 @@ declare module "../types.js" {
   }
 }
 
+/** Public helper for bash Execution To Text behavior in packages/agent-core. */
 export function bashExecutionToText(msg: BashExecutionMessage): string {
   let text = `Ran \`${msg.command}\`\n`;
   if (msg.output) {
@@ -79,6 +88,7 @@ export function bashExecutionToText(msg: BashExecutionMessage): string {
   return text;
 }
 
+/** Public helper for create Branch Summary Message behavior in packages/agent-core. */
 export function createBranchSummaryMessage(
   summary: string,
   fromId: string,
@@ -92,6 +102,7 @@ export function createBranchSummaryMessage(
   };
 }
 
+/** Public helper for create Compaction Summary Message behavior in packages/agent-core. */
 export function createCompactionSummaryMessage(
   summary: string,
   tokensBefore: number,
@@ -105,6 +116,7 @@ export function createCompactionSummaryMessage(
   };
 }
 
+/** Public helper for create Custom Message behavior in packages/agent-core. */
 export function createCustomMessage(
   customType: string,
   content: string | (TextContent | ImageContent)[],
@@ -122,6 +134,7 @@ export function createCustomMessage(
   };
 }
 
+/** Public helper for convert To Llm behavior in packages/agent-core. */
 export function convertToLlm(messages: AgentMessage[]): Message[] {
   return messages
     .map((m): Message | undefined => {

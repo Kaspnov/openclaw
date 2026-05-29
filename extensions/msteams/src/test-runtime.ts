@@ -1,3 +1,4 @@
+// extensions/msteams/src test runtime helpers and runtime behavior.
 import os from "node:os";
 import path from "node:path";
 import type { PluginRuntime } from "../runtime-api.js";

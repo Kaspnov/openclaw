@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src signals helpers and runtime behavior.
 import { randomUUID } from "node:crypto";
 import { compactWhitespace, extractTranscriptText } from "./text.js";
 import type { SkillProposal } from "./types.js";

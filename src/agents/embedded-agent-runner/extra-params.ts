@@ -1,3 +1,4 @@
+/** Resolves and applies provider-specific extra params for embedded-agent streams. */
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
 import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import { createGoogleThinkingPayloadWrapper } from "../../llm/providers/stream-wrappers/google.js";
@@ -50,6 +51,7 @@ const providerRuntimeDeps = {
 let preparedExtraParamsCache = new WeakMap<OpenClawConfig, Map<string, Record<string, unknown>>>();
 const REQUEST_SCOPED_EXTRA_PARAM_KEYS = new Set(["response_format", "responseFormat"]);
 
+/** Reused constant for testing behavior in src/agents/embedded-agent-runner. */
 export const testing = {
   setProviderRuntimeDepsForTest(
     deps: Partial<typeof defaultProviderRuntimeDeps> | undefined,
@@ -78,6 +80,7 @@ export const testing = {
  *
  * @internal Exported for testing only
  */
+/** Resolves configured extra params before transport/provider-specific preparation. */
 export function resolveExtraParams(params: {
   cfg: OpenClawConfig | undefined;
   provider: string;
@@ -158,6 +161,7 @@ type CacheRetentionStreamOptions = Partial<SimpleStreamOptions> & {
   presencePenalty?: number;
   seed?: number;
 };
+/** Shared type for Supported Transport in src/agents/embedded-agent-runner. */
 export type SupportedTransport = AgentRuntimeTransport;
 
 function resolveSupportedTransport(value: unknown): SupportedTransport | undefined {
@@ -223,6 +227,7 @@ function resolvePreparedExtraParamsCacheKey(params: {
   });
 }
 
+/** Resolves extra params after model/provider/transport are known. */
 export function resolvePreparedExtraParams(params: {
   cfg: OpenClawConfig | undefined;
   provider: string;
@@ -392,6 +397,7 @@ function applyDefaultOpenAIGptRuntimeParams(
   }
 }
 
+/** Resolves explicit transport override from config and model settings. */
 export function resolveAgentTransportOverride(params: {
   settingsManager: Pick<SettingsManager, "getGlobalSettings" | "getProjectSettings">;
   effectiveExtraParams: Record<string, unknown> | undefined;
@@ -404,6 +410,7 @@ export function resolveAgentTransportOverride(params: {
   return resolveSupportedTransport(params.effectiveExtraParams?.transport);
 }
 
+/** Reads the explicit transport value from model/provider settings. */
 export function resolveExplicitSettingsTransport(params: {
   settingsManager: Pick<SettingsManager, "getGlobalSettings" | "getProjectSettings">;
   sessionTransport: unknown;
@@ -940,6 +947,7 @@ function isMiMoReasoningAsVisibleTextOpenAICompatibleModel(
  *
  * @internal Exported for testing
  */
+/** Applies resolved extra params to an agent stream function wrapper. */
 export function applyExtraParamsToAgent(
   agent: { streamFn?: StreamFn },
   cfg: OpenClawConfig | undefined,
@@ -1026,4 +1034,5 @@ export function applyExtraParamsToAgent(
 
   return { effectiveExtraParams };
 }
+/** Re-exported API for src/agents/embedded-agent-runner, starting with testing. */
 export { testing as __testing };

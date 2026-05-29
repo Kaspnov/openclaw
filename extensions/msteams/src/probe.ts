@@ -1,3 +1,4 @@
+// extensions/msteams/src probe helpers and runtime behavior.
 import {
   normalizeStringEntries,
   type BaseProbeResult,

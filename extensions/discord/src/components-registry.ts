@@ -1,3 +1,4 @@
+// extensions/discord/src components registry helpers and runtime behavior.
 import { resolveGlobalMap } from "openclaw/plugin-sdk/global-singleton";
 import { uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
 import type { DiscordComponentEntry, DiscordModalEntry } from "./components.js";

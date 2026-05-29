@@ -1,3 +1,4 @@
+/** Resolves embedded-agent provider/model definitions from config, catalogs, and discovery. */
 import type { ModelCompatConfig, ModelMediaInputConfig } from "../../config/types.models.js";
 import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import type { ModelRegistry as CoreModelRegistry } from "../../llm/model-registry.js";
@@ -419,6 +420,7 @@ function findInlineModelMatch(params: {
   );
 }
 
+/** Re-exported API for src/agents/embedded-agent-runner, starting with build Model Alias Lines. */
 export { buildModelAliasLines, buildInlineProviderModels };
 
 function resolveConfiguredProviderConfig(
@@ -1223,6 +1225,7 @@ function normalizeProviderModelRef(params: {
   };
 }
 
+/** Resolves a model using explicit config plus the active runtime model registry. */
 export function resolveModelWithRegistry(params: {
   provider: string;
   modelId: string;
@@ -1277,6 +1280,7 @@ export function resolveModelWithRegistry(params: {
   return resolveConfiguredFallbackModel(scopedParams);
 }
 
+/** Resolves a model synchronously from config and built-in catalogs. */
 export function resolveModel(
   provider: string,
   modelId: string,
@@ -1340,6 +1344,7 @@ export function resolveModel(
   };
 }
 
+/** Resolves a model asynchronously, allowing provider discovery and startup retries. */
 export async function resolveModelAsync(
   provider: string,
   modelId: string,

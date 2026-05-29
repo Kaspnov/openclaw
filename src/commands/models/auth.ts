@@ -1,3 +1,4 @@
+// Interactive model authentication commands for built-in and plugin-backed providers.
 import {
   cancel,
   confirm as clackConfirm,
@@ -527,6 +528,7 @@ async function runProviderAuthMethod(params: {
   });
 }
 
+/** Reused helper for models Auth Setup Token Command behavior in src/commands/models. */
 export async function modelsAuthSetupTokenCommand(
   opts: { provider?: string; yes?: boolean; agent?: string },
   runtime: RuntimeEnv,
@@ -583,6 +585,7 @@ export async function modelsAuthSetupTokenCommand(
   });
 }
 
+/** Reused helper for models Auth Paste Token Command behavior in src/commands/models. */
 export async function modelsAuthPasteTokenCommand(
   opts: {
     provider?: string;
@@ -655,6 +658,7 @@ export async function modelsAuthPasteTokenCommand(
   }
 }
 
+/** Reused helper for models Auth Paste Api Key Command behavior in src/commands/models. */
 export async function modelsAuthPasteApiKeyCommand(
   opts: {
     provider?: string;
@@ -716,6 +720,7 @@ async function upsertAuthProfileWithLockOrThrow(params: UpsertAuthProfileParams)
   }
 }
 
+/** Reused helper for models Auth Add Command behavior in src/commands/models. */
 export async function modelsAuthAddCommand(opts: { agent?: string }, runtime: RuntimeEnv) {
   const { config, agentDir, workspaceDir, providers } = await resolveModelsAuthContext({
     rawAgentId: opts.agent,
@@ -848,6 +853,7 @@ async function clearStaleProfileLockouts(provider: string, agentDir: string): Pr
   }
 }
 
+/** Reused helper for resolve Requested Login Provider Or Throw behavior in src/commands/models. */
 export function resolveRequestedLoginProviderOrThrow(
   providers: ProviderPlugin[],
   rawProvider?: string,
@@ -865,6 +871,7 @@ function credentialMode(credential: AuthProfileCredential): "api_key" | "oauth" 
   return "oauth";
 }
 
+/** Reused helper for resolve Login Profiles behavior in src/commands/models. */
 export function resolveLoginProfiles(params: {
   result: ProviderAuthResult;
   requestedProfileId?: string;
@@ -893,6 +900,7 @@ function maybeLogOpenAICodexNativeSearchTip(runtime: RuntimeEnv, providerId: str
   );
 }
 
+/** Reused helper for models Auth Login Command behavior in src/commands/models. */
 export async function modelsAuthLoginCommand(opts: LoginOptions, runtime: RuntimeEnv) {
   if (!process.stdin.isTTY) {
     throw new Error(

@@ -1,5 +1,7 @@
+/** Long-running gateway server loop and restart handoff logic. */
 import { randomUUID } from "node:crypto";
 import net from "node:net";
+import { clearRuntimeConfigSnapshot } from "../../config/runtime-snapshot.js";
 import {
   captureGatewayRestartTraceHandoff,
   createGatewayRestartTraceHandoffEnv,
@@ -12,7 +14,6 @@ import { formatErrorMessage } from "../../infra/errors.js";
 import { acquireGatewayLock } from "../../infra/gateway-lock.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type { RuntimeEnv } from "../../runtime.js";
-import { clearRuntimeConfigSnapshot } from "../../config/runtime-snapshot.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 const gatewayLog = createSubsystemLogger("gateway");
 const LAUNCHD_SUPERVISED_RESTART_EXIT_DELAY_MS = 1500;
@@ -96,6 +97,7 @@ async function waitForHealthyGatewayChild(
   return false;
 }
 
+/** Reused helper for run Gateway Loop behavior in src/cli/gateway-cli. */
 export async function runGatewayLoop(params: {
   start: (params?: {
     startupStartedAt?: number;

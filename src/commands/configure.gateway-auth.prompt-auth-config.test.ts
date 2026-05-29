@@ -1,3 +1,4 @@
+/** Tests gateway auth prompt config generation. */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import type { NormalizedModelCatalogRow } from "../model-catalog/index.js";

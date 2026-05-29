@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src skills helpers and runtime behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
 import {

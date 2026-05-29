@@ -1,3 +1,4 @@
+// Shared types for extensions/skill-workshop/src types behavior.
 export type SkillWorkshopStatus = "pending" | "applied" | "rejected" | "quarantined";
 
 export type SkillChange =

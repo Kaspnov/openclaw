@@ -1,5 +1,7 @@
+// Shared types for model-catalog/provider-index types behavior.
 import type { ModelCatalogProvider } from "../types.js";
 
+/** Shared type for Open Claw Provider Index Plugin Install in src/model-catalog/provider-index. */
 export type OpenClawProviderIndexPluginInstall = {
   clawhubSpec?: string;
   npmSpec?: string;
@@ -8,6 +10,7 @@ export type OpenClawProviderIndexPluginInstall = {
   expectedIntegrity?: string;
 };
 
+/** Shared type for Open Claw Provider Index Plugin in src/model-catalog/provider-index. */
 export type OpenClawProviderIndexPlugin = {
   id: string;
   package?: string;
@@ -15,6 +18,7 @@ export type OpenClawProviderIndexPlugin = {
   install?: OpenClawProviderIndexPluginInstall;
 };
 
+/** Shared type for Open Claw Provider Index Provider Auth Choice in src/model-catalog/provider-index. */
 export type OpenClawProviderIndexProviderAuthChoice = {
   method: string;
   choiceId: string;
@@ -32,6 +36,7 @@ export type OpenClawProviderIndexProviderAuthChoice = {
   onboardingScopes?: readonly ("text-inference" | "image-generation" | "music-generation")[];
 };
 
+/** Shared type for Open Claw Provider Index Provider in src/model-catalog/provider-index. */
 export type OpenClawProviderIndexProvider = {
   id: string;
   name: string;
@@ -42,6 +47,7 @@ export type OpenClawProviderIndexProvider = {
   previewCatalog?: ModelCatalogProvider;
 };
 
+/** Shared type for Open Claw Provider Index in src/model-catalog/provider-index. */
 export type OpenClawProviderIndex = {
   version: number;
   providers: Readonly<Record<string, OpenClawProviderIndexProvider>>;

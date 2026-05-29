@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src prompt helpers and runtime behavior.
 import type { SkillWorkshopConfig } from "./config.js";
 
 export function buildWorkshopGuidance(config: SkillWorkshopConfig): string {

@@ -1,3 +1,4 @@
+// Tests extensions/discord/src components test behavior.
 import { ButtonStyle, MessageFlags } from "discord-api-types/v10";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

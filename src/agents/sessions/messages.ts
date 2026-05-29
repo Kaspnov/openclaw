@@ -1,3 +1,4 @@
+/** Re-exports agent-core message types through the session SDK surface. */
 import type {
   BashExecutionMessage,
   BranchSummaryMessage,
@@ -5,6 +6,7 @@ import type {
   CustomMessage,
 } from "../../../packages/agent-core/src/harness/messages.js";
 
+/** Re-exported API for src/agents/sessions. */
 export {
   bashExecutionToText,
   BRANCH_SUMMARY_PREFIX,
@@ -17,6 +19,7 @@ export {
   createCustomMessage,
 } from "../../../packages/agent-core/src/harness/messages.js";
 
+/** Re-exported API for src/agents/sessions. */
 export type {
   BashExecutionMessage,
   BranchSummaryMessage,

@@ -1,3 +1,4 @@
+/** Public SDK helper for defining plugin entries with config snapshots and runtime wiring. */
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import type {
@@ -121,6 +122,7 @@ import type {
 } from "../plugins/types.js";
 import { createCachedLazyValueGetter } from "./lazy-value.js";
 
+/** Re-exported API for src/plugin-sdk. */
 export type {
   AnyAgentTool,
   AgentHarness,
@@ -240,25 +242,31 @@ export type {
   OpenClawPluginDefinition,
   PluginLogger,
 };
+/** Re-exported API for src/plugin-sdk. */
 export type {
   PluginConversationBinding,
   PluginConversationBindingResolvedEvent,
   PluginConversationBindingRequestParams,
   PluginConversationBindingRequestResult,
 } from "../plugins/conversation-binding.types.js";
+/** Re-exported API for src/plugin-sdk. */
 export type {
   PluginHookInboundClaimContext,
   PluginHookInboundClaimEvent,
   PluginHookInboundClaimResult,
 } from "../plugins/hook-types.js";
+/** Re-exported API for src/plugin-sdk, starting with Provider Runtime Model. */
 export type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
+/** Re-exported API for src/plugin-sdk. */
 export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
+/** Re-exported API for src/plugin-sdk, starting with Open Claw Config. */
 export type { OpenClawConfig };
 
+/** Re-exported API for src/plugin-sdk. */
 export {
   buildJsonPluginConfigSchema,
   buildPluginConfigSchema,
@@ -302,6 +310,7 @@ type DefinedPluginEntry = {
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
  * `openclaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
+/** Define a plugin entry factory with optional config and runtime injection hooks. */
 export function definePluginEntry({
   id,
   name,

@@ -1,3 +1,4 @@
+// secrets provider env vars helpers and runtime behavior.
 import { resolveProviderAuthAliasMap } from "../agents/provider-auth-aliases.js";
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";
@@ -30,6 +31,7 @@ const CORE_PROVIDER_SETUP_ENV_VAR_OVERRIDES = {
   "minimax-cn": ["MINIMAX_API_KEY"],
 } as const;
 
+/** Shared type for Provider Env Var Lookup Params in src/secrets. */
 export type ProviderEnvVarLookupParams = {
   config?: OpenClawConfig;
   workspaceDir?: string;
@@ -38,6 +40,7 @@ export type ProviderEnvVarLookupParams = {
   metadataSnapshot?: PluginMetadataSnapshot;
 };
 
+/** Shared type for Provider Auth Evidence in src/secrets. */
 export type ProviderAuthEvidence = {
   type: "local-file-with-env";
   fileEnvVar?: string;
@@ -48,6 +51,7 @@ export type ProviderAuthEvidence = {
   source?: string;
 };
 
+/** Shared type for Provider Auth Lookup Maps in src/secrets. */
 export type ProviderAuthLookupMaps = {
   aliasMap: Readonly<Record<string, string>>;
   envCandidateMap: Readonly<Record<string, readonly string[]>>;
@@ -260,6 +264,7 @@ function resolveManifestProviderAuthEvidenceFromSnapshot(
   return evidenceByProvider;
 }
 
+/** Reused helper for resolve Provider Auth Env Var Candidates behavior in src/secrets. */
 export function resolveProviderAuthEnvVarCandidates(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly string[]> {
@@ -269,12 +274,14 @@ export function resolveProviderAuthEnvVarCandidates(
   };
 }
 
+/** Reused helper for resolve Provider Auth Evidence behavior in src/secrets. */
 export function resolveProviderAuthEvidence(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly ProviderAuthEvidence[]> {
   return resolveManifestProviderAuthEvidence(params);
 }
 
+/** Reused helper for resolve Provider Auth Lookup Maps behavior in src/secrets. */
 export function resolveProviderAuthLookupMaps(
   params?: ProviderEnvVarLookupParams,
 ): ProviderAuthLookupMaps {
@@ -294,6 +301,7 @@ export function resolveProviderAuthLookupMaps(
   };
 }
 
+/** Reused helper for resolve Provider Env Vars behavior in src/secrets. */
 export function resolveProviderEnvVars(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly string[]> {
@@ -370,6 +378,7 @@ export const PROVIDER_AUTH_ENV_VAR_CANDIDATES = createLazyReadonlyRecord(() =>
  */
 export const PROVIDER_ENV_VARS = createLazyReadonlyRecord(() => resolveProviderEnvVars());
 
+/** Reused constant for testing behavior in src/secrets. */
 export const testing = {
   resetProviderEnvVarCachesForTests(): void {
     for (const reset of lazyRecordCacheResetters) {
@@ -378,6 +387,7 @@ export const testing = {
   },
 };
 
+/** Reused helper for get Provider Env Vars behavior in src/secrets. */
 export function getProviderEnvVars(
   providerId: string,
   params?: ProviderEnvVarLookupParams,
@@ -391,6 +401,7 @@ export function getProviderEnvVars(
 
 // OPENCLAW_API_KEY authenticates the local OpenClaw bridge itself and must
 // remain available to child bridge/runtime processes.
+/** Reused helper for list Known Provider Auth Env Var Names behavior in src/secrets. */
 export function listKnownProviderAuthEnvVarNames(params?: ProviderEnvVarLookupParams): string[] {
   return uniqueStrings([
     ...Object.values(resolveProviderAuthEnvVarCandidates(params)).flatMap((keys) => keys),
@@ -398,10 +409,12 @@ export function listKnownProviderAuthEnvVarNames(params?: ProviderEnvVarLookupPa
   ]);
 }
 
+/** Reused helper for list Known Secret Env Var Names behavior in src/secrets. */
 export function listKnownSecretEnvVarNames(params?: ProviderEnvVarLookupParams): string[] {
   return uniqueStrings(Object.values(resolveProviderEnvVars(params)).flatMap((keys) => keys));
 }
 
+/** Reused helper for omit Env Keys Case Insensitive behavior in src/secrets. */
 export function omitEnvKeysCaseInsensitive(
   baseEnv: NodeJS.ProcessEnv,
   keys: Iterable<string>,
@@ -424,4 +437,5 @@ export function omitEnvKeysCaseInsensitive(
   }
   return env;
 }
+/** Re-exported API for src/secrets, starting with testing. */
 export { testing as __testing };

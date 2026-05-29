@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src store helpers and runtime behavior.
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { privateFileStore } from "openclaw/plugin-sdk/security-runtime";

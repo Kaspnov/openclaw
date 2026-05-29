@@ -1,3 +1,4 @@
+/** Tests shared provider catalog normalization and merge behavior. */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ModelCatalogProvider } from "../model-catalog/types.js";
 import {

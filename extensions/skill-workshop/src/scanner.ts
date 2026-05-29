@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src scanner helpers and runtime behavior.
 import type { SkillScanFinding } from "./types.js";
 
 const RULES: Array<{

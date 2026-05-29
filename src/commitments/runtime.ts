@@ -1,3 +1,4 @@
+// Background runtime for debounced commitment extraction from conversation turns.
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
@@ -73,10 +74,12 @@ function clearTimer(handle: TimerHandle): void {
   (runtime.clearTimer ?? clearTimeout)(handle);
 }
 
+/** Reused helper for configure Commitment Extraction Runtime behavior in src/commitments. */
 export function configureCommitmentExtractionRuntime(next: CommitmentExtractionRuntime): void {
   runtime = next;
 }
 
+/** Reused helper for reset Commitment Extraction Runtime For Tests behavior in src/commitments. */
 export function resetCommitmentExtractionRuntimeForTests(): void {
   if (timer) {
     clearTimer(timer);
@@ -98,6 +101,7 @@ function isUsefulText(value: string | undefined): boolean {
   return Boolean(value?.trim());
 }
 
+/** Reused helper for enqueue Commitment Extraction behavior in src/commitments. */
 export function enqueueCommitmentExtraction(input: CommitmentExtractionEnqueueInput): boolean {
   const resolved = resolveCommitmentsConfig(input.cfg);
   const nowMs = input.nowMs ?? Date.now();
@@ -263,6 +267,7 @@ async function hydrateBatch(
   );
 }
 
+/** Reused helper for drain Commitment Extraction Queue behavior in src/commitments. */
 export async function drainCommitmentExtractionQueue(): Promise<number> {
   if (draining) {
     return 0;

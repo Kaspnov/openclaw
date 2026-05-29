@@ -1,3 +1,4 @@
+// mcp channel bridge helpers and runtime behavior.
 import { randomUUID } from "node:crypto";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
@@ -39,6 +40,7 @@ type ServerNotification = {
 const CLAUDE_PERMISSION_REPLY_RE = /^(yes|no)\s+([a-km-z]{5})$/i;
 const QUEUE_LIMIT = 1_000;
 
+/** Reused class for Open Claw Channel Bridge behavior in src/mcp. */
 export class OpenClawChannelBridge {
   private gateway: GatewayClient | null = null;
   private readonly verbose: boolean;
@@ -544,6 +546,7 @@ export class OpenClawChannelBridge {
   }
 }
 
+/** Reused helper for should Retry Initial Mcp Gateway Connect behavior in src/mcp. */
 export function shouldRetryInitialMcpGatewayConnect(error: Error): boolean {
   if (
     error.name === "GatewayClientRequestError" &&

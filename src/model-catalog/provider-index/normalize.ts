@@ -1,3 +1,4 @@
+// model-catalog/provider-index normalize helpers and runtime behavior.
 import { parseClawHubPluginSpec } from "../../infra/clawhub-spec.js";
 import { parseRegistryNpmSpec } from "../../infra/npm-registry-spec.js";
 import { isBlockedObjectKey } from "../../infra/prototype-keys.js";
@@ -207,6 +208,7 @@ function normalizeProvider(
   };
 }
 
+/** Reused helper for normalize Open Claw Provider Index behavior in src/model-catalog/provider-index. */
 export function normalizeOpenClawProviderIndex(value: unknown): OpenClawProviderIndex | undefined {
   if (!isRecord(value) || value.version !== OPENCLAW_PROVIDER_INDEX_VERSION) {
     return undefined;

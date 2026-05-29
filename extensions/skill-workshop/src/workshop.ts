@@ -1,3 +1,4 @@
+// extensions/skill-workshop/src workshop helpers and runtime behavior.
 import type { OpenClawPluginApi } from "../api.js";
 import { resolveDefaultAgentId } from "../api.js";
 import type { SkillWorkshopConfig } from "./config.js";

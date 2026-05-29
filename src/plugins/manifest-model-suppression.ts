@@ -1,3 +1,4 @@
+// plugins manifest model suppression helpers and runtime behavior.
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import {
   buildModelCatalogMergeKey,
@@ -115,6 +116,7 @@ function manifestSuppressionMatchesConditions(params: {
   return true;
 }
 
+/** Reused helper for build Manifest Built In Model Suppression Resolver behavior in src/plugins. */
 export function buildManifestBuiltInModelSuppressionResolver(params: {
   config?: OpenClawConfig;
   workspaceDir?: string;

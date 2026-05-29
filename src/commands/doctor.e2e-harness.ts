@@ -1,3 +1,4 @@
+/** Shared E2E harness for doctor command tests. */
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -59,59 +60,85 @@ function createLegacyConfigSnapshot() {
   } as const;
 }
 
+/** Reused constant for read Config File Snapshot behavior in src/commands. */
 export const readConfigFileSnapshot = vi.fn() as unknown as MockFn;
+/** Reused constant for confirm behavior in src/commands. */
 export const confirm = vi.fn().mockResolvedValue(true) as unknown as MockFn;
+/** Reused constant for select behavior in src/commands. */
 export const select = vi.fn().mockResolvedValue("node") as unknown as MockFn;
+/** Reused constant for note behavior in src/commands. */
 export const note = vi.fn() as unknown as MockFn;
+/** Reused constant for write Config File behavior in src/commands. */
 export const writeConfigFile = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for resolve Open Claw Package Root behavior in src/commands. */
 export const resolveOpenClawPackageRoot = vi.fn().mockResolvedValue(null) as unknown as MockFn;
+/** Reused constant for run Gateway Update behavior in src/commands. */
 export const runGatewayUpdate = vi
   .fn()
   .mockResolvedValue(createGatewayUpdateResult()) as unknown as MockFn;
+/** Reused constant for collect Relevant Doctor Plugin Ids behavior in src/commands. */
 export const collectRelevantDoctorPluginIds = vi.fn(() => []) as unknown as MockFn;
+/** Reused constant for list Plugin Doctor Legacy Config Rules behavior in src/commands. */
 export const listPluginDoctorLegacyConfigRules = vi.fn(() => []) as unknown as MockFn;
+/** Reused constant for run Doctor Health Contributions behavior in src/commands. */
 export const runDoctorHealthContributions = vi.fn(
   defaultRunDoctorHealthContributions,
 ) as unknown as MockFn;
+/** Reused constant for maybe Repair Memory Recall Health behavior in src/commands. */
 export const maybeRepairMemoryRecallHealth = vi
   .fn()
   .mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for note Memory Search Health behavior in src/commands. */
 export const noteMemorySearchHealth = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for note Memory Recall Health behavior in src/commands. */
 export const noteMemoryRecallHealth = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for migrate Legacy Config behavior in src/commands. */
 export const migrateLegacyConfig = vi.fn((raw: unknown) => ({
   config: raw as Record<string, unknown>,
   changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
 })) as unknown as MockFn;
 
+/** Reused constant for run Exec behavior in src/commands. */
 export const runExec = vi.fn().mockResolvedValue({
   stdout: "",
   stderr: "",
 }) as unknown as MockFn;
+/** Reused constant for run Command With Timeout behavior in src/commands. */
 export const runCommandWithTimeout = vi
   .fn()
   .mockResolvedValue(createCommandWithTimeoutResult()) as unknown as MockFn;
 
+/** Reused constant for ensure Auth Profile Store behavior in src/commands. */
 export const ensureAuthProfileStore = vi
   .fn()
   .mockReturnValue({ version: 1, profiles: {} }) as unknown as MockFn;
 
+/** Reused constant for legacy Read Config File Snapshot behavior in src/commands. */
 export const legacyReadConfigFileSnapshot = vi
   .fn()
   .mockResolvedValue(createLegacyConfigSnapshot()) as unknown as MockFn;
+/** Reused constant for create Config IO behavior in src/commands. */
 export const createConfigIO = vi.fn(() => ({
   readConfigFileSnapshot: legacyReadConfigFileSnapshot,
 })) as unknown as MockFn;
 
+/** Reused constant for find Legacy Gateway Services behavior in src/commands. */
 export const findLegacyGatewayServices = vi.fn().mockResolvedValue([]) as unknown as MockFn;
+/** Reused constant for uninstall Legacy Gateway Services behavior in src/commands. */
 export const uninstallLegacyGatewayServices = vi.fn().mockResolvedValue([]) as unknown as MockFn;
+/** Reused constant for find Extra Gateway Services behavior in src/commands. */
 export const findExtraGatewayServices = vi.fn().mockResolvedValue([]) as unknown as MockFn;
+/** Reused constant for find System Gateway Services behavior in src/commands. */
 export const findSystemGatewayServices = vi.fn().mockResolvedValue([]) as unknown as MockFn;
+/** Reused constant for render Gateway Service Cleanup Hints behavior in src/commands. */
 export const renderGatewayServiceCleanupHints = vi
   .fn()
   .mockReturnValue(["cleanup"]) as unknown as MockFn;
+/** Reused constant for audit Gateway Service Config behavior in src/commands. */
 export const auditGatewayServiceConfig = vi
   .fn()
   .mockResolvedValue({ ok: true, issues: [] }) as unknown as MockFn;
+/** Reused constant for build Gateway Install Plan behavior in src/commands. */
 export const buildGatewayInstallPlan = vi.mocked(
   vi.fn().mockResolvedValue({
     programArguments: ["node", "cli", "gateway", "--port", "18789"],
@@ -119,28 +146,39 @@ export const buildGatewayInstallPlan = vi.mocked(
     environment: {},
   }),
 ) as unknown as MockFn;
+/** Reused constant for resolve Gateway Auth Token For Service behavior in src/commands. */
 export const resolveGatewayAuthTokenForService = vi
   .fn()
   .mockResolvedValue({ token: undefined }) as unknown as MockFn;
+/** Reused constant for resolve Gateway Program Arguments behavior in src/commands. */
 export const resolveGatewayProgramArguments = vi.fn().mockResolvedValue({
   programArguments: ["node", "cli", "gateway", "--port", "18789"],
 }) as unknown as MockFn;
+/** Reused constant for service Install behavior in src/commands. */
 export const serviceInstall = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for service Is Loaded behavior in src/commands. */
 export const serviceIsLoaded = vi.fn().mockResolvedValue(false) as unknown as MockFn;
+/** Reused constant for service Stop behavior in src/commands. */
 export const serviceStop = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for service Restart behavior in src/commands. */
 export const serviceRestart = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for service Uninstall behavior in src/commands. */
 export const serviceUninstall = vi.fn().mockResolvedValue(undefined) as unknown as MockFn;
+/** Reused constant for service Read Command behavior in src/commands. */
 export const serviceReadCommand = vi.fn().mockResolvedValue(null) as unknown as MockFn;
+/** Reused constant for call Gateway behavior in src/commands. */
 export const callGateway = vi
   .fn()
   .mockRejectedValue(new Error("gateway closed")) as unknown as MockFn;
 
+/** Reused constant for auto Migrate Legacy State Dir behavior in src/commands. */
 export const autoMigrateLegacyStateDir = vi.fn().mockResolvedValue({
   migrated: false,
   skipped: false,
   changes: [],
   warnings: [],
 }) as unknown as MockFn;
+/** Reused constant for run Channel Plugin Startup Maintenance behavior in src/commands. */
 export const runChannelPluginStartupMaintenance = vi
   .fn()
   .mockResolvedValue(undefined) as unknown as MockFn;
@@ -223,10 +261,12 @@ function createLegacyStateMigrationDetectionResult(params?: {
   };
 }
 
+/** Reused constant for detect Legacy State Migrations behavior in src/commands. */
 export const detectLegacyStateMigrations = vi
   .fn()
   .mockResolvedValue(createLegacyStateMigrationDetectionResult()) as unknown as MockFn;
 
+/** Reused constant for run Legacy State Migrations behavior in src/commands. */
 export const runLegacyStateMigrations = vi.fn().mockResolvedValue({
   changes: [],
   warnings: [],
@@ -470,6 +510,7 @@ vi.mock("../channels/plugins/lifecycle-startup.js", () => ({
   runChannelPluginStartupMaintenance,
 }));
 
+/** Reused helper for mock Doctor Config Snapshot behavior in src/commands. */
 export function mockDoctorConfigSnapshot(
   params: {
     config?: Record<string, unknown>;
@@ -489,6 +530,7 @@ export function mockDoctorConfigSnapshot(
   });
 }
 
+/** Reused helper for create Doctor Runtime behavior in src/commands. */
 export function createDoctorRuntime() {
   return {
     log: vi.fn() as unknown as MockFn,
@@ -497,6 +539,7 @@ export function createDoctorRuntime() {
   };
 }
 
+/** Reused helper for arrange Legacy State Migration Test behavior in src/commands. */
 export async function arrangeLegacyStateMigrationTest(): Promise<{
   doctorCommand: unknown;
   runtime: { log: MockFn; error: MockFn; exit: MockFn };

@@ -1,3 +1,4 @@
+// Browser cleanup hook for session lifecycle shutdown.
 import { runBestEffortCleanup } from "./infra/non-fatal-cleanup.js";
 import { closeTrackedBrowserTabsForSessions } from "./plugin-sdk/browser-maintenance.js";
 
@@ -12,6 +13,7 @@ function normalizeSessionKeys(sessionKeys: string[]): string[] {
   return [...keys];
 }
 
+/** Best-effort cleanup of browser tabs associated with ending sessions. */
 export async function cleanupBrowserSessionsForLifecycleEnd(params: {
   sessionKeys: string[];
   onWarn?: (message: string) => void;

@@ -1,3 +1,4 @@
+// Tests extensions/qqbot/src/engine/tools remind logic test behavior.
 import { describe, expect, it } from "vitest";
 import {
   parseRelativeTime,

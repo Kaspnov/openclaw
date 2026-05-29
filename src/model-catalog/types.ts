@@ -1,8 +1,13 @@
+// Shared types for model-catalog types behavior.
 import type { ModelApi, ModelCompatConfig, ModelMediaInputConfig } from "../config/types.models.js";
 
+/** Shared type for Model Catalog Input in src/model-catalog. */
 export type ModelCatalogInput = "text" | "image" | "document";
+/** Shared type for Model Catalog Discovery in src/model-catalog. */
 export type ModelCatalogDiscovery = "static" | "refreshable" | "runtime";
+/** Shared type for Model Catalog Status in src/model-catalog. */
 export type ModelCatalogStatus = "available" | "preview" | "deprecated" | "disabled";
+/** Shared type for Model Catalog Source in src/model-catalog. */
 export type ModelCatalogSource =
   | "manifest"
   | "provider-index"
@@ -10,6 +15,7 @@ export type ModelCatalogSource =
   | "config"
   | "runtime-refresh";
 
+/** Shared type for Unified Model Catalog Kind in src/model-catalog. */
 export type UnifiedModelCatalogKind =
   | "text"
   | "voice"
@@ -17,6 +23,7 @@ export type UnifiedModelCatalogKind =
   | "video_generation"
   | "music_generation";
 
+/** Shared type for Unified Model Catalog Source in src/model-catalog. */
 export type UnifiedModelCatalogSource =
   | "manifest"
   | "provider-index"
@@ -26,6 +33,7 @@ export type UnifiedModelCatalogSource =
   | "configured"
   | "runtime-refresh";
 
+/** Shared type for Unified Model Catalog Entry in src/model-catalog. */
 export type UnifiedModelCatalogEntry<TCapabilities = unknown> = {
   kind: UnifiedModelCatalogKind;
   provider: string;
@@ -43,6 +51,7 @@ export type UnifiedModelCatalogEntry<TCapabilities = unknown> = {
   warnings?: readonly string[];
 };
 
+/** Shared type for Model Catalog Tiered Cost in src/model-catalog. */
 export type ModelCatalogTieredCost = {
   input: number;
   output: number;
@@ -51,6 +60,7 @@ export type ModelCatalogTieredCost = {
   range: [number, number] | [number];
 };
 
+/** Shared type for Model Catalog Cost in src/model-catalog. */
 export type ModelCatalogCost = {
   input?: number;
   output?: number;
@@ -59,6 +69,7 @@ export type ModelCatalogCost = {
   tieredPricing?: ModelCatalogTieredCost[];
 };
 
+/** Shared type for Model Catalog Model in src/model-catalog. */
 export type ModelCatalogModel = {
   id: string;
   name?: string;
@@ -80,6 +91,7 @@ export type ModelCatalogModel = {
   tags?: string[];
 };
 
+/** Shared type for Model Catalog Provider in src/model-catalog. */
 export type ModelCatalogProvider = {
   baseUrl?: string;
   api?: ModelApi;
@@ -87,12 +99,14 @@ export type ModelCatalogProvider = {
   models: ModelCatalogModel[];
 };
 
+/** Shared type for Model Catalog Alias in src/model-catalog. */
 export type ModelCatalogAlias = {
   provider: string;
   api?: ModelApi;
   baseUrl?: string;
 };
 
+/** Shared type for Model Catalog Suppression in src/model-catalog. */
 export type ModelCatalogSuppression = {
   provider: string;
   model: string;
@@ -103,6 +117,7 @@ export type ModelCatalogSuppression = {
   };
 };
 
+/** Shared type for Model Catalog in src/model-catalog. */
 export type ModelCatalog = {
   providers?: Record<string, ModelCatalogProvider>;
   aliases?: Record<string, ModelCatalogAlias>;
@@ -111,6 +126,7 @@ export type ModelCatalog = {
   runtimeAugment?: boolean;
 };
 
+/** Shared type for Normalized Model Catalog Row in src/model-catalog. */
 export type NormalizedModelCatalogRow = {
   provider: string;
   id: string;

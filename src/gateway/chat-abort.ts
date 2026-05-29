@@ -5,6 +5,7 @@ import { emitAgentEvent } from "../infra/agent-events.js";
 
 const DEFAULT_CHAT_RUN_ABORT_GRACE_MS = 60_000;
 
+/** Shared type for Chat Abort Controller Entry in src/gateway. */
 export type ChatAbortControllerEntry = {
   controller: AbortController;
   sessionId: string;
@@ -39,6 +40,7 @@ type RegisteredChatAbortController = {
   cleanup: () => void;
 };
 
+/** Reused helper for is Chat Stop Command Text behavior in src/gateway. */
 export function isChatStopCommandText(text: string): boolean {
   return isAbortRequestText(text);
 }
@@ -73,6 +75,7 @@ function resolveChatRunExpiresAtMs(params: {
   return Math.min(max, Math.max(min, target));
 }
 
+/** Reused helper for resolve Agent Run Expires At Ms behavior in src/gateway. */
 export function resolveAgentRunExpiresAtMs(params: {
   now: number;
   timeoutMs: number;
@@ -88,6 +91,7 @@ export function resolveAgentRunExpiresAtMs(params: {
   });
 }
 
+/** Reused helper for register Chat Abort Controller behavior in src/gateway. */
 export function registerChatAbortController(params: {
   chatAbortControllers: Map<string, ChatAbortControllerEntry>;
   runId: string;
@@ -229,6 +233,7 @@ function resolveDefaultGlobalAgentId(ops: ChatAbortOps): string | undefined {
   return cfg ? resolveDefaultAgentId(cfg) : undefined;
 }
 
+/** Reused helper for abort Chat Run By Id behavior in src/gateway. */
 export function abortChatRunById(
   ops: ChatAbortOps,
   params: {
@@ -284,6 +289,7 @@ export function abortChatRunById(
   return { aborted: true };
 }
 
+/** Reused helper for update Chat Run Provider behavior in src/gateway. */
 export function updateChatRunProvider(
   chatAbortControllers: Map<string, ChatAbortControllerEntry>,
   params: {
@@ -301,6 +307,7 @@ export function updateChatRunProvider(
   return true;
 }
 
+/** Reused helper for abort Chat Runs For Provider behavior in src/gateway. */
 export function abortChatRunsForProvider(
   ops: ChatAbortOps,
   params: {
