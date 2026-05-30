@@ -380,22 +380,32 @@ export async function sendWebGroupInboundMessage(params: {
   const conversationId = params.conversationId ?? "123@g.us";
   const accountId = params.accountId ?? "default";
   await params.onMessage({
-    body: params.body,
+    event: {
+      id: params.id,
+    },
+    payload: {
+      body: params.body,
+    },
+    platform: {
+      chatJid: conversationId,
+      recipientJid: "+2",
+      senderE164: params.senderE164,
+      senderName: params.senderName,
+      selfE164: params.selfE164,
+      selfJid: params.selfJid,
+      sendComposing: params.spies.sendComposing,
+      reply: params.spies.reply,
+      sendMedia: params.spies.sendMedia,
+    },
     from: conversationId,
     conversationId,
-    chatId: conversationId,
     chatType: "group",
-    to: "+2",
     accountId,
-    id: params.id,
-    senderE164: params.senderE164,
-    senderName: params.senderName,
-    mentionedJids: params.mentionedJids,
-    selfE164: params.selfE164,
-    selfJid: params.selfJid,
-    sendComposing: params.spies.sendComposing,
-    reply: params.spies.reply,
-    sendMedia: params.spies.sendMedia,
+    group: {
+      mentions: {
+        jids: params.mentionedJids,
+      },
+    },
   } as WebInboundMessage);
 }
 
@@ -412,16 +422,22 @@ export async function sendWebDirectInboundMessage(params: {
   const accountId = params.accountId ?? "default";
   await params.onMessage({
     accountId,
-    id: params.id,
+    event: {
+      id: params.id,
+      timestamp: params.timestamp ?? Date.now(),
+    },
+    payload: {
+      body: params.body,
+    },
+    platform: {
+      chatJid: `direct:${params.from}`,
+      recipientJid: params.to,
+      sendComposing: params.spies.sendComposing,
+      reply: params.spies.reply,
+      sendMedia: params.spies.sendMedia,
+    },
     from: params.from,
     conversationId: params.from,
-    to: params.to,
-    body: params.body,
-    timestamp: params.timestamp ?? Date.now(),
     chatType: "direct",
-    chatId: `direct:${params.from}`,
-    sendComposing: params.spies.sendComposing,
-    reply: params.spies.reply,
-    sendMedia: params.spies.sendMedia,
   } as WebInboundMessage);
 }
