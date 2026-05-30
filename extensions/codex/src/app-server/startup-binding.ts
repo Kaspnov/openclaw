@@ -110,32 +110,6 @@ async function listCodexAppServerRolloutFilesForThread(
   return files;
 }
 
-async function readCodexSessionRecordForSessionFile(
-  sessionFile: string,
-): Promise<(Record<string, unknown> & { sessionKey: string }) | undefined> {
-  const sessionsFile = path.join(path.dirname(sessionFile), "sessions.json");
-  let store: JsonValue | undefined;
-  try {
-    store = JSON.parse(await fs.readFile(sessionsFile, "utf8")) as JsonValue;
-  } catch {
-    return undefined;
-  }
-  if (!isJsonObject(store)) {
-    return undefined;
-  }
-  const resolvedSessionFile = path.resolve(sessionFile);
-  for (const [sessionKey, record] of Object.entries(store)) {
-    if (!isJsonObject(record) || typeof record.sessionFile !== "string") {
-      continue;
-    }
-    if (path.resolve(record.sessionFile) !== resolvedSessionFile) {
-      continue;
-    }
-    return { sessionKey, ...record };
-  }
-  return undefined;
-}
-
 type CodexAppServerRolloutTokenSnapshot = {
   totalTokens?: number;
   modelContextWindow?: number;
@@ -262,9 +236,6 @@ export async function rotateOversizedCodexAppServerStartupBinding(params: {
     );
     return binding;
   }
-  const sessionRecord = params.sessionFile
-    ? await readCodexSessionRecordForSessionFile(params.sessionFile)
-    : undefined;
   const maxBytes = parseCodexAppServerByteLimit(
     params.config?.agents?.defaults?.compaction?.maxActiveTranscriptBytes,
   );
@@ -298,21 +269,13 @@ export async function rotateOversizedCodexAppServerStartupBinding(params: {
     nativeTokenSnapshots.map((snapshot) => snapshot?.modelContextWindow),
   );
   const maxTokens = resolveCodexAppServerNativeThreadTokenFuse(nativeModelContextWindow);
-  const sessionTokens =
-    sessionRecord?.totalTokensFresh !== false &&
-    typeof sessionRecord?.totalTokens === "number" &&
-    Number.isFinite(sessionRecord.totalTokens)
-      ? sessionRecord.totalTokens
-      : undefined;
-  const tokenCount = maxFiniteNumber([sessionTokens, nativeTokens]);
+  const tokenCount = maxFiniteNumber([nativeTokens]);
   if (tokenCount !== undefined && tokenCount >= maxTokens) {
     embeddedAgentLog.warn(
       "codex app-server native transcript exceeded active token limit; starting a fresh thread",
       {
         threadId: binding.threadId,
         maxTokens,
-        sessionKey: sessionRecord?.sessionKey,
-        sessionTokens,
         nativeTokens,
         nativeModelContextWindow,
       },
