@@ -1,4 +1,4 @@
-// web provider runtime shared helpers and runtime behavior.
+// Shared provider selection and credential checks for web search/fetch runtimes.
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { normalizeSecretInputString, resolveSecretInputRef } from "../config/types.secrets.js";
 import { normalizeSecretInput } from "../utils/normalize-secret-input.js";
@@ -14,7 +14,7 @@ type ProviderWithCredential = {
   requiresCredential?: boolean;
 };
 
-/** Reused helper for resolve Web Provider Config behavior in src/web. */
+/** Resolve the `tools.web.search` or `tools.web.fetch` provider config block. */
 export function resolveWebProviderConfig(
   cfg: OpenClawConfig | undefined,
   kind: "search" | "fetch",
@@ -30,7 +30,7 @@ export function resolveWebProviderConfig(
   return toolConfig as Record<string, unknown>;
 }
 
-/** Reused helper for read Web Provider Env Value behavior in src/web. */
+/** Read the first non-empty secret value from a provider's configured env vars. */
 export function readWebProviderEnvValue(
   envVars: string[],
   processEnv: NodeJS.ProcessEnv = process.env,
@@ -44,14 +44,14 @@ export function readWebProviderEnvValue(
   return undefined;
 }
 
-/** Reused helper for provider Requires Credential behavior in src/web. */
+/** Return whether a provider entry requires credentials before it can be selected. */
 export function providerRequiresCredential(
   provider: Pick<ProviderWithCredential, "requiresCredential">,
 ): boolean {
   return provider.requiresCredential !== false;
 }
 
-/** Reused helper for has Web Provider Entry Credential behavior in src/web. */
+/** Check config, auth providers, env refs, and fallback config for provider credentials. */
 export function hasWebProviderEntryCredential<
   TProvider extends ProviderWithCredential,
   TConfig extends Record<string, unknown> | undefined,
@@ -130,7 +130,7 @@ export function hasWebProviderEntryCredential<
   );
 }
 
-/** Reused helper for resolve Web Provider Definition behavior in src/web. */
+/** Resolve the enabled provider and create its runtime tool definition. */
 export function resolveWebProviderDefinition<
   TProvider extends { id: string },
   TConfig extends Record<string, unknown> | undefined,
