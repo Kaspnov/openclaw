@@ -37,7 +37,7 @@ import {
 } from "../sessions/session-key-utils.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
-/** Re-exported API for src/plugin-sdk. */
+/** Core plugin-entry contracts for plugin definitions, providers, commands, and runtime hooks. */
 export type {
   AgentPromptGuidance,
   AgentPromptGuidanceEntry,
@@ -130,27 +130,27 @@ export type {
   UnifiedModelCatalogProviderPlugin,
   SpeechProviderPlugin,
 } from "./plugin-entry.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Unified model catalog entry/source metadata exposed to provider plugins. */
 export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Provider Runtime Model. */
+/** Runtime model metadata used by provider registration. */
 export type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Plugin tool context/factory contracts exposed to SDK callers. */
 export type {
   OpenClawPluginActiveModelContext,
   OpenClawPluginToolContext,
   OpenClawPluginToolFactory,
 } from "../plugins/types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Memory plugin public artifact contracts exposed through the SDK. */
 export type {
   MemoryPluginCapability,
   MemoryPluginPublicArtifact,
   MemoryPluginPublicArtifactsProvider,
 } from "../plugins/memory-state.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Reply hook payload dispatch contracts for plugin hook integrations. */
 export type {
   PluginHookReplyPayloadSendingContext,
   PluginHookReplyPayloadSendingEvent,
@@ -160,17 +160,17 @@ export type {
   PluginHookReplyDispatchEvent,
   PluginHookReplyDispatchResult,
 } from "../plugins/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Open Claw Config. */
+/** Host config type shared with plugins. */
 export type { OpenClawConfig } from "../config/config.js";
-/** Re-exported API for src/plugin-sdk, starting with Outbound Identity. */
+/** Outbound identity shape used by channel send adapters. */
 export type { OutboundIdentity } from "../infra/outbound/identity.js";
-/** Re-exported API for src/plugin-sdk, starting with History Entry. */
+/** Reply history entry shape passed to channel/plugin hooks. */
 export type { HistoryEntry } from "../auto-reply/reply/history.types.js";
-/** Re-exported API for src/plugin-sdk, starting with Reply Payload. */
+/** Reply payload contract shared by channel plugins. */
 export type { ReplyPayload } from "./reply-payload.js";
-/** Re-exported API for src/plugin-sdk, starting with Allowlist Match. */
+/** Allowlist match result used by channel security helpers. */
 export type { AllowlistMatch } from "../channels/allowlist-match.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Public channel metadata/setup/probe contracts. */
 export type {
   BaseProbeResult,
   ChannelAccountSnapshot,
@@ -179,21 +179,21 @@ export type {
   ChannelMeta,
   ChannelSetupInput,
 } from "../channels/plugins/types.public.js";
-/** Re-exported API for src/plugin-sdk, starting with Chat Type. */
+/** Chat type discriminator used by channel adapters. */
 export type { ChatType } from "../channels/chat-type.js";
-/** Re-exported API for src/plugin-sdk, starting with Normalized Location. */
+/** Normalized location metadata for channel messages. */
 export type { NormalizedLocation } from "../channels/location.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Directory Entry. */
+/** Channel directory entry returned by directory-capable plugins. */
 export type { ChannelDirectoryEntry } from "../channels/plugins/types.core.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Outbound Adapter. */
+/** Outbound adapter contract for channel plugins. */
 export type { ChannelOutboundAdapter } from "../channels/plugins/types.adapters.js";
-/** Re-exported API for src/plugin-sdk, starting with Poll Input. */
+/** Poll creation input accepted by channel poll adapters. */
 export type { PollInput } from "../polls.js";
-/** Re-exported API for src/plugin-sdk, starting with is Secret Ref. */
+/** SecretRef type guard for plugin config handling. */
 export { isSecretRef } from "../config/types.secrets.js";
-/** Re-exported API for src/plugin-sdk, starting with Gateway Request Handler Options. */
+/** Gateway request handler options exposed to plugin gateway methods. */
 export type { GatewayRequestHandlerOptions } from "../gateway/server-methods/types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Channel messaging/session route contracts for outbound routing. */
 export type {
   ChannelOutboundSessionRoute,
   ChannelMessagingAdapter,
@@ -217,96 +217,96 @@ function createInlineTextPairingAdapter(params: {
     },
   };
 }
-/** Re-exported API for src/plugin-sdk. */
+/** Provider usage snapshot types for usage-reporting plugins. */
 export type {
   ProviderUsageSnapshot,
   UsageProviderId,
   UsageWindow,
 } from "../infra/provider-usage.types.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Message Action Context. */
+/** Context passed to channel message action handlers. */
 export type { ChannelMessageActionContext } from "../channels/plugins/types.public.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Plugin. */
+/** Channel plugin definition contract. */
 export type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Config Ui Hint. */
+/** UI hint metadata for channel config fields. */
 export type { ChannelConfigUiHint } from "../channels/plugins/types.config.js";
-/** Re-exported API for src/plugin-sdk, starting with Plugin Runtime. */
+/** Plugin runtime and logger contracts passed during registration. */
 export type { PluginRuntime, RuntimeLogger } from "../plugins/runtime/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Wizard Prompter. */
+/** Wizard prompt helper contract used by setup flows. */
 export type { WizardPrompter } from "../wizard/prompts.js";
 
-/** Re-exported API for src/plugin-sdk, starting with define Plugin Entry. */
+/** Define the main plugin entry module shape. */
 export { definePluginEntry } from "./plugin-entry.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Plugin config schema builders and empty schema sentinel. */
 export {
   buildJsonPluginConfigSchema,
   buildPluginConfigSchema,
   emptyPluginConfigSchema,
 } from "../plugins/config-schema.js";
-/** Re-exported API for src/plugin-sdk, starting with Keyed Async Queue. */
+/** Keyed async queue utilities for serialized plugin work. */
 export { KeyedAsyncQueue, enqueueKeyedTask } from "./keyed-async-queue.js";
-/** Re-exported API for src/plugin-sdk, starting with create Dedupe Cache. */
+/** Dedupe cache helpers for plugin send/probe flows. */
 export { createDedupeCache, resolveGlobalDedupeCache } from "../infra/dedupe.js";
-/** Re-exported API for src/plugin-sdk, starting with generate Secure Token. */
+/** Secure random token/UUID helpers for plugin pairing and setup. */
 export { generateSecureToken, generateSecureUuid } from "../infra/secure-random.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Context-engine delegation helpers exposed to memory/context plugins. */
 export {
   buildMemorySystemPromptAddition,
   delegateCompactionToRuntime,
 } from "../context-engine/delegate.js";
-/** Re-exported API for src/plugin-sdk, starting with DEFAULT ACCOUNT ID. */
+/** Account id constants and normalization for channel config. */
 export { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../routing/session-key.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Channel config schema builders and empty schema sentinel. */
 export {
   buildChannelConfigSchema,
   buildJsonChannelConfigSchema,
   emptyChannelConfigSchema,
 } from "../channels/plugins/config-schema.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Account setup migration helpers for channel config sections. */
 export {
   applyAccountNameToChannelSection,
   migrateBaseNameToDefaultAccount,
 } from "../channels/plugins/setup-helpers.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Channel config mutation helpers for account entries. */
 export {
   clearAccountEntryFields,
   deleteAccountFromConfigSection,
   setAccountEnabledInConfigSection,
 } from "../channels/plugins/config-helpers.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Channel pairing hint formatting and delimited-entry parsing helpers. */
 export {
   formatPairingApproveHint,
   parseOptionalDelimitedEntries,
 } from "../channels/plugins/helpers.js";
-/** Re-exported API for src/plugin-sdk. */
+/** TypeBox schema helpers for agent/channel tool parameters. */
 export {
   channelTargetSchema,
   channelTargetsSchema,
   optionalStringEnum,
   stringEnum,
 } from "../agents/schema/typebox.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Secret file size limits and bounded read helpers. */
 export {
   DEFAULT_SECRET_FILE_MAX_BYTES,
   loadSecretFileSync,
   readSecretFileSync,
   tryReadSecretFileSync,
 } from "../infra/secret-file.js";
-/** Re-exported API for src/plugin-sdk, starting with Secret File Read Options. */
+/** Secret file read option/result contracts. */
 export type { SecretFileReadOptions, SecretFileReadResult } from "../infra/secret-file.js";
 
-/** Re-exported API for src/plugin-sdk, starting with resolve Gateway Bind Url. */
+/** Resolve gateway bind URL from config/env inputs. */
 export { resolveGatewayBindUrl } from "../shared/gateway-bind-url.js";
-/** Re-exported API for src/plugin-sdk, starting with Gateway Bind Url Result. */
+/** Gateway bind URL resolution result. */
 export type { GatewayBindUrlResult } from "../shared/gateway-bind-url.js";
-/** Re-exported API for src/plugin-sdk, starting with resolve Gateway Port. */
+/** Resolve gateway port from config/env inputs. */
 export { resolveGatewayPort } from "../config/paths.js";
-/** Re-exported API for src/plugin-sdk, starting with create Subsystem Logger. */
+/** Create a subsystem-scoped logger for plugin helpers. */
 export { createSubsystemLogger } from "../logging/subsystem.js";
-/** Re-exported API for src/plugin-sdk, starting with normalize At Hash Slug. */
+/** Slug normalization helpers shared by channel/user identifiers. */
 export { normalizeAtHashSlug, normalizeHyphenSlug } from "../shared/string-normalization.js";
-/** Re-exported API for src/plugin-sdk, starting with create Action Gate. */
+/** Create a gated action helper for tool execution. */
 export { createActionGate } from "../agents/tools/common.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Common agent tool result and parameter reader helpers. */
 export {
   jsonResult,
   readNumberParam,
@@ -314,16 +314,16 @@ export {
   readStringArrayParam,
   readStringParam,
 } from "../agents/tools/common.js";
-/** Re-exported API for src/plugin-sdk, starting with parse Strict Positive Integer. */
+/** Parse a strict positive integer from user/config input. */
 export { parseStrictPositiveInteger } from "../infra/parse-finite-number.js";
-/** Re-exported API for src/plugin-sdk, starting with is Trusted Proxy Address. */
+/** Trusted proxy and client IP helpers for gateway-facing plugins. */
 export { isTrustedProxyAddress, resolveClientIp } from "../gateway/net.js";
-/** Re-exported API for src/plugin-sdk, starting with format Zoned Timestamp. */
+/** Format timestamps in a configured timezone. */
 export { formatZonedTimestamp } from "../infra/format-time/format-datetime.js";
-/** Re-exported API for src/plugin-sdk, starting with resolve Configured Acp Binding Record. */
+/** Resolve persisted ACP binding records from config. */
 export { resolveConfiguredAcpBindingRecord } from "../acp/persistent-bindings.resolve.js";
 
-/** Reused helper for ensure Configured Acp Binding Ready behavior in src/plugin-sdk. */
+/** Lazily prepare a configured ACP binding without loading lifecycle code at module import. */
 export async function ensureConfiguredAcpBindingReady(params: {
   cfg: OpenClawConfig;
   configuredBinding: ResolvedConfiguredAcpBinding | null;
@@ -332,23 +332,23 @@ export async function ensureConfiguredAcpBindingReady(params: {
   return runtime.ensureConfiguredAcpBindingReady(params);
 }
 
-/** Re-exported API for src/plugin-sdk, starting with resolve Tailnet Host With Runner. */
+/** Resolve Tailnet host state using an injectable command runner. */
 export { resolveTailnetHostWithRunner } from "../shared/tailscale-status.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Tailscale command runner/result contracts. */
 export type {
   TailscaleStatusCommandResult,
   TailscaleStatusCommandRunner,
 } from "../shared/tailscale-status.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Route peer/session-key helpers for channel plugins. */
 export {
   buildAgentSessionKey,
   type RoutePeer,
   type RoutePeerKind,
 } from "../routing/resolve-route.js";
-/** Re-exported API for src/plugin-sdk, starting with resolve Thread Session Keys. */
+/** Resolve parent/thread session keys for channel thread routing. */
 export { resolveThreadSessionKeys } from "../routing/session-key.js";
 
-/** Shared type for Channel Outbound Session Route Params in src/plugin-sdk. */
+/** Parameter shape accepted by channel outbound session route resolvers. */
 export type ChannelOutboundSessionRouteParams = Parameters<
   NonNullable<ChannelMessagingAdapter["resolveOutboundSessionRoute"]>
 >[0];
@@ -371,7 +371,7 @@ function resolveSdkChatChannelMeta(id: string) {
   return cachedSdkChatChannelMeta.metaById[id];
 }
 
-/** Reused helper for get Chat Channel Meta behavior in src/plugin-sdk. */
+/** Return bundled chat-channel metadata by id using the SDK metadata cache. */
 export function getChatChannelMeta(id: ChatChannelId): ChannelMeta {
   return resolveSdkChatChannelMeta(id);
 }
@@ -426,20 +426,20 @@ export function buildChannelOutboundSessionRoute(params: {
   };
 }
 
-/** Shared type for Thread Aware Outbound Session Route Thread Source in src/plugin-sdk. */
+/** Source priority token for selecting a thread id during outbound routing. */
 export type ThreadAwareOutboundSessionRouteThreadSource =
   | "replyToId"
   | "threadId"
   | "currentSession";
 
-/** Shared type for Thread Aware Outbound Session Route Recovery Context in src/plugin-sdk. */
+/** Facts exposed to plugins when deciding whether current-thread recovery is valid. */
 export type ThreadAwareOutboundSessionRouteRecoveryContext = {
   route: ChannelOutboundSessionRoute;
   currentBaseSessionKey: string;
   currentThreadId: string;
 };
 
-/** Reused helper for recover Current Thread Session Id behavior in src/plugin-sdk. */
+/** Recover a thread id from the current session key when it belongs to the same route. */
 export function recoverCurrentThreadSessionId(params: {
   route: ChannelOutboundSessionRoute;
   currentSessionKey?: string | null;
@@ -466,7 +466,7 @@ export function recoverCurrentThreadSessionId(params: {
   return current.threadId;
 }
 
-/** Reused helper for build Thread Aware Outbound Session Route behavior in src/plugin-sdk. */
+/** Build an outbound route that applies reply/thread/current-session precedence. */
 export function buildThreadAwareOutboundSessionRoute(params: {
   route: ChannelOutboundSessionRoute;
   replyToId?: string | number | null;
@@ -850,7 +850,7 @@ function resolveChatChannelOutbound(
 
 // Shared higher-level builder for chat-style channels that mostly compose
 // scoped DM security, text pairing, reply threading, and attached send results.
-/** Reused helper for create Chat Channel Plugin behavior in src/plugin-sdk. */
+/** Compose common chat-channel security, pairing, threading, and outbound adapters. */
 export function createChatChannelPlugin<
   TResolvedAccount extends { accountId?: string | null },
   Probe = unknown,
@@ -878,7 +878,7 @@ export function createChatChannelPlugin<
 }
 
 // Shared base object for channel plugins that only need to override a few optional surfaces.
-/** Reused helper for create Channel Plugin Base behavior in src/plugin-sdk. */
+/** Build the common channel plugin base object with bundled metadata defaults. */
 export function createChannelPluginBase<TResolvedAccount>(
   params: CreateChannelPluginBaseOptions<TResolvedAccount>,
 ): CreatedChannelPluginBase<TResolvedAccount> {
