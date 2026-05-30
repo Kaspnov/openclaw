@@ -35,13 +35,27 @@ export function resolveContextWindowInfo(params: {
     const providers = params.cfg?.models?.providers as
       | Record<
           string,
-          { models?: Array<{ id?: string; contextTokens?: number; contextWindow?: number }> }
+          {
+            contextTokens?: number;
+            contextWindow?: number;
+            models?: Array<{ id?: string; contextTokens?: number; contextWindow?: number }>;
+          }
         >
       | undefined;
     const providerEntry = findNormalizedProviderValue(providers, params.provider);
     const models = Array.isArray(providerEntry?.models) ? providerEntry.models : [];
     const match = models.find((m) => m?.id === params.modelId);
-    return normalizePositiveInt(match?.contextTokens) ?? normalizePositiveInt(match?.contextWindow);
+    const matchContextTokens = normalizePositiveInt(match?.contextTokens);
+    const providerContextTokens = normalizePositiveInt(providerEntry?.contextTokens);
+    const matchContextWindow = normalizePositiveInt(match?.contextWindow);
+    return (
+      matchContextTokens ??
+      (providerContextTokens && matchContextWindow
+        ? Math.min(providerContextTokens, matchContextWindow)
+        : providerContextTokens) ??
+      matchContextWindow ??
+      normalizePositiveInt(providerEntry?.contextWindow)
+    );
   })();
   const fromModel =
     normalizePositiveInt(params.modelContextTokens) ??
