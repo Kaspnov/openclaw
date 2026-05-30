@@ -1,4 +1,4 @@
-// config mcp config helpers and runtime behavior.
+// Read and mutate configured MCP server entries in OpenClaw config.
 import { isRecord } from "../utils.js";
 import { readSourceConfigSnapshot } from "./io.js";
 import {
@@ -31,7 +31,7 @@ type ConfigMcpWriteResult =
     }
   | { ok: false; path: string; error: string };
 
-/** Reused helper for list Configured Mcp Servers behavior in src/config. */
+/** Read configured MCP servers from the source config file. */
 export async function listConfiguredMcpServers(): Promise<ConfigMcpReadResult> {
   const snapshot = await readSourceConfigSnapshot();
   if (!snapshot.valid) {
@@ -51,7 +51,7 @@ export async function listConfiguredMcpServers(): Promise<ConfigMcpReadResult> {
   };
 }
 
-/** Reused helper for set Configured Mcp Server behavior in src/config. */
+/** Add or replace one configured MCP server and persist validated config. */
 export async function setConfiguredMcpServer(params: {
   name: string;
   server: unknown;
@@ -98,7 +98,7 @@ export async function setConfiguredMcpServer(params: {
   };
 }
 
-/** Reused helper for unset Configured Mcp Server behavior in src/config. */
+/** Remove one configured MCP server and persist validated config. */
 export async function unsetConfiguredMcpServer(params: {
   name: string;
 }): Promise<ConfigMcpWriteResult> {
