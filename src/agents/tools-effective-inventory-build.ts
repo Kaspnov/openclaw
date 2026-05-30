@@ -23,250 +23,25 @@ import type {
 } from "./tools-effective-inventory.types.js";
 import type { AnyAgentTool } from "./tools/common.js";
 
-type InventoryToolMetadata = {
-  displayName?: string;
-  description?: string;
-  risk?: "low" | "medium" | "high";
-  tags?: string[];
-};
-
-type InventoryToolEntryRead =
-  | {
-      ok: true;
-      tool: AnyAgentTool;
-      toolIndex: number;
-    }
-  | {
-      ok: false;
-      diagnostic: RuntimeToolSchemaDiagnostic;
-    };
-
-function readRecordField(
-  value: unknown,
-  field: string,
-): { ok: true; value: unknown } | { ok: false } {
-  try {
-    if ((typeof value !== "object" && typeof value !== "function") || value === null) {
-      return { ok: false };
-    }
-    return { ok: true, value: (value as Record<string, unknown>)[field] };
-  } catch {
-    return { ok: false };
-  }
-}
-
-function readArrayLength(value: unknown): number | undefined {
-  try {
-    return Array.isArray(value) ? value.length : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function readArrayElement(
-  value: unknown,
-  index: number,
-): { ok: true; value: unknown } | { ok: false } {
-  return readRecordField(value, String(index));
-}
-
-function unreadableInventoryToolRow(toolIndex: number): InventoryToolEntryRead {
-  return {
-    ok: false,
-    diagnostic: {
-      toolName: `tool[${toolIndex}]`,
-      toolIndex,
-      violations: [`tool[${toolIndex}] is unreadable`],
-    },
-  };
-}
-
-function readInventoryToolEntries(tools: readonly AnyAgentTool[]): InventoryToolEntryRead[] {
-  let length = 0;
-  try {
-    length = tools.length;
-  } catch {
-    return [unreadableInventoryToolRow(0)];
-  }
-  const entries: InventoryToolEntryRead[] = [];
-  for (let toolIndex = 0; toolIndex < length; toolIndex += 1) {
-    try {
-      entries.push({ ok: true, tool: tools[toolIndex], toolIndex });
-    } catch {
-      entries.push(unreadableInventoryToolRow(toolIndex));
-    }
-  }
-  return entries;
-}
-
-function readArrayFieldElements(value: unknown, field: string): unknown[] {
-  const read = readRecordField(value, field);
-  if (!read.ok) {
-    return [];
-  }
-  const length = readArrayLength(read.value);
-  if (length === undefined) {
-    return [];
-  }
-  const entries: unknown[] = [];
-  for (let index = 0; index < length; index += 1) {
-    const entry = readArrayElement(read.value, index);
-    if (entry.ok) {
-      entries.push(entry.value);
-    }
-  }
-  return entries;
-}
-
-function readNormalizedStringField(value: unknown, field: string): string | undefined {
-  const read = readRecordField(value, field);
-  if (!read.ok || typeof read.value !== "string") {
-    return undefined;
-  }
-  return normalizeOptionalString(read.value);
-}
-
-function readStringField(value: unknown, field: string): string | undefined {
-  const read = readRecordField(value, field);
-  return read.ok && typeof read.value === "string" ? read.value : undefined;
-}
-
-function readStringArrayField(value: unknown, field: string): string[] | undefined {
-  const read = readRecordField(value, field);
-  if (!read.ok) {
-    return undefined;
-  }
-  const length = readArrayLength(read.value);
-  if (length === undefined) {
-    return undefined;
-  }
-  const items: string[] = [];
-  for (let index = 0; index < length; index += 1) {
-    const item = readArrayElement(read.value, index);
-    if (!item.ok || typeof item.value !== "string") {
-      continue;
-    }
-    const normalized = normalizeOptionalString(item.value);
-    if (normalized) {
-      items.push(normalized);
-    }
-  }
-  return items.length > 0 ? items : undefined;
-}
-
-function readInventoryToolField(
-  tool: AnyAgentTool,
-  key: "name" | "label" | "description" | "displaySummary",
-): unknown {
-  try {
-    return (tool as Record<string, unknown>)[key];
-  } catch {
-    return undefined;
-  }
-}
-
-function readInventoryToolName(tool: AnyAgentTool): string | undefined {
-  return normalizeOptionalString(readInventoryToolField(tool, "name"));
-}
-
-function readInventoryToolString(
-  tool: AnyAgentTool,
-  key: "label" | "description" | "displaySummary",
-): string | undefined {
-  const value = readInventoryToolField(tool, key);
-  return typeof value === "string" ? value : undefined;
-}
-
-function readToolAtIndex(
-  tools: readonly AnyAgentTool[],
-  toolIndex: number,
-): AnyAgentTool | undefined {
-  try {
-    return tools[toolIndex];
-  } catch {
-    return undefined;
-  }
-}
-
-function buildReadableToolNameMap(
-  entries: readonly InventoryToolEntryRead[],
-): Map<string, AnyAgentTool> {
-  const byName = new Map<string, AnyAgentTool>();
-  for (const entry of entries) {
-    if (!entry.ok) {
-      continue;
-    }
-    const name = readInventoryToolName(entry.tool);
-    if (name) {
-      byName.set(name, entry.tool);
-    }
-  }
-  return byName;
-}
-
-function filterProviderNormalizableTools(entries: readonly InventoryToolEntryRead[]): {
-  tools: readonly AnyAgentTool[];
-  diagnostics: readonly RuntimeToolSchemaDiagnostic[];
-} {
-  const normalizedTools: AnyAgentTool[] = [];
-  const diagnostics: RuntimeToolSchemaDiagnostic[] = [];
-  for (const entry of entries) {
-    if (!entry.ok) {
-      diagnostics.push(entry.diagnostic);
-      continue;
-    }
-    const { tool, toolIndex } = entry;
-    const nameRead = readRecordField(tool, "name");
-    const toolName =
-      nameRead.ok && typeof nameRead.value === "string" && nameRead.value
-        ? nameRead.value
-        : `tool[${toolIndex}]`;
-    const parametersRead = readRecordField(tool, "parameters");
-    const schemaProjectionPath = `${toolName}.parameters`;
-    const schemaProjectionViolations =
-      parametersRead.ok && parametersRead.value !== null && typeof parametersRead.value === "object"
-        ? projectRuntimeToolInputSchema(
-            parametersRead.value,
-            schemaProjectionPath,
-          ).violations.filter(
-            (violation) =>
-              violation === `${schemaProjectionPath} is not JSON-serializable` ||
-              violation === `${schemaProjectionPath} is not a JSON value`,
-          )
-        : [];
-    const violations = [
-      ...(nameRead.ok ? [] : [`${toolName}.name is unreadable`]),
-      ...(parametersRead.ok ? [] : [`${toolName}.parameters is unreadable`]),
-      ...schemaProjectionViolations,
-    ];
-    if (violations.length > 0) {
-      diagnostics.push({ toolName, toolIndex, violations });
-      continue;
-    }
-    normalizedTools.push(tool);
-  }
-  return { tools: normalizedTools, diagnostics };
-}
-
-function resolveEffectiveToolLabel(tool: AnyAgentTool, toolName: string): string {
-  const rawLabel = normalizeOptionalString(readInventoryToolString(tool, "label")) ?? "";
+function resolveEffectiveToolLabel(tool: AnyAgentTool): string {
+  const rawLabel = normalizeOptionalString(tool.label) ?? "";
   if (
     rawLabel &&
-    normalizeLowercaseStringOrEmpty(rawLabel) !== normalizeLowercaseStringOrEmpty(toolName)
+    normalizeLowercaseStringOrEmpty(rawLabel) !== normalizeLowercaseStringOrEmpty(tool.name)
   ) {
     return rawLabel;
   }
-  return resolveToolDisplay({ name: toolName }).title;
+  return resolveToolDisplay({ name: tool.name }).title;
 }
 
 function resolveRawToolDescription(tool: AnyAgentTool): string {
-  return normalizeOptionalString(readInventoryToolString(tool, "description")) ?? "";
+  return normalizeOptionalString(tool.description) ?? "";
 }
 
 function summarizeToolDescription(tool: AnyAgentTool): string {
   return summarizeToolDescriptionText({
     rawDescription: resolveRawToolDescription(tool),
-    displaySummary: readInventoryToolString(tool, "displaySummary"),
+    displaySummary: tool.displaySummary,
   });
 }
 
@@ -278,21 +53,53 @@ function resolveEffectiveToolSource(
   pluginId?: string;
   channelId?: string;
 } {
-  const pluginMeta =
-    getPluginToolMeta(tool) ?? (fallbackTool ? getPluginToolMeta(fallbackTool) : undefined);
+  const pluginMeta = readPluginToolMeta(tool) ?? readPluginToolMeta(fallbackTool);
   if (pluginMeta) {
     if (pluginMeta.pluginId === "bundle-mcp") {
       return { source: "mcp", pluginId: pluginMeta.pluginId };
     }
     return { source: "plugin", pluginId: pluginMeta.pluginId };
   }
-  const channelMeta =
-    getChannelAgentToolMeta(tool as never) ??
-    (fallbackTool ? getChannelAgentToolMeta(fallbackTool as never) : undefined);
+  const channelMeta = readChannelToolMeta(tool) ?? readChannelToolMeta(fallbackTool);
   if (channelMeta) {
     return { source: "channel", channelId: channelMeta.channelId };
   }
   return { source: "core" };
+}
+
+function readPluginToolMeta(tool: AnyAgentTool | undefined): ReturnType<typeof getPluginToolMeta> {
+  if (!tool) {
+    return undefined;
+  }
+  try {
+    return getPluginToolMeta(tool);
+  } catch {
+    return undefined;
+  }
+}
+
+function readChannelToolMeta(
+  tool: AnyAgentTool | undefined,
+): ReturnType<typeof getChannelAgentToolMeta> {
+  if (!tool) {
+    return undefined;
+  }
+  try {
+    return getChannelAgentToolMeta(tool as never);
+  } catch {
+    return undefined;
+  }
+}
+
+function readToolAtIndex(
+  tools: readonly AnyAgentTool[],
+  toolIndex: number,
+): AnyAgentTool | undefined {
+  try {
+    return tools[toolIndex];
+  } catch {
+    return undefined;
+  }
 }
 
 function buildUnsupportedToolSchemaNotice(params: {
@@ -330,30 +137,82 @@ function buildUnsupportedToolSchemaNotices(params: {
   );
 }
 
-function readActivePluginToolMetadata(): Map<string, InventoryToolMetadata> {
-  const metadata = new Map<string, InventoryToolMetadata>();
-  for (const entry of readArrayFieldElements(getActivePluginRegistry(), "toolMetadata")) {
-    const pluginId = readNormalizedStringField(entry, "pluginId");
-    const metadataRecord = readRecordField(entry, "metadata");
-    if (!pluginId || !metadataRecord.ok) {
-      continue;
-    }
-    const toolName = readNormalizedStringField(metadataRecord.value, "toolName");
-    if (!toolName) {
-      continue;
-    }
-    const displayName = readStringField(metadataRecord.value, "displayName");
-    const description = readStringField(metadataRecord.value, "description");
-    const risk = readStringField(metadataRecord.value, "risk");
-    const tags = readStringArrayField(metadataRecord.value, "tags");
-    metadata.set(buildPluginToolMetadataKey(pluginId, toolName), {
-      ...(displayName !== undefined ? { displayName } : {}),
-      ...(description !== undefined ? { description } : {}),
-      ...(risk === "low" || risk === "medium" || risk === "high" ? { risk } : {}),
-      ...(tags !== undefined ? { tags } : {}),
-    });
+function unreadableToolRowDiagnostic(toolIndex: number): RuntimeToolSchemaDiagnostic {
+  return {
+    toolName: `tool[${toolIndex}]`,
+    toolIndex,
+    violations: [`tool[${toolIndex}] is unreadable`],
+  };
+}
+
+function readProviderNormalizableToolName(
+  tool: AnyAgentTool,
+  toolIndex: number,
+): { toolName: string; violations: string[] } {
+  try {
+    return {
+      toolName: typeof tool.name === "string" && tool.name ? tool.name : `tool[${toolIndex}]`,
+      violations: [],
+    };
+  } catch {
+    const toolName = `tool[${toolIndex}]`;
+    return { toolName, violations: [`${toolName}.name is unreadable`] };
   }
-  return metadata;
+}
+
+function filterProviderNormalizableTools(tools: readonly AnyAgentTool[]): {
+  tools: readonly AnyAgentTool[];
+  diagnostics: readonly RuntimeToolSchemaDiagnostic[];
+} {
+  let length = 0;
+  try {
+    length = tools.length;
+  } catch {
+    return { tools: [], diagnostics: [unreadableToolRowDiagnostic(0)] };
+  }
+  const normalizableTools: AnyAgentTool[] = [];
+  const diagnostics: RuntimeToolSchemaDiagnostic[] = [];
+  for (let toolIndex = 0; toolIndex < length; toolIndex += 1) {
+    let tool: AnyAgentTool | undefined;
+    try {
+      tool = tools[toolIndex];
+    } catch {
+      diagnostics.push(unreadableToolRowDiagnostic(toolIndex));
+      continue;
+    }
+    if (!tool) {
+      diagnostics.push(unreadableToolRowDiagnostic(toolIndex));
+      continue;
+    }
+    const nameRead = readProviderNormalizableToolName(tool, toolIndex);
+    let parameters: unknown;
+    try {
+      parameters = tool.parameters;
+    } catch {
+      diagnostics.push({
+        toolName: nameRead.toolName,
+        toolIndex,
+        violations: [...nameRead.violations, `${nameRead.toolName}.parameters is unreadable`],
+      });
+      continue;
+    }
+    const schemaPath = `${nameRead.toolName}.parameters`;
+    const serializationViolations =
+      parameters !== null && typeof parameters === "object"
+        ? projectRuntimeToolInputSchema(parameters, schemaPath).violations.filter(
+            (violation) =>
+              violation === `${schemaPath} is not JSON-serializable` ||
+              violation === `${schemaPath} is not a JSON value`,
+          )
+        : [];
+    const violations = [...nameRead.violations, ...serializationViolations];
+    if (violations.length > 0) {
+      diagnostics.push({ toolName: nameRead.toolName, toolIndex, violations });
+      continue;
+    }
+    normalizableTools.push(tool);
+  }
+  return { tools: normalizableTools, diagnostics };
 }
 
 function disambiguateLabels(entries: EffectiveToolInventoryEntry[]): EffectiveToolInventoryEntry[] {
@@ -376,38 +235,36 @@ export function buildEffectiveToolInventoryEntries(
 ): EffectiveToolInventoryEntry[] {
   // Key metadata by plugin ownership and tool name so only the owning plugin can
   // project display/risk metadata for its own tool.
-  const pluginToolMetadata = readActivePluginToolMetadata();
+  const pluginToolMetadata = new Map(
+    (getActivePluginRegistry()?.toolMetadata ?? []).map((entry) => [
+      buildPluginToolMetadataKey(entry.pluginId, entry.metadata.toolName),
+      entry.metadata,
+    ]),
+  );
 
   return disambiguateLabels(
     tools
-      .flatMap((tool) => {
-        const toolName = readInventoryToolName(tool);
-        if (!toolName) {
-          return [];
-        }
-        const source = resolveEffectiveToolSource(tool, rawToolsByName.get(toolName));
+      .map((tool) => {
+        const source = resolveEffectiveToolSource(tool, rawToolsByName.get(tool.name));
         const metadata = source.pluginId
-          ? pluginToolMetadata.get(buildPluginToolMetadataKey(source.pluginId, toolName))
+          ? pluginToolMetadata.get(buildPluginToolMetadataKey(source.pluginId, tool.name))
           : undefined;
-        return [
-          Object.assign(
-            {
-              id: toolName,
-              label:
-                normalizeOptionalString(metadata?.displayName) ??
-                resolveEffectiveToolLabel(tool, toolName),
-              description:
-                normalizeOptionalString(metadata?.description) ?? summarizeToolDescription(tool),
-              rawDescription:
-                normalizeOptionalString(metadata?.description) ??
-                resolveRawToolDescription(tool) ??
-                summarizeToolDescription(tool),
-              ...(metadata?.risk ? { risk: metadata.risk } : {}),
-              ...(metadata?.tags ? { tags: metadata.tags } : {}),
-            },
-            source,
-          ) satisfies EffectiveToolInventoryEntry,
-        ];
+        return Object.assign(
+          {
+            id: tool.name,
+            label:
+              normalizeOptionalString(metadata?.displayName) ?? resolveEffectiveToolLabel(tool),
+            description:
+              normalizeOptionalString(metadata?.description) ?? summarizeToolDescription(tool),
+            rawDescription:
+              normalizeOptionalString(metadata?.description) ??
+              resolveRawToolDescription(tool) ??
+              summarizeToolDescription(tool),
+            ...(metadata?.risk ? { risk: metadata.risk } : {}),
+            ...(metadata?.tags ? { tags: metadata.tags } : {}),
+          },
+          source,
+        ) satisfies EffectiveToolInventoryEntry;
       })
       .toSorted((a, b) => a.label.localeCompare(b.label)),
   );
@@ -425,13 +282,12 @@ export function buildRuntimeCompatibleToolInventory(params: {
   entries: EffectiveToolInventoryEntry[];
   notices: EffectiveToolInventoryNotice[];
 } {
-  const toolEntries = readInventoryToolEntries(params.tools);
-  const rawToolsByName = buildReadableToolNameMap(toolEntries);
-  const providerNormalizableTools = filterProviderNormalizableTools(toolEntries);
+  const providerProjection = filterProviderNormalizableTools(params.tools);
+  const rawToolsByName = new Map(providerProjection.tools.map((tool) => [tool.name, tool]));
   const normalizedTools = normalizeAgentRuntimeTools({
     // Schema normalization can replace tool definitions, so hand the runtime
     // policy a mutable copy while keeping this inventory API readonly.
-    tools: [...providerNormalizableTools.tools],
+    tools: [...providerProjection.tools],
     provider: params.modelProvider ?? "",
     config: params.cfg,
     workspaceDir: params.workspaceDir,
@@ -444,7 +300,7 @@ export function buildRuntimeCompatibleToolInventory(params: {
     entries: buildEffectiveToolInventoryEntries(projection.tools, rawToolsByName),
     notices: [
       ...buildUnsupportedToolSchemaNotices({
-        diagnostics: providerNormalizableTools.diagnostics,
+        diagnostics: providerProjection.diagnostics,
         tools: params.tools,
         rawToolsByName,
       }),
