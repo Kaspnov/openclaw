@@ -1,4 +1,3 @@
-import path from "node:path";
 import type { Message } from "grammy/types";
 import { createClaimableDedupe, type ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
 import { normalizeStringEntries, uniqueStrings } from "openclaw/plugin-sdk/string-coerce-runtime";
@@ -32,7 +31,7 @@ export function buildTelegramMessageDispatchReplayKey(msg: Message): string | nu
 }
 
 export function createTelegramMessageDispatchReplayGuard(params: {
-  storePath: string;
+  scopeKey: string;
   onDiskError?: (error: unknown) => void;
 }): TelegramMessageDispatchReplayGuard {
   return createClaimableDedupe({
@@ -40,12 +39,9 @@ export function createTelegramMessageDispatchReplayGuard(params: {
     memoryMaxSize: TELEGRAM_MESSAGE_DISPATCH_MEMORY_MAX,
     maxEntries: TELEGRAM_MESSAGE_DISPATCH_FILE_MAX,
     resolveScopeKey: (namespace: string) =>
-      path.join(
-        path.dirname(params.storePath),
-        `${path.basename(params.storePath)}.telegram-message-dispatch-${sanitizeFileSegment(
-          namespace,
-        )}.json`,
-      ),
+      `telegram-message-dispatch:${sanitizeFileSegment(params.scopeKey)}:${sanitizeFileSegment(
+        namespace,
+      )}`,
     onStorageError: params.onDiskError,
   });
 }

@@ -22,7 +22,6 @@ import {
 } from "openclaw/plugin-sdk/interactive-runtime";
 import type { MessagePresentation } from "openclaw/plugin-sdk/interactive-runtime";
 import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
 import {
   createTelegramActionGate,
   resolveDefaultTelegramAccountId,
@@ -136,10 +135,8 @@ function readTelegramThreadId(params: Record<string, unknown>) {
 }
 
 function resolveActionTopicNameCacheScope(cfg: OpenClawConfig, accountId?: string | null): string {
-  const storePath = resolveStorePath(cfg.session?.store, {
-    agentId: accountId ?? resolveDefaultTelegramAccountId(cfg),
-  });
-  return resolveTopicNameCacheScope(storePath);
+  const resolvedAccountId = accountId ?? resolveDefaultTelegramAccountId(cfg);
+  return resolveTopicNameCacheScope(`account:${resolvedAccountId}`);
 }
 
 function formatTelegramDeliveryTarget(to: string, messageThreadId?: number | null): string {

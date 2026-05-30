@@ -2,9 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
 import { captureEnv } from "openclaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { loadPendingDeliveries } from "../../../src/infra/outbound/delivery-queue.js";
 import { handleTelegramAction, telegramActionRuntime } from "./action-runtime.js";
 import { beginTelegramInboundEventDeliveryCorrelation } from "./inbound-event-delivery.js";
 import {
@@ -229,18 +229,8 @@ function resultDetails(result: Awaited<ReturnType<typeof handleTelegramAction>>)
   return requireRecord(result.details, "Telegram action details");
 }
 
-function readDurableQueueEntries(stateDir: string): Record<string, unknown>[] {
-  const queueDir = path.join(stateDir, "delivery-queue");
-  if (!fs.existsSync(queueDir)) {
-    return [];
-  }
-  return fs
-    .readdirSync(queueDir)
-    .filter((name) => name.endsWith(".json"))
-    .map((name) => JSON.parse(fs.readFileSync(path.join(queueDir, name), "utf-8"))) as Record<
-    string,
-    unknown
-  >[];
+async function readDurableQueueEntries(stateDir: string): Promise<Record<string, unknown>[]> {
+  return (await loadPendingDeliveries(stateDir)) as unknown as Record<string, unknown>[];
 }
 
 describe("handleTelegramAction", () => {
@@ -269,7 +259,7 @@ describe("handleTelegramAction", () => {
   }
 
   function topicCacheScopeFor(cfg: OpenClawConfig, accountId: string): string {
-    return resolveTopicNameCacheScope(resolveStorePath(cfg.session?.store, { agentId: accountId }));
+    return resolveTopicNameCacheScope(`account:${accountId}`);
   }
 
   async function sendInlineButtonsMessage(params: {
@@ -657,7 +647,7 @@ describe("handleTelegramAction", () => {
     const sendText = vi
       .fn()
       .mockImplementationOnce(async () => {
-        const entries = readDurableQueueEntries(stateDir);
+        const entries = await readDurableQueueEntries(stateDir);
         expect(entries).toHaveLength(1);
         expect(entries[0]).toMatchObject({
           channel: "telegram",
@@ -675,7 +665,7 @@ describe("handleTelegramAction", () => {
         throw new Error("telegram timeout");
       })
       .mockImplementationOnce(async () => {
-        const entries = readDurableQueueEntries(stateDir);
+        const entries = await readDurableQueueEntries(stateDir);
         const liveEntry = entries.find((entry) =>
           JSON.stringify(entry.payloads).includes("delivers after queue write"),
         );
@@ -736,7 +726,7 @@ describe("handleTelegramAction", () => {
         ),
       ).rejects.toThrow("telegram timeout");
 
-      const retryableEntries = readDurableQueueEntries(stateDir);
+      const retryableEntries = await readDurableQueueEntries(stateDir);
       expect(retryableEntries).toHaveLength(1);
       expect(retryableEntries[0]).toMatchObject({
         payloads: [
@@ -763,8 +753,9 @@ describe("handleTelegramAction", () => {
         ok: true,
         messageId: "tg-ok",
       });
-      expect(readDurableQueueEntries(stateDir)).toHaveLength(1);
-      expect(readDurableQueueEntries(stateDir)[0]).toMatchObject({
+      const deliveredEntries = await readDurableQueueEntries(stateDir);
+      expect(deliveredEntries).toHaveLength(1);
+      expect(deliveredEntries[0]).toMatchObject({
         payloads: [
           {
             text: "times out after queue write",

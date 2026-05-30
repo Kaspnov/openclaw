@@ -1,8 +1,6 @@
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import path from "node:path";
+import { randomUUID } from "node:crypto";
 import type { Message } from "grammy/types";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   buildTelegramMessageDispatchReplayKey,
   claimTelegramMessageDispatchReplay,
@@ -11,12 +9,8 @@ import {
   releaseTelegramMessageDispatchReplay,
 } from "./message-dispatch-dedupe.js";
 
-const tempDirs: string[] = [];
-
-function createStorePath(): string {
-  const dir = mkdtempSync(path.join(tmpdir(), "openclaw-telegram-dispatch-dedupe-"));
-  tempDirs.push(dir);
-  return path.join(dir, "sessions.json");
+function createScopeKey(): string {
+  return `test-${randomUUID()}`;
 }
 
 function message(params?: { chatId?: number; messageId?: number }): Message {
@@ -27,12 +21,6 @@ function message(params?: { chatId?: number; messageId?: number }): Message {
   } as Message;
 }
 
-afterEach(() => {
-  for (const dir of tempDirs.splice(0)) {
-    rmSync(dir, { recursive: true, force: true });
-  }
-});
-
 describe("Telegram message dispatch replay guard", () => {
   it("keys messages by chat id and message id", () => {
     expect(buildTelegramMessageDispatchReplayKey(message())).toBe(
@@ -42,8 +30,8 @@ describe("Telegram message dispatch replay guard", () => {
   });
 
   it("persists committed dispatches across guard recreation", async () => {
-    const storePath = createStorePath();
-    const writer = createTelegramMessageDispatchReplayGuard({ storePath });
+    const scopeKey = createScopeKey();
+    const writer = createTelegramMessageDispatchReplayGuard({ scopeKey });
     const first = await claimTelegramMessageDispatchReplay({
       guard: writer,
       accountId: "default",
@@ -63,7 +51,7 @@ describe("Telegram message dispatch replay guard", () => {
       keys: [first.key],
     });
 
-    const reader = createTelegramMessageDispatchReplayGuard({ storePath });
+    const reader = createTelegramMessageDispatchReplayGuard({ scopeKey });
     await expect(
       claimTelegramMessageDispatchReplay({
         guard: reader,
@@ -74,8 +62,7 @@ describe("Telegram message dispatch replay guard", () => {
   });
 
   it("keeps accounts isolated and releases retryable pre-dispatch claims", async () => {
-    const storePath = createStorePath();
-    const guard = createTelegramMessageDispatchReplayGuard({ storePath });
+    const guard = createTelegramMessageDispatchReplayGuard({ scopeKey: createScopeKey() });
     const first = await claimTelegramMessageDispatchReplay({
       guard,
       accountId: "default",
