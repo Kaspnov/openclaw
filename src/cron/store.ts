@@ -1,4 +1,5 @@
-// cron store helpers and runtime behavior.
+// Cron store persistence. Config fields stay in jobs.json while runtime state
+// is split into jobs-state.json, with quarantine support for invalid rows.
 import fs from "node:fs";
 import path from "node:path";
 import { expandHomePrefix } from "../infra/home-dir.js";
@@ -16,7 +17,7 @@ type SerializedStoreCacheEntry = {
   needsSplitMigration: boolean;
 };
 
-/** Shared type for Quarantined Cron Config Job in src/cron. */
+/** Invalid cron config row captured for operator repair instead of dropping data. */
 export type QuarantinedCronConfigJob = {
   sourceIndex: number;
   reason: string;
@@ -27,13 +28,13 @@ export type QuarantinedCronConfigJob = {
   scheduleIdentity?: string;
 };
 
-/** Shared type for Cron Quarantine File in src/cron. */
+/** On-disk quarantine file for invalid cron job rows. */
 export type CronQuarantineFile = {
   version: 1;
   jobs: Array<QuarantinedCronConfigJob & { quarantinedAtMs: number }>;
 };
 
-/** Shared type for Loaded Cron Store in src/cron. */
+/** Loaded cron store plus original config rows and quarantined invalid rows. */
 export type LoadedCronStore = {
   store: CronStoreFile;
   configJobs: Array<Record<string, unknown>>;
@@ -68,7 +69,7 @@ function resolveStatePath(storePath: string): string {
   return `${storePath}-state.json`;
 }
 
-/** Reused helper for resolve Cron Quarantine Path behavior in src/cron. */
+/** Resolves the quarantine file next to a cron store path. */
 export function resolveCronQuarantinePath(storePath: string): string {
   if (storePath.endsWith(".json")) {
     return storePath.replace(/\.json$/, "-quarantine.json");
@@ -82,7 +83,7 @@ type CronStateFileEntry = {
   state?: Record<string, unknown>;
 };
 
-/** Shared type for Cron Config Job Runtime Entry in src/cron. */
+/** Runtime state entry paired with a config job during split-store loading. */
 export type CronConfigJobRuntimeEntry = CronStateFileEntry;
 
 type CronStateFile = {
@@ -156,7 +157,7 @@ function extractStateFile(store: CronStoreFile): CronStateFile {
   return { version: 1, jobs };
 }
 
-/** Reused helper for resolve Cron Store Path behavior in src/cron. */
+/** Resolves the cron store path from an override or the default config dir. */
 export function resolveCronStorePath(storePath?: string) {
   if (storePath?.trim()) {
     const raw = storePath.trim();
@@ -251,7 +252,7 @@ function resolveCronStateId(job: Record<string, unknown>): string | undefined {
   return normalizeOptionalString(job.id) ?? normalizeOptionalString(job.jobId);
 }
 
-/** Reused helper for load Cron Store With Config Jobs behavior in src/cron. */
+/** Loads cron config, merges split runtime state, and reports invalid rows. */
 export async function loadCronStoreWithConfigJobs(storePath: string): Promise<LoadedCronStore> {
   try {
     const raw = await fs.promises.readFile(storePath, "utf-8");
@@ -341,12 +342,12 @@ export async function loadCronStoreWithConfigJobs(storePath: string): Promise<Lo
   }
 }
 
-/** Reused helper for load Cron Store behavior in src/cron. */
+/** Loads the cron store with runtime state merged into jobs. */
 export async function loadCronStore(storePath: string): Promise<CronStoreFile> {
   return (await loadCronStoreWithConfigJobs(storePath)).store;
 }
 
-/** Reused helper for load Cron Store Sync behavior in src/cron. */
+/** Synchronously loads cron jobs with split runtime state merged in. */
 export function loadCronStoreSync(storePath: string): CronStoreFile {
   try {
     const raw = fs.readFileSync(storePath, "utf-8");
@@ -433,7 +434,7 @@ async function serializedFileNeedsWrite(
   }
 }
 
-/** Reused helper for save Cron Store behavior in src/cron. */
+/** Saves cron config/state atomically, preserving state before split migration. */
 export async function saveCronStore(
   storePath: string,
   store: CronStoreFile,
@@ -487,7 +488,7 @@ export async function saveCronStore(
   updatedCache.needsSplitMigration = stateOnly && migrating;
 }
 
-/** Reused helper for load Cron Quarantine File behavior in src/cron. */
+/** Loads and validates the cron quarantine file, returning an empty file if absent. */
 export async function loadCronQuarantineFile(path: string): Promise<CronQuarantineFile> {
   try {
     const raw = await fs.promises.readFile(path, "utf-8");
@@ -555,7 +556,7 @@ function quarantineEntryKey(entry: QuarantinedCronConfigJob): string {
   });
 }
 
-/** Reused helper for save Cron Quarantine File behavior in src/cron. */
+/** Appends new invalid cron rows to quarantine without duplicating prior entries. */
 export async function saveCronQuarantineFile(params: {
   storePath: string;
   entries: QuarantinedCronConfigJob[];
