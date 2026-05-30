@@ -2,7 +2,7 @@
 // Keep this entry intentionally tiny. Channel/provider helpers belong on
 // dedicated subpaths or, for legacy consumers, the compat surface.
 
-/** Re-exported API for src/plugin-sdk. */
+/** Public channel identity, capability, status, and action adapter types. */
 export type {
   ChannelAccountSnapshot,
   ChannelAgentTool,
@@ -14,42 +14,42 @@ export type {
   ChannelMessageActionName,
   ChannelStatusIssue,
 } from "../channels/plugins/types.public.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Gateway Context. */
+/** Gateway runtime context exposed to channel plugins. */
 export type { ChannelGatewayContext } from "../channels/plugins/types.adapters.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Config Schema. */
+/** Channel plugin config schema and UI hint types. */
 export type { ChannelConfigSchema, ChannelConfigUiHint } from "../channels/plugins/types.config.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Setup Input. */
+/** Channel setup input contract exposed to setup flows. */
 export type { ChannelSetupInput } from "../channels/plugins/types.public.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Setup Adapter. */
+/** Channel setup adapter contract exposed to plugins. */
 export type { ChannelSetupAdapter } from "../channels/plugins/types.adapters.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Configured binding resolution types for channel route matching. */
 export type {
   ChannelConfiguredBindingConversationRef,
   ChannelConfiguredBindingMatch,
   ChannelConfiguredBindingProvider,
 } from "../channels/plugins/types.adapters.js";
-/** Re-exported API for src/plugin-sdk, starting with Channel Plugin. */
+/** Channel plugin entry contract. */
 export type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Stateful binding target descriptors used by channel setup and routing. */
 export type {
   ConfiguredBindingConversation,
   ConfiguredBindingResolution,
   CompiledConfiguredBinding,
   StatefulBindingTargetDescriptor,
 } from "../channels/plugins/binding-types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Stateful binding target driver contracts for setup/session flows. */
 export type {
   StatefulBindingTargetDriver,
   StatefulBindingTargetReadyResult,
   StatefulBindingTargetResetResult,
   StatefulBindingTargetSessionResult,
 } from "../channels/plugins/stateful-target-drivers.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Setup wizard contracts for channel plugin onboarding. */
 export type {
   ChannelSetupWizard,
   ChannelSetupWizardAllowFromEntry,
 } from "../channels/plugins/setup-wizard-types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Core plugin, provider, logging, auth, and catalog extension contracts. */
 export type {
   AgentHarness,
   AnyAgentTool,
@@ -66,24 +66,24 @@ export type {
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
 } from "../plugins/types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Unified model catalog entry and source metadata types. */
 export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Provider Runtime Model. */
+/** Provider runtime model descriptor exposed to provider plugins. */
 export type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
-/** Re-exported API for src/plugin-sdk, starting with Resolved Provider Runtime Auth. */
+/** Resolved provider runtime auth payload passed to provider transports. */
 export type { ResolvedProviderRuntimeAuth } from "../plugins/runtime/model-auth-types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Plugin runtime and subagent run contracts. */
 export type {
   PluginRuntime,
   RuntimeLogger,
   SubagentRunParams,
   SubagentRunResult,
 } from "../plugins/runtime/types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** LLM completion helper request, result, caller, and usage types. */
 export type {
   LlmCompleteCaller,
   LlmCompleteMessage,
@@ -91,7 +91,7 @@ export type {
   LlmCompleteResult,
   LlmCompleteUsage,
 } from "../plugins/runtime/types-core.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Runtime task facade types for plugin task flows and runs. */
 export type {
   BoundTaskFlowsRuntime,
   BoundTaskRunsRuntime,
@@ -100,7 +100,7 @@ export type {
   PluginRuntimeTaskRuns,
   PluginRuntimeTasks,
 } from "../plugins/runtime/runtime-tasks.types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Task flow/run view and aggregate domain types. */
 export type {
   TaskFlowDetail,
   TaskFlowView,
@@ -109,44 +109,44 @@ export type {
   TaskRunDetail,
   TaskRunView,
 } from "../plugins/runtime/task-domain-types.js";
-/** Re-exported API for src/plugin-sdk, starting with Open Claw Config. */
+/** Canonical OpenClaw config type exposed to plugins. */
 export type { OpenClawConfig } from "../config/config.js";
 /** @deprecated Use OpenClawConfig instead */
 export type { OpenClawConfig as ClawdbotConfig } from "../config/config.js";
 /** @deprecated Use OpenClawConfig instead */
 export type { OpenClawConfig as OpenClawSchemaType } from "../config/config.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Memory plugin public artifact and capability contracts. */
 export type {
   MemoryPluginCapability,
   MemoryPluginPublicArtifact,
   MemoryPluginPublicArtifactsProvider,
 } from "../plugins/memory-state.js";
-/** Re-exported API for src/plugin-sdk, starting with Cli Backend Config. */
+/** CLI backend config type used by agent harness plugins. */
 export type { CliBackendConfig } from "../config/types.js";
-/** Shared type for this surface in src/plugin-sdk. */
+/** Image-generation plugin contracts. */
 export type * from "./image-generation.js";
-/** Shared type for this surface in src/plugin-sdk. */
+/** Music-generation plugin contracts. */
 export type * from "./music-generation.js";
-/** Re-exported API for src/plugin-sdk, starting with Secret Input. */
+/** Secret input and reference config types exposed to plugins. */
 export type { SecretInput, SecretRef } from "../config/types.secrets.js";
-/** Re-exported API for src/plugin-sdk, starting with Runtime Env. */
+/** Runtime environment descriptor exposed to plugin entrypoints. */
 export type { RuntimeEnv } from "../runtime.js";
-/** Re-exported API for src/plugin-sdk, starting with Hook Entry. */
+/** Hook registration descriptor exposed to plugins. */
 export type { HookEntry } from "../hooks/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Reply Payload. */
+/** Structured reply payload type exposed to channel and tool plugins. */
 export type { ReplyPayload } from "./reply-payload.js";
-/** Re-exported API for src/plugin-sdk, starting with Wizard Prompter. */
+/** Interactive wizard prompt facade used by setup flows. */
 export type { WizardPrompter } from "../wizard/prompts.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Context engine factory registration contracts. */
 export type {
   ContextEngineFactory,
   ContextEngineFactoryContext,
 } from "../context-engine/registry.js";
-/** Re-exported API for src/plugin-sdk, starting with Diagnostic Event Payload. */
+/** Diagnostic event payload shape emitted through SDK diagnostics. */
 export type { DiagnosticEventPayload } from "../infra/diagnostic-events.js";
-/** Re-exported API for src/plugin-sdk, starting with Diagnostic Trace Context. */
+/** Diagnostic trace context carried through plugin operations. */
 export type { DiagnosticTraceContext } from "../infra/diagnostic-trace-context.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Context engine runtime, operation, and transcript rewrite contracts. */
 export type {
   AssembleResult,
   BootstrapResult,
@@ -167,18 +167,18 @@ export type {
   TranscriptRewriteResult,
 } from "../context-engine/types.js";
 
-/** Re-exported API for src/plugin-sdk, starting with empty Plugin Config Schema. */
+/** Empty plugin config schema helper for plugins without settings. */
 export { emptyPluginConfigSchema } from "../plugins/config-schema.js";
-/** Re-exported API for src/plugin-sdk, starting with register Context Engine. */
+/** Registers a context engine implementation with the host registry. */
 export { registerContextEngine } from "../context-engine/registry.js";
-/** Re-exported API for src/plugin-sdk, starting with assert Context Engine Host Support. */
+/** Asserts that host context-engine capabilities satisfy plugin requirements. */
 export { assertContextEngineHostSupport } from "../context-engine/host-compat.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Context-engine delegation helpers used by plugin runtimes. */
 export {
   buildMemorySystemPromptAddition,
   delegateCompactionToRuntime,
 } from "../context-engine/delegate.js";
-/** Re-exported API for src/plugin-sdk, starting with on Diagnostic Event. */
+/** Subscribes to SDK diagnostic events. */
 export { onDiagnosticEvent } from "../infra/diagnostic-events.js";
-/** Re-exported API for src/plugin-sdk, starting with optional String Enum. */
+/** TypeBox string enum helpers exposed for plugin schemas. */
 export { optionalStringEnum, stringEnum } from "../agents/schema/typebox.js";
