@@ -1,11 +1,11 @@
-// plugins host hook turn types helpers and runtime behavior.
+// Plugin host-hook payload contracts for queued turn injections and heartbeat context.
 import type { AgentMessage } from "../agents/runtime/index.js";
 import type { PluginJsonValue } from "./host-hook-json.js";
 
-/** Shared type for Plugin Next Turn Injection Placement in src/plugins. */
+/** Placement of plugin-provided context in the next agent turn. */
 export type PluginNextTurnInjectionPlacement = "prepend_context" | "append_context";
 
-/** Shared type for Plugin Next Turn Injection in src/plugins. */
+/** Request from a plugin to inject context into a future session turn. */
 export type PluginNextTurnInjection = {
   sessionKey: string;
   text: string;
@@ -15,7 +15,7 @@ export type PluginNextTurnInjection = {
   metadata?: PluginJsonValue;
 };
 
-/** Shared type for Plugin Next Turn Injection Record in src/plugins. */
+/** Persisted plugin next-turn injection with owner and creation metadata. */
 export type PluginNextTurnInjectionRecord = Omit<PluginNextTurnInjection, "sessionKey"> & {
   id: string;
   pluginId: string;
@@ -24,34 +24,34 @@ export type PluginNextTurnInjectionRecord = Omit<PluginNextTurnInjection, "sessi
   placement: PluginNextTurnInjectionPlacement;
 };
 
-/** Shared type for Plugin Next Turn Injection Enqueue Result in src/plugins. */
+/** Result returned after enqueueing a plugin next-turn injection. */
 export type PluginNextTurnInjectionEnqueueResult = {
   enqueued: boolean;
   id: string;
   sessionKey: string;
 };
 
-/** Shared type for Plugin Agent Turn Prepare Event in src/plugins. */
+/** Event passed to plugins before an agent turn prompt is finalized. */
 export type PluginAgentTurnPrepareEvent = {
   prompt: string;
   messages: AgentMessage[] | unknown[];
   queuedInjections: PluginNextTurnInjectionRecord[];
 };
 
-/** Shared type for Plugin Agent Turn Prepare Result in src/plugins. */
+/** Context contributions returned by plugin agent-turn prepare hooks. */
 export type PluginAgentTurnPrepareResult = {
   prependContext?: string;
   appendContext?: string;
 };
 
-/** Shared type for Plugin Heartbeat Prompt Contribution Event in src/plugins. */
+/** Event passed to plugins that contribute heartbeat prompt context. */
 export type PluginHeartbeatPromptContributionEvent = {
   sessionKey?: string;
   agentId?: string;
   heartbeatName?: string;
 };
 
-/** Shared type for Plugin Heartbeat Prompt Contribution Result in src/plugins. */
+/** Context contributions returned by plugin heartbeat prompt hooks. */
 export type PluginHeartbeatPromptContributionResult = {
   prependContext?: string;
   appendContext?: string;
