@@ -1,7 +1,11 @@
 import { runCommandWithTimeout } from "../process/exec.js";
+import { isWSLSync } from "./wsl.js";
+
+const WSL_CLIPBOARD_ARGV = ["bash", "-lc", "cat | /mnt/c/Windows/System32/clip.exe"];
 
 export async function copyToClipboard(value: string): Promise<boolean> {
   const attempts: Array<{ argv: string[] }> = [
+    ...(isWSLSync() ? [{ argv: WSL_CLIPBOARD_ARGV }] : []),
     { argv: ["pbcopy"] },
     { argv: ["xclip", "-selection", "clipboard"] },
     { argv: ["wl-copy"] },

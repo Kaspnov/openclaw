@@ -1,9 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const runCommandWithTimeoutMock = vi.hoisted(() => vi.fn());
+const isWSLSyncMock = vi.hoisted(() => vi.fn(() => false));
 
 vi.mock("../process/exec.js", () => ({
   runCommandWithTimeout: (...args: unknown[]) => runCommandWithTimeoutMock(...args),
+}));
+
+vi.mock("./wsl.js", () => ({
+  isWSLSync: isWSLSyncMock,
 }));
 
 const { copyToClipboard } = await import("./clipboard.js");
@@ -11,6 +16,7 @@ const { copyToClipboard } = await import("./clipboard.js");
 describe("copyToClipboard", () => {
   beforeEach(() => {
     runCommandWithTimeoutMock.mockReset();
+    isWSLSyncMock.mockReturnValue(false);
   });
 
   it("returns true on the first successful clipboard command", async () => {
@@ -36,6 +42,24 @@ describe("copyToClipboard", () => {
       ["xclip", "-selection", "clipboard"],
       ["wl-copy"],
     ]);
+  });
+
+  it("uses a WSL shell bridge for clip.exe without putting the value in argv", async () => {
+    isWSLSyncMock.mockReturnValue(true);
+    runCommandWithTimeoutMock.mockResolvedValueOnce({ code: 0, killed: false });
+
+    const tokenUrl = "http://127.0.0.1:18789/#token=secret-token";
+    await expect(copyToClipboard(tokenUrl)).resolves.toBe(true);
+
+    expect(runCommandWithTimeoutMock).toHaveBeenCalledWith(
+      ["bash", "-lc", "cat | /mnt/c/Windows/System32/clip.exe"],
+      {
+        timeoutMs: 3000,
+        input: tokenUrl,
+      },
+    );
+    expect(runCommandWithTimeoutMock.mock.calls[0]?.[0]).not.toContain("secret-token");
+    expect(runCommandWithTimeoutMock).toHaveBeenCalledTimes(1);
   });
 
   it("returns false when every clipboard backend fails or is killed", async () => {
