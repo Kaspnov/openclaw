@@ -45,8 +45,12 @@ function resolveStrictOpenAISchemaCacheKey(
   ]);
 }
 
-function readCachedStrictOpenAISchema(schema: object, key: string): unknown {
-  return strictOpenAISchemaCache.get(schema)?.find((entry) => entry.key === key)?.value;
+function readCachedStrictOpenAISchema(
+  schema: object,
+  key: string,
+): { found: true; value: unknown } | { found: false } {
+  const entry = strictOpenAISchemaCache.get(schema)?.find((candidate) => candidate.key === key);
+  return entry ? { found: true, value: entry.value } : { found: false };
 }
 
 function rememberStrictOpenAISchema(schema: object, key: string, value: unknown): unknown {
@@ -80,8 +84,8 @@ export function normalizeStrictOpenAIJsonSchema(
   }
   const cacheKey = resolveStrictOpenAISchemaCacheKey(modelCompat);
   const cached = readCachedStrictOpenAISchema(schemaInput, cacheKey);
-  if (cached !== undefined) {
-    return cached;
+  if (cached.found) {
+    return cached.value;
   }
   return rememberStrictOpenAISchema(
     schemaInput,
@@ -163,21 +167,108 @@ type OpenAIStrictToolSchemaDiagnostic = {
   violations: string[];
 };
 
+type ToolParametersRead = { ok: true; value: unknown } | { ok: false };
+
+type OpenAIToolEntryRead =
+  | {
+      ok: true;
+      tool: ToolWithParameters;
+      toolIndex: number;
+    }
+  | {
+      ok: false;
+      toolIndex: number;
+      violations: string[];
+    };
+
+function unreadableOpenAIToolEntry(toolIndex: number): OpenAIToolEntryRead {
+  return {
+    ok: false,
+    toolIndex,
+    violations: [`tool[${toolIndex}].parameters`],
+  };
+}
+
+function copyOpenAIToolEntries(tools: readonly ToolWithParameters[]): OpenAIToolEntryRead[] {
+  let length = 0;
+  try {
+    length = tools.length;
+  } catch {
+    return [unreadableOpenAIToolEntry(0)];
+  }
+  const entries: OpenAIToolEntryRead[] = [];
+  for (let toolIndex = 0; toolIndex < length; toolIndex += 1) {
+    try {
+      entries.push({ ok: true, tool: tools[toolIndex], toolIndex });
+    } catch {
+      entries.push(unreadableOpenAIToolEntry(toolIndex));
+    }
+  }
+  return entries;
+}
+
+function readOpenAIToolName(tool: ToolWithParameters): string | undefined {
+  try {
+    const name = tool.name;
+    return typeof name === "string" && name ? name : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function readOpenAIToolParameters(tool: ToolWithParameters): ToolParametersRead {
+  try {
+    return { ok: true, value: tool.parameters };
+  } catch {
+    return { ok: false };
+  }
+}
+
+function formatOpenAIToolSchemaDiagnosticPath(toolName: string | undefined, toolIndex: number) {
+  return `${toolName ?? `tool[${toolIndex}]`}.parameters`;
+}
+
 export function findOpenAIStrictToolSchemaDiagnostics(
   tools: readonly ToolWithParameters[],
 ): OpenAIStrictToolSchemaDiagnostic[] {
-  return tools.flatMap((tool, toolIndex) => {
-    const violations = findStrictOpenAIJsonSchemaViolations(
-      normalizeStrictOpenAIJsonSchema(tool.parameters),
-      `${typeof tool.name === "string" && tool.name ? tool.name : `tool[${toolIndex}]`}.parameters`,
-    );
+  return copyOpenAIToolEntries(tools).flatMap((entry) => {
+    if (!entry.ok) {
+      return [
+        {
+          toolIndex: entry.toolIndex,
+          violations: entry.violations,
+        },
+      ];
+    }
+    const { tool, toolIndex } = entry;
+    const toolName = readOpenAIToolName(tool);
+    const diagnosticPath = formatOpenAIToolSchemaDiagnosticPath(toolName, toolIndex);
+    const parameters = readOpenAIToolParameters(tool);
+    if (!parameters.ok) {
+      return [
+        {
+          toolIndex,
+          ...(toolName ? { toolName } : {}),
+          violations: [diagnosticPath],
+        },
+      ];
+    }
+    let violations: string[];
+    try {
+      violations = findStrictOpenAIJsonSchemaViolations(
+        normalizeStrictOpenAIJsonSchema(parameters.value),
+        diagnosticPath,
+      );
+    } catch {
+      violations = [diagnosticPath];
+    }
     if (violations.length === 0) {
       return [];
     }
     return [
       {
         toolIndex,
-        ...(typeof tool.name === "string" && tool.name ? { toolName: tool.name } : {}),
+        ...(toolName ? { toolName } : {}),
         violations,
       },
     ];
@@ -304,5 +395,19 @@ export function resolveOpenAIStrictToolFlagForInventory(
   if (strict !== true) {
     return strict === false ? false : undefined;
   }
-  return tools.every((tool) => isStrictOpenAIJsonSchemaCompatible(tool.parameters));
+  return copyOpenAIToolEntries(tools).every((entry) => {
+    if (!entry.ok) {
+      return false;
+    }
+    const { tool } = entry;
+    const parameters = readOpenAIToolParameters(tool);
+    if (!parameters.ok) {
+      return false;
+    }
+    try {
+      return isStrictOpenAIJsonSchemaCompatible(parameters.value);
+    } catch {
+      return false;
+    }
+  });
 }
