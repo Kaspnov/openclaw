@@ -32,6 +32,46 @@ describe("local model lean tool filtering", () => {
     ).toEqual(["read", "exec"]);
   });
 
+  it("keeps explicitly preserved tools when lean mode is enabled", () => {
+    const cfg: OpenClawConfig = {
+      agents: {
+        defaults: {
+          experimental: {
+            localModelLean: true,
+          },
+        },
+      },
+    };
+
+    expect(
+      filterLocalModelLeanTools({
+        tools: tools(["read", "browser", "cron", "message", "exec"]),
+        config: cfg,
+        preserveToolNames: ["browser", "cron", "group:messaging"],
+      }).map((tool) => tool.name),
+    ).toEqual(["read", "browser", "cron", "message", "exec"]);
+  });
+
+  it("does not treat wildcard preservation as disabling lean mode", () => {
+    const cfg: OpenClawConfig = {
+      agents: {
+        defaults: {
+          experimental: {
+            localModelLean: true,
+          },
+        },
+      },
+    };
+
+    expect(
+      filterLocalModelLeanTools({
+        tools: tools(["read", "browser", "cron", "message", "exec"]),
+        config: cfg,
+        preserveToolNames: ["*"],
+      }).map((tool) => tool.name),
+    ).toEqual(["read", "exec"]);
+  });
+
   it("lets an agent opt out of an inherited global lean setting", () => {
     const cfg: OpenClawConfig = {
       agents: {
