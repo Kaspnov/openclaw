@@ -2,26 +2,26 @@ import type { ImageContent, Message, TextContent } from "../../../llm-core/src/i
 import type { AgentMessage } from "../types.js";
 import { requireSessionTimestampMs } from "./session/timestamps.js";
 
-/** Public constant for COMPACTION SUMMARY PREFIX behavior in packages/agent-core. */
+/** Prefix used when replaying compacted history as a model-visible summary message. */
 export const COMPACTION_SUMMARY_PREFIX = `The conversation history before this point was compacted into the following summary:
 
 <summary>
 `;
 
-/** Public constant for COMPACTION SUMMARY SUFFIX behavior in packages/agent-core. */
+/** Suffix closing the model-visible compaction summary wrapper. */
 export const COMPACTION_SUMMARY_SUFFIX = `
 </summary>`;
 
-/** Public constant for BRANCH SUMMARY PREFIX behavior in packages/agent-core. */
+/** Prefix used when replaying a branch return summary into the active context. */
 export const BRANCH_SUMMARY_PREFIX = `The following is a summary of a branch that this conversation came back from:
 
 <summary>
 `;
 
-/** Public constant for BRANCH SUMMARY SUFFIX behavior in packages/agent-core. */
+/** Suffix closing the model-visible branch summary wrapper. */
 export const BRANCH_SUMMARY_SUFFIX = `</summary>`;
 
-/** Public type describing Bash Execution Message for packages/agent-core. */
+/** Transcript entry for a shell command plus the output summary shown to the model. */
 export interface BashExecutionMessage {
   role: "bashExecution";
   command: string;
@@ -34,7 +34,7 @@ export interface BashExecutionMessage {
   excludeFromContext?: boolean;
 }
 
-/** Public type describing Custom Message for packages/agent-core. */
+/** Generic transcript entry for harness integrations that need typed sidecar details. */
 export interface CustomMessage<T = unknown> {
   role: "custom";
   customType: string;
@@ -44,7 +44,7 @@ export interface CustomMessage<T = unknown> {
   timestamp: number;
 }
 
-/** Public type describing Branch Summary Message for packages/agent-core. */
+/** Transcript entry that preserves context when returning from a branch. */
 export interface BranchSummaryMessage {
   role: "branchSummary";
   summary: string;
@@ -52,7 +52,7 @@ export interface BranchSummaryMessage {
   timestamp: number;
 }
 
-/** Public type describing Compaction Summary Message for packages/agent-core. */
+/** Transcript entry that replaces older history with a bounded summary. */
 export interface CompactionSummaryMessage {
   role: "compactionSummary";
   summary: string;
@@ -69,7 +69,7 @@ declare module "../types.js" {
   }
 }
 
-/** Public helper for bash Execution To Text behavior in packages/agent-core. */
+/** Render a bash execution entry into the exact text passed back into model context. */
 export function bashExecutionToText(msg: BashExecutionMessage): string {
   let text = `Ran \`${msg.command}\`\n`;
   if (msg.output) {
@@ -88,7 +88,7 @@ export function bashExecutionToText(msg: BashExecutionMessage): string {
   return text;
 }
 
-/** Public helper for create Branch Summary Message behavior in packages/agent-core. */
+/** Build a branch summary entry while normalizing the persisted session timestamp. */
 export function createBranchSummaryMessage(
   summary: string,
   fromId: string,
@@ -102,7 +102,7 @@ export function createBranchSummaryMessage(
   };
 }
 
-/** Public helper for create Compaction Summary Message behavior in packages/agent-core. */
+/** Build a compaction summary entry with token-count metadata for future pruning logic. */
 export function createCompactionSummaryMessage(
   summary: string,
   tokensBefore: number,
@@ -116,7 +116,7 @@ export function createCompactionSummaryMessage(
   };
 }
 
-/** Public helper for create Custom Message behavior in packages/agent-core. */
+/** Build a custom transcript entry for harness extensions. */
 export function createCustomMessage(
   customType: string,
   content: string | (TextContent | ImageContent)[],
@@ -134,7 +134,7 @@ export function createCustomMessage(
   };
 }
 
-/** Public helper for convert To Llm behavior in packages/agent-core. */
+/** Convert persisted harness transcript entries into provider-facing LLM messages. */
 export function convertToLlm(messages: AgentMessage[]): Message[] {
   return messages
     .map((m): Message | undefined => {
