@@ -1,12 +1,12 @@
-// gateway node pending work helpers and runtime behavior.
+/** In-memory pending-work queue for connected gateway nodes. */
 import { randomUUID } from "node:crypto";
 
 const NODE_PENDING_WORK_TYPES = ["status.request", "location.request"] as const;
-/** Shared type for Node Pending Work Type in src/gateway. */
+/** Work item kinds that can be queued for a node. */
 export type NodePendingWorkType = (typeof NODE_PENDING_WORK_TYPES)[number];
 
 const NODE_PENDING_WORK_PRIORITIES = ["default", "normal", "high"] as const;
-/** Shared type for Node Pending Work Priority in src/gateway. */
+/** Priority levels used when draining node pending work. */
 export type NodePendingWorkPriority = (typeof NODE_PENDING_WORK_PRIORITIES)[number];
 
 type NodePendingWorkItem = {
@@ -103,7 +103,7 @@ function makeBaselineStatusItem(nowMs: number): NodePendingWorkItem {
   };
 }
 
-/** Reused helper for enqueue Node Pending Work behavior in src/gateway. */
+/** Enqueues one deduped work item for a node. */
 export function enqueueNodePendingWork(params: {
   nodeId: string;
   type: NodePendingWorkType;
@@ -138,7 +138,7 @@ export function enqueueNodePendingWork(params: {
   return { revision: state.revision, item, deduped: false };
 }
 
-/** Reused helper for drain Node Pending Work behavior in src/gateway. */
+/** Drains pending work for a node, optionally adding a baseline status request. */
 export function drainNodePendingWork(nodeId: string, opts: DrainOptions = {}): DrainResult {
   const normalizedNodeId = nodeId.trim();
   if (!normalizedNodeId) {
@@ -168,7 +168,7 @@ export function drainNodePendingWork(nodeId: string, opts: DrainOptions = {}): D
   };
 }
 
-/** Reused helper for acknowledge Node Pending Work behavior in src/gateway. */
+/** Acknowledges node work items and removes them from the queue. */
 export function acknowledgeNodePendingWork(params: { nodeId: string; itemIds: string[] }): {
   revision: number;
   removedItemIds: string[];
@@ -198,12 +198,12 @@ export function acknowledgeNodePendingWork(params: { nodeId: string; itemIds: st
   return { revision: state.revision, removedItemIds };
 }
 
-/** Reused helper for reset Node Pending Work For Tests behavior in src/gateway. */
+/** Clears all pending work state for tests. */
 export function resetNodePendingWorkForTests() {
   stateByNodeId.clear();
 }
 
-/** Reused helper for get Node Pending Work State Count For Tests behavior in src/gateway. */
+/** Returns the number of nodes with pending-work state for tests. */
 export function getNodePendingWorkStateCountForTests(): number {
   return stateByNodeId.size;
 }
