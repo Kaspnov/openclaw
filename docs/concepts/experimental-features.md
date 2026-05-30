@@ -32,7 +32,7 @@ Treat them differently from normal config:
 
 `agents.defaults.experimental.localModelLean: true` is a pressure-release valve for weaker local-model setups. By default it uses the `basic` profile and drops three default tools — `browser`, `cron`, and `message` — from the agent's tool surface for every turn. Nothing else changes. Use `agents.list[].experimental.localModelLean` to enable or disable the same behavior for one configured agent.
 
-If that is not enough, set `localModelLeanProfile: "strict"` with `localModelLean: true`. The strict profile keeps only the minimal coding/status tools: `read`, `write`, `edit`, `exec`, `apply_patch`, `process`, `session_status`, and `update_plan`. Use it as a stronger fallback, not as the new default.
+If that is not enough, set `localModelLeanProfile: "strict"` with `localModelLean: true`. The strict profile keeps only the minimal coding/status tools: `read`, `write`, `edit`, `exec`, `wait`, `apply_patch`, `process`, `session_status`, and `update_plan`. Use it as a stronger fallback, not as the new default.
 
 ### Why these three tools
 

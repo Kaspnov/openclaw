@@ -11,6 +11,7 @@ const LOCAL_MODEL_LEAN_STRICT_ALLOW_TOOL_NAMES = new Set([
   "write",
   "edit",
   "exec",
+  "wait",
   "apply_patch",
   "process",
   "session_status",
