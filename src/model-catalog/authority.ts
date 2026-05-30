@@ -1,4 +1,4 @@
-// model-catalog authority helpers and runtime behavior.
+// Merges model catalog rows according to source authority.
 import type { ModelCatalogSource, NormalizedModelCatalogRow } from "./types.js";
 
 const MODEL_CATALOG_SOURCE_AUTHORITY: Readonly<Record<ModelCatalogSource, number>> = {
@@ -16,7 +16,7 @@ function compareModelCatalogSourceAuthority(
   return MODEL_CATALOG_SOURCE_AUTHORITY[left] - MODEL_CATALOG_SOURCE_AUTHORITY[right];
 }
 
-/** Reused helper for merge Model Catalog Rows By Authority behavior in src/model-catalog. */
+/** Keep the highest-authority row for each provider/model merge key. */
 export function mergeModelCatalogRowsByAuthority(
   rows: Iterable<NormalizedModelCatalogRow>,
 ): NormalizedModelCatalogRow[] {

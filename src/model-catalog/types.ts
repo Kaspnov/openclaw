@@ -1,13 +1,13 @@
-// Shared types for model-catalog types behavior.
+// Shared model catalog contracts for manifests, config, cache, and runtime refreshes.
 import type { ModelApi, ModelCompatConfig, ModelMediaInputConfig } from "../config/types.models.js";
 
-/** Shared type for Model Catalog Input in src/model-catalog. */
+/** Input modalities declared for a model catalog entry. */
 export type ModelCatalogInput = "text" | "image" | "document";
-/** Shared type for Model Catalog Discovery in src/model-catalog. */
+/** Discovery mode advertised by a provider catalog. */
 export type ModelCatalogDiscovery = "static" | "refreshable" | "runtime";
-/** Shared type for Model Catalog Status in src/model-catalog. */
+/** Availability state for a model catalog entry. */
 export type ModelCatalogStatus = "available" | "preview" | "deprecated" | "disabled";
-/** Shared type for Model Catalog Source in src/model-catalog. */
+/** Source layer that produced a normalized model catalog row. */
 export type ModelCatalogSource =
   | "manifest"
   | "provider-index"
@@ -15,7 +15,7 @@ export type ModelCatalogSource =
   | "config"
   | "runtime-refresh";
 
-/** Shared type for Unified Model Catalog Kind in src/model-catalog. */
+/** Cross-surface model kind used by unified picker rows. */
 export type UnifiedModelCatalogKind =
   | "text"
   | "voice"
@@ -23,7 +23,7 @@ export type UnifiedModelCatalogKind =
   | "video_generation"
   | "music_generation";
 
-/** Shared type for Unified Model Catalog Source in src/model-catalog. */
+/** Source layer used by unified model picker entries. */
 export type UnifiedModelCatalogSource =
   | "manifest"
   | "provider-index"
@@ -33,7 +33,7 @@ export type UnifiedModelCatalogSource =
   | "configured"
   | "runtime-refresh";
 
-/** Shared type for Unified Model Catalog Entry in src/model-catalog. */
+/** Provider/model row used by unified model pickers across modalities. */
 export type UnifiedModelCatalogEntry<TCapabilities = unknown> = {
   kind: UnifiedModelCatalogKind;
   provider: string;
@@ -51,7 +51,7 @@ export type UnifiedModelCatalogEntry<TCapabilities = unknown> = {
   warnings?: readonly string[];
 };
 
-/** Shared type for Model Catalog Tiered Cost in src/model-catalog. */
+/** Cost tier that applies over a token range. */
 export type ModelCatalogTieredCost = {
   input: number;
   output: number;
@@ -60,7 +60,7 @@ export type ModelCatalogTieredCost = {
   range: [number, number] | [number];
 };
 
-/** Shared type for Model Catalog Cost in src/model-catalog. */
+/** Flat or tiered token pricing metadata for a model. */
 export type ModelCatalogCost = {
   input?: number;
   output?: number;
@@ -69,7 +69,7 @@ export type ModelCatalogCost = {
   tieredPricing?: ModelCatalogTieredCost[];
 };
 
-/** Shared type for Model Catalog Model in src/model-catalog. */
+/** Model metadata declared by a provider catalog. */
 export type ModelCatalogModel = {
   id: string;
   name?: string;
@@ -91,7 +91,7 @@ export type ModelCatalogModel = {
   tags?: string[];
 };
 
-/** Shared type for Model Catalog Provider in src/model-catalog. */
+/** Provider-level catalog defaults and model entries. */
 export type ModelCatalogProvider = {
   baseUrl?: string;
   api?: ModelApi;
@@ -99,14 +99,14 @@ export type ModelCatalogProvider = {
   models: ModelCatalogModel[];
 };
 
-/** Shared type for Model Catalog Alias in src/model-catalog. */
+/** Alias metadata that overrides provider API/base URL resolution. */
 export type ModelCatalogAlias = {
   provider: string;
   api?: ModelApi;
   baseUrl?: string;
 };
 
-/** Shared type for Model Catalog Suppression in src/model-catalog. */
+/** Rule that hides a model under specific provider/config conditions. */
 export type ModelCatalogSuppression = {
   provider: string;
   model: string;
@@ -117,7 +117,7 @@ export type ModelCatalogSuppression = {
   };
 };
 
-/** Shared type for Model Catalog in src/model-catalog. */
+/** Full model catalog block accepted from manifests, config, and cache. */
 export type ModelCatalog = {
   providers?: Record<string, ModelCatalogProvider>;
   aliases?: Record<string, ModelCatalogAlias>;
@@ -126,7 +126,7 @@ export type ModelCatalog = {
   runtimeAugment?: boolean;
 };
 
-/** Shared type for Normalized Model Catalog Row in src/model-catalog. */
+/** Normalized provider/model row after defaults, aliases, and refs are computed. */
 export type NormalizedModelCatalogRow = {
   provider: string;
   id: string;

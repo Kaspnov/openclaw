@@ -1,26 +1,26 @@
-// model-catalog index helpers and runtime behavior.
-/** Re-exported API for src/model-catalog, starting with merge Model Catalog Rows By Authority. */
+// Public model catalog barrel for normalization, planning, refs, and provider index data.
+/** Re-export catalog row authority merging. */
 export { mergeModelCatalogRowsByAuthority } from "./authority.js";
-/** Re-exported API for src/model-catalog. */
+/** Re-export model catalog ref and provider-id helpers. */
 export {
   buildModelCatalogMergeKey,
   buildModelCatalogRef,
   normalizeModelCatalogProviderId,
 } from "./refs.js";
-/** Re-exported API for src/model-catalog, starting with normalize Model Catalog. */
+/** Re-export model catalog normalizers. */
 export { normalizeModelCatalog, normalizeModelCatalogRows } from "./normalize.js";
-/** Re-exported API for src/model-catalog, starting with load Open Claw Provider Index. */
+/** Re-export the OpenClaw-owned provider index loader. */
 export { loadOpenClawProviderIndex } from "./provider-index/index.js";
-/** Re-exported API for src/model-catalog. */
+/** Re-export manifest model catalog planners. */
 export {
   planManifestModelCatalogRows,
   planManifestModelCatalogSuppressions,
 } from "./manifest-planner.js";
-/** Re-exported API for src/model-catalog, starting with plan Provider Index Model Catalog Rows. */
+/** Re-export provider-index preview catalog planner. */
 export { planProviderIndexModelCatalogRows } from "./provider-index-planner.js";
-/** Re-exported API for src/model-catalog, starting with Manifest Model Catalog Suppression Entry. */
+/** Re-export manifest suppression plan entry type. */
 export type { ManifestModelCatalogSuppressionEntry } from "./manifest-planner.js";
-/** Re-exported API for src/model-catalog. */
+/** Re-export public model catalog data contracts. */
 export type {
   ModelCatalog,
   ModelCatalogAlias,
@@ -38,5 +38,5 @@ export type {
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "./types.js";
-/** Re-exported API for src/model-catalog, starting with Open Claw Provider Index Provider. */
+/** Re-export public OpenClaw provider index provider type. */
 export type { OpenClawProviderIndexProvider } from "./provider-index/index.js";

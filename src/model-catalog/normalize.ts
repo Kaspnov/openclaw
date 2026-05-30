@@ -1,4 +1,4 @@
-// model-catalog normalize helpers and runtime behavior.
+// Normalizes model catalog manifests into deterministic provider/model rows.
 import {
   MODEL_APIS,
   isModelThinkingFormat,
@@ -448,7 +448,7 @@ function normalizeModelCatalogDiscovery(
   return Object.keys(discovery).length > 0 ? discovery : undefined;
 }
 
-/** Reused helper for normalize Model Catalog behavior in src/model-catalog. */
+/** Normalize an unknown model catalog object for the providers owned by one plugin/config. */
 export function normalizeModelCatalog(
   value: unknown,
   params: { ownedProviders: ReadonlySet<string> },
@@ -472,7 +472,7 @@ export function normalizeModelCatalog(
   return Object.keys(catalog).length > 0 ? catalog : undefined;
 }
 
-/** Reused helper for normalize Model Catalog Provider Rows behavior in src/model-catalog. */
+/** Convert one provider catalog into deterministic normalized model rows. */
 export function normalizeModelCatalogProviderRows(params: {
   provider: string;
   providerCatalog: ModelCatalogProvider;
@@ -534,7 +534,7 @@ export function normalizeModelCatalogProviderRows(params: {
   return rows.toSorted((a, b) => a.provider.localeCompare(b.provider) || a.id.localeCompare(b.id));
 }
 
-/** Reused helper for normalize Model Catalog Rows behavior in src/model-catalog. */
+/** Convert all provider catalogs in a catalog block into normalized model rows. */
 export function normalizeModelCatalogRows(params: {
   providers: Record<string, ModelCatalogProvider>;
   source: ModelCatalogSource;

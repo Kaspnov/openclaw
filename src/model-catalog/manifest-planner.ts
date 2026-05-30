@@ -1,4 +1,4 @@
-// model-catalog manifest planner helpers and runtime behavior.
+// Plans model catalog rows and suppressions from loaded plugin manifests.
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { normalizeUniqueStringEntries } from "../shared/string-normalization.js";
 import { normalizeModelCatalogProviderRows } from "./normalize.js";
@@ -45,7 +45,7 @@ type ManifestModelCatalogPlan = {
   conflicts: readonly ManifestModelCatalogConflict[];
 };
 
-/** Shared type for Manifest Model Catalog Suppression Entry in src/model-catalog. */
+/** Suppression rule with the plugin id and merge key that produced it. */
 export type ManifestModelCatalogSuppressionEntry = {
   pluginId: string;
   provider: string;
@@ -59,7 +59,7 @@ type ManifestModelCatalogSuppressionPlan = {
   suppressions: readonly ManifestModelCatalogSuppressionEntry[];
 };
 
-/** Reused helper for plan Manifest Model Catalog Rows behavior in src/model-catalog. */
+/** Plan normalized catalog rows from plugin manifest catalogs and detect conflicts. */
 export function planManifestModelCatalogRows(params: {
   registry: ManifestModelCatalogRegistry;
   providerFilter?: string;
@@ -214,7 +214,7 @@ function applyModelCatalogAliasOverrides(params: {
   }));
 }
 
-/** Reused helper for plan Manifest Model Catalog Suppressions behavior in src/model-catalog. */
+/** Plan model suppression rules from plugin manifests with optional provider/model filters. */
 export function planManifestModelCatalogSuppressions(params: {
   registry: ManifestModelCatalogRegistry;
   providerFilter?: string;

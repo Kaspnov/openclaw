@@ -1,7 +1,7 @@
-// Shared types for model-catalog/provider-index types behavior.
+// Data contracts for the OpenClaw-owned installable provider index.
 import type { ModelCatalogProvider } from "../types.js";
 
-/** Shared type for Open Claw Provider Index Plugin Install in src/model-catalog/provider-index. */
+/** Install metadata for a provider plugin exposed by the provider index. */
 export type OpenClawProviderIndexPluginInstall = {
   clawhubSpec?: string;
   npmSpec?: string;
@@ -10,7 +10,7 @@ export type OpenClawProviderIndexPluginInstall = {
   expectedIntegrity?: string;
 };
 
-/** Shared type for Open Claw Provider Index Plugin in src/model-catalog/provider-index. */
+/** Plugin identity and package source for an indexed provider. */
 export type OpenClawProviderIndexPlugin = {
   id: string;
   package?: string;
@@ -18,7 +18,7 @@ export type OpenClawProviderIndexPlugin = {
   install?: OpenClawProviderIndexPluginInstall;
 };
 
-/** Shared type for Open Claw Provider Index Provider Auth Choice in src/model-catalog/provider-index. */
+/** Authentication choice surfaced before a provider plugin is installed. */
 export type OpenClawProviderIndexProviderAuthChoice = {
   method: string;
   choiceId: string;
@@ -36,7 +36,7 @@ export type OpenClawProviderIndexProviderAuthChoice = {
   onboardingScopes?: readonly ("text-inference" | "image-generation" | "music-generation")[];
 };
 
-/** Shared type for Open Claw Provider Index Provider in src/model-catalog/provider-index. */
+/** Provider entry in the OpenClaw-owned installable provider index. */
 export type OpenClawProviderIndexProvider = {
   id: string;
   name: string;
@@ -47,7 +47,7 @@ export type OpenClawProviderIndexProvider = {
   previewCatalog?: ModelCatalogProvider;
 };
 
-/** Shared type for Open Claw Provider Index in src/model-catalog/provider-index. */
+/** Versioned provider index containing provider ids mapped to provider metadata. */
 export type OpenClawProviderIndex = {
   version: number;
   providers: Readonly<Record<string, OpenClawProviderIndexProvider>>;

@@ -1,17 +1,17 @@
-// model-catalog refs helpers and runtime behavior.
+// Helpers for canonical model catalog provider ids and merge keys.
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
-/** Reused helper for normalize Model Catalog Provider Id behavior in src/model-catalog. */
+/** Normalize provider ids before catalog lookup and merge-key construction. */
 export function normalizeModelCatalogProviderId(provider: string): string {
   return normalizeLowercaseStringOrEmpty(provider);
 }
 
-/** Reused helper for build Model Catalog Ref behavior in src/model-catalog. */
+/** Build the user-facing provider/model reference string. */
 export function buildModelCatalogRef(provider: string, modelId: string): string {
   return `${normalizeModelCatalogProviderId(provider)}/${modelId}`;
 }
 
-/** Reused helper for build Model Catalog Merge Key behavior in src/model-catalog. */
+/** Build the case-insensitive key used to merge duplicate catalog rows. */
 export function buildModelCatalogMergeKey(provider: string, modelId: string): string {
   return `${normalizeModelCatalogProviderId(provider)}::${normalizeLowercaseStringOrEmpty(modelId)}`;
 }
