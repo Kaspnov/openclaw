@@ -474,6 +474,31 @@ function readModelParams(value: unknown): Record<string, unknown> | undefined {
   return value as Record<string, unknown>;
 }
 
+function readModelMetadataParams(model: unknown): unknown {
+  return (model as { params?: unknown } | undefined)?.params;
+}
+
+function readModelMetadataCompat(model: unknown): ModelCompatConfig | undefined {
+  const compat = (model as { compat?: unknown } | undefined)?.compat;
+  return compat && typeof compat === "object" && !Array.isArray(compat)
+    ? (compat as ModelCompatConfig)
+    : undefined;
+}
+
+function readModelMetadataContextTokens(model: unknown): number | undefined {
+  const contextTokens = (model as { contextTokens?: unknown } | undefined)?.contextTokens;
+  return typeof contextTokens === "number" && Number.isFinite(contextTokens)
+    ? contextTokens
+    : undefined;
+}
+
+function readModelMetadataMediaInput(model: unknown): ModelMediaInputConfig | undefined {
+  const mediaInput = (model as { mediaInput?: unknown } | undefined)?.mediaInput;
+  return mediaInput && typeof mediaInput === "object" && !Array.isArray(mediaInput)
+    ? (mediaInput as ModelMediaInputConfig)
+    : undefined;
+}
+
 function mergeModelParams(
   ...entries: Array<Record<string, unknown> | undefined>
 ): Record<string, unknown> | undefined {
@@ -1004,12 +1029,13 @@ function resolveConfiguredFallbackModel(params: {
   const modelHeaders = sanitizeModelHeaders(metadataModel?.headers, {
     stripSecretRefMarkers: true,
   });
+  const metadataCompat = readModelMetadataCompat(metadataModel);
   const resolvedParams = mergeConfiguredRuntimeModelParams({
     cfg,
     provider,
     modelId,
     providerParams: providerConfig?.params,
-    configuredParams: metadataModel?.params,
+    configuredParams: readModelMetadataParams(metadataModel),
   });
   const fallbackTransport = resolveProviderTransport({
     provider,
@@ -1036,7 +1062,7 @@ function resolveConfiguredFallbackModel(params: {
   });
   const fallbackReasoning = resolveConfiguredFallbackReasoning({
     provider,
-    compat: metadataModel?.compat,
+    compat: metadataCompat,
     reasoning: metadataModel?.reasoning,
   });
   return normalizeResolvedModel({
@@ -1070,7 +1096,7 @@ function resolveConfiguredFallbackModel(params: {
             configuredModel?.contextTokens ??
             providerConfig?.contextTokens ??
             providerConfig?.models?.[0]?.contextTokens ??
-            staticCatalogModel?.contextTokens,
+            readModelMetadataContextTokens(staticCatalogModel),
           maxTokens:
             configuredModel?.maxTokens ??
             providerConfig?.maxTokens ??
@@ -1080,8 +1106,8 @@ function resolveConfiguredFallbackModel(params: {
           ...(resolvedParams ? { params: resolvedParams } : {}),
           ...(requestTimeoutMs !== undefined ? { requestTimeoutMs } : {}),
           headers: requestConfig.headers,
-          compat: metadataModel?.compat,
-          mediaInput: metadataModel?.mediaInput,
+          compat: metadataCompat,
+          mediaInput: readModelMetadataMediaInput(metadataModel),
         } as Model,
         providerRequest,
       ),
