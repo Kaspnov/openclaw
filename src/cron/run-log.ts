@@ -1,4 +1,5 @@
-// cron run log helpers and runtime behavior.
+// Cron run log storage and query helpers. Appends secure per-job JSONL logs,
+// prunes them, and reads filtered pages for status/history surfaces.
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -24,7 +25,7 @@ import type {
   CronRunTelemetry,
 } from "./types.js";
 
-/** Shared type for Cron Run Log Entry in src/cron. */
+/** Persisted JSONL entry for a finished cron run. */
 export type CronRunLogEntry = {
   ts: number;
   jobId: string;
@@ -111,7 +112,7 @@ function assertSafeCronRunLogJobId(jobId: string): string {
   return trimmed;
 }
 
-/** Reused helper for resolve Cron Run Log Path behavior in src/cron. */
+/** Resolves the secure per-job cron run log path under the store directory. */
 export function resolveCronRunLogPath(params: { storePath: string; jobId: string }) {
   const storePath = path.resolve(params.storePath);
   const dir = path.dirname(storePath);
@@ -130,12 +131,12 @@ async function setSecureFileMode(filePath: string): Promise<void> {
   await fs.chmod(filePath, 0o600).catch(() => undefined);
 }
 
-/** Reused constant for DEFAULT CRON RUN LOG MAX BYTES behavior in src/cron. */
+/** Default maximum bytes retained per cron run log file. */
 export const DEFAULT_CRON_RUN_LOG_MAX_BYTES = 2_000_000;
-/** Reused constant for DEFAULT CRON RUN LOG KEEP LINES behavior in src/cron. */
+/** Default number of latest JSONL entries retained after pruning. */
 export const DEFAULT_CRON_RUN_LOG_KEEP_LINES = 2_000;
 
-/** Reused helper for resolve Cron Run Log Prune Options behavior in src/cron. */
+/** Resolves run-log pruning limits from cron config with safe defaults. */
 export function resolveCronRunLogPruneOptions(cfg?: CronConfig["runLog"]): {
   maxBytes: number;
   keepLines: number;
@@ -160,7 +161,7 @@ export function resolveCronRunLogPruneOptions(cfg?: CronConfig["runLog"]): {
   return { maxBytes, keepLines };
 }
 
-/** Reused helper for get Pending Cron Run Log Write Count For Tests behavior in src/cron. */
+/** Returns queued run-log writes so tests can assert drain behavior. */
 export function getPendingCronRunLogWriteCountForTests() {
   return writesByPath.size;
 }
@@ -188,7 +189,7 @@ async function pruneIfNeeded(filePath: string, opts: { maxBytes: number; keepLin
   );
 }
 
-/** Reused helper for append Cron Run Log behavior in src/cron. */
+/** Appends one run-log entry, serializing concurrent writes per file. */
 export async function appendCronRunLog(
   filePath: string,
   entry: CronRunLogEntry,
@@ -223,7 +224,7 @@ export async function appendCronRunLog(
   }
 }
 
-/** Reused helper for read Cron Run Log Entries behavior in src/cron. */
+/** Reads the latest cron run-log entries asynchronously. */
 export async function readCronRunLogEntries(
   filePath: string,
   opts?: { limit?: number; jobId?: string },
@@ -240,7 +241,7 @@ export async function readCronRunLogEntries(
   return page.entries.toReversed();
 }
 
-/** Reused helper for read Cron Run Log Entries Sync behavior in src/cron. */
+/** Reads the latest cron run-log entries synchronously. */
 export function readCronRunLogEntriesSync(
   filePath: string,
   opts?: { limit?: number; jobId?: string },
@@ -469,7 +470,7 @@ function filterRunLogEntries(
   });
 }
 
-/** Reused helper for read Cron Run Log Entries Page behavior in src/cron. */
+/** Reads one filtered/sorted page from a single cron run log file. */
 export async function readCronRunLogEntriesPage(
   filePath: string,
   opts?: ReadCronRunLogPageOptions,
@@ -518,7 +519,7 @@ export async function readCronRunLogEntriesPage(
   };
 }
 
-/** Reused helper for read Cron Run Log Entries Page All behavior in src/cron. */
+/** Reads one filtered/sorted page across all per-job cron run log files. */
 export async function readCronRunLogEntriesPageAll(
   opts: ReadCronRunLogAllPageOptions,
 ): Promise<CronRunLogPageResult> {
