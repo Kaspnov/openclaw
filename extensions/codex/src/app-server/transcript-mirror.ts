@@ -274,7 +274,6 @@ function buildMirrorDedupeIdentity(message: MirroredAgentMessage): string {
 export async function mirrorCodexAppServerTranscript(params: {
   agentId?: string;
   path?: string;
-  sessionFile?: string;
   sessionId?: string;
   sessionKey?: string;
   messages: AgentMessage[];
@@ -287,7 +286,7 @@ export async function mirrorCodexAppServerTranscript(params: {
   if (!sessionId) {
     return { userMessagesPresent: [] };
   }
-  const transcriptPath = params.path ?? params.sessionFile;
+  const transcriptPath = params.path;
   const messages = params.messages.filter(
     (message): message is MirroredAgentMessage =>
       message.role === "user" || message.role === "assistant" || message.role === "toolResult",
