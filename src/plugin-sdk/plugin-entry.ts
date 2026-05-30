@@ -122,7 +122,7 @@ import type {
 } from "../plugins/types.js";
 import { createCachedLazyValueGetter } from "./lazy-value.js";
 
-/** Re-exported API for src/plugin-sdk. */
+/** Core plugin/provider registration contracts exposed to plugin entry modules. */
 export type {
   AnyAgentTool,
   AgentHarness,
@@ -242,31 +242,31 @@ export type {
   OpenClawPluginDefinition,
   PluginLogger,
 };
-/** Re-exported API for src/plugin-sdk. */
+/** Conversation binding event/request contracts for channel-aware plugins. */
 export type {
   PluginConversationBinding,
   PluginConversationBindingResolvedEvent,
   PluginConversationBindingRequestParams,
   PluginConversationBindingRequestResult,
 } from "../plugins/conversation-binding.types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Inbound claim hook contracts exposed to plugin entry modules. */
 export type {
   PluginHookInboundClaimContext,
   PluginHookInboundClaimEvent,
   PluginHookInboundClaimResult,
 } from "../plugins/hook-types.js";
-/** Re-exported API for src/plugin-sdk, starting with Provider Runtime Model. */
+/** Runtime model shape returned by dynamic provider catalog hooks. */
 export type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";
-/** Re-exported API for src/plugin-sdk. */
+/** Unified model catalog entry/source contracts for provider plugins. */
 export type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
-/** Re-exported API for src/plugin-sdk, starting with Open Claw Config. */
+/** Root OpenClaw config type used by plugin setup and provider hooks. */
 export type { OpenClawConfig };
 
-/** Re-exported API for src/plugin-sdk. */
+/** Config-schema builders for plugin manifest/runtime config declarations. */
 export {
   buildJsonPluginConfigSchema,
   buildPluginConfigSchema,
@@ -310,7 +310,7 @@ type DefinedPluginEntry = {
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
  * `openclaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
-/** Define a plugin entry factory with optional config and runtime injection hooks. */
+/** Normalize plugin entry options into the shape consumed by the plugin loader. */
 export function definePluginEntry({
   id,
   name,
