@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { logRejectedLargePayload } from "../logging/diagnostic-payload.js";
+import { resolveConnectNodeId } from "./node-identity.js";
 import { MAX_BUFFERED_BYTES } from "./server-constants.js";
 import type { GatewayWsClient } from "./server/ws-types.js";
 
@@ -156,9 +157,9 @@ export class NodeRegistry {
   private pendingInvokes = new Map<string, PendingInvoke>();
   private authorizedSystemRunEvents = new Map<string, AuthorizedSystemRunEvent>();
 
-  register(client: GatewayWsClient, opts: { remoteIp?: string | undefined }) {
+  register(client: GatewayWsClient, opts: { remoteIp?: string | undefined; nodeId?: string }) {
     const connect = client.connect;
-    const nodeId = connect.device?.id ?? connect.client.id;
+    const nodeId = opts.nodeId?.trim() || resolveConnectNodeId(connect);
     const caps = Array.isArray(connect.caps) ? connect.caps : [];
     const declaredCaps = Array.isArray((connect as { declaredCaps?: string[] }).declaredCaps)
       ? ((connect as { declaredCaps?: string[] }).declaredCaps ?? [])
@@ -245,6 +246,15 @@ export class NodeRegistry {
 
   get(nodeId: string): NodeSession | undefined {
     return this.nodesById.get(nodeId);
+  }
+
+  getByConnId(connId: string | undefined): NodeSession | undefined {
+    if (!connId) {
+      return undefined;
+    }
+    const nodeId = this.nodesByConn.get(connId);
+    const session = nodeId ? this.nodesById.get(nodeId) : undefined;
+    return session?.connId === connId ? session : undefined;
   }
 
   async checkConnectivity(nodeId: string, timeoutMs = 2_000): Promise<NodeConnectivityResult> {
@@ -336,6 +346,33 @@ export class NodeRegistry {
 
   updateCommands(nodeId: string, commands: readonly string[]): NodeSession | null {
     return this.updateSurface(nodeId, { commands });
+  }
+
+  adoptNodeId(
+    currentNodeId: string,
+    nextNodeId: string,
+    surface: {
+      caps?: readonly string[];
+      commands: readonly string[];
+      permissions?: Record<string, boolean> | undefined;
+    },
+  ): NodeSession | null {
+    const current = currentNodeId.trim();
+    const next = nextNodeId.trim();
+    if (!current || !next) {
+      return null;
+    }
+    const node = this.nodesById.get(current);
+    if (!node) {
+      return null;
+    }
+    if (current !== next) {
+      this.nodesById.delete(current);
+      node.nodeId = next;
+      this.nodesById.set(next, node);
+      this.nodesByConn.set(node.connId, next);
+    }
+    return this.updateSurface(next, surface);
   }
 
   updateSurface(
