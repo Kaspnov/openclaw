@@ -1,459 +1,459 @@
-// Shared types for packages/gateway-protocol/src/schema types behavior.
+// Schema-derived TypeScript aliases for the gateway protocol public API.
 import type { Static } from "typebox";
 import { ProtocolSchemas } from "./protocol-schemas.js";
 
 type ProtocolSchemaName = keyof typeof ProtocolSchemas;
 type SchemaType<TName extends ProtocolSchemaName> = Static<(typeof ProtocolSchemas)[TName]>;
 
-/** Public type describing Connect Params for packages/gateway-protocol. */
+/** Public alias for the Connect Params schema-derived TypeScript type. */
 export type ConnectParams = SchemaType<"ConnectParams">;
-/** Public type describing Hello Ok for packages/gateway-protocol. */
+/** Public alias for the Hello Ok schema-derived TypeScript type. */
 export type HelloOk = SchemaType<"HelloOk">;
-/** Public type describing Request Frame for packages/gateway-protocol. */
+/** Public alias for the Request Frame schema-derived TypeScript type. */
 export type RequestFrame = SchemaType<"RequestFrame">;
-/** Public type describing Response Frame for packages/gateway-protocol. */
+/** Public alias for the Response Frame schema-derived TypeScript type. */
 export type ResponseFrame = SchemaType<"ResponseFrame">;
-/** Public type describing Event Frame for packages/gateway-protocol. */
+/** Public alias for the Event Frame schema-derived TypeScript type. */
 export type EventFrame = SchemaType<"EventFrame">;
-/** Public type describing Gateway Frame for packages/gateway-protocol. */
+/** Public alias for the Gateway Frame schema-derived TypeScript type. */
 export type GatewayFrame = SchemaType<"GatewayFrame">;
-/** Public type describing Snapshot for packages/gateway-protocol. */
+/** Public alias for the Snapshot schema-derived TypeScript type. */
 export type Snapshot = SchemaType<"Snapshot">;
-/** Public type describing Presence Entry for packages/gateway-protocol. */
+/** Public alias for the Presence Entry schema-derived TypeScript type. */
 export type PresenceEntry = SchemaType<"PresenceEntry">;
-/** Public type describing Error Shape for packages/gateway-protocol. */
+/** Public alias for the Error Shape schema-derived TypeScript type. */
 export type ErrorShape = SchemaType<"ErrorShape">;
-/** Public type describing State Version for packages/gateway-protocol. */
+/** Public alias for the State Version schema-derived TypeScript type. */
 export type StateVersion = SchemaType<"StateVersion">;
-/** Public type describing Environment Status for packages/gateway-protocol. */
+/** Public alias for the Environment Status schema-derived TypeScript type. */
 export type EnvironmentStatus = SchemaType<"EnvironmentStatus">;
-/** Public type describing Environment Summary for packages/gateway-protocol. */
+/** Public alias for the Environment Summary schema-derived TypeScript type. */
 export type EnvironmentSummary = SchemaType<"EnvironmentSummary">;
-/** Public type describing Environments List Params for packages/gateway-protocol. */
+/** Public alias for the Environments List Params schema-derived TypeScript type. */
 export type EnvironmentsListParams = SchemaType<"EnvironmentsListParams">;
-/** Public type describing Environments List Result for packages/gateway-protocol. */
+/** Public alias for the Environments List Result schema-derived TypeScript type. */
 export type EnvironmentsListResult = SchemaType<"EnvironmentsListResult">;
-/** Public type describing Environments Status Params for packages/gateway-protocol. */
+/** Public alias for the Environments Status Params schema-derived TypeScript type. */
 export type EnvironmentsStatusParams = SchemaType<"EnvironmentsStatusParams">;
-/** Public type describing Environments Status Result for packages/gateway-protocol. */
+/** Public alias for the Environments Status Result schema-derived TypeScript type. */
 export type EnvironmentsStatusResult = SchemaType<"EnvironmentsStatusResult">;
-/** Public type describing Agent Event for packages/gateway-protocol. */
+/** Public alias for the Agent Event schema-derived TypeScript type. */
 export type AgentEvent = SchemaType<"AgentEvent">;
-/** Public type describing Agent Identity Params for packages/gateway-protocol. */
+/** Public alias for the Agent Identity Params schema-derived TypeScript type. */
 export type AgentIdentityParams = SchemaType<"AgentIdentityParams">;
-/** Public type describing Agent Identity Result for packages/gateway-protocol. */
+/** Public alias for the Agent Identity Result schema-derived TypeScript type. */
 export type AgentIdentityResult = SchemaType<"AgentIdentityResult">;
-/** Public type describing Message Action Params for packages/gateway-protocol. */
+/** Public alias for the Message Action Params schema-derived TypeScript type. */
 export type MessageActionParams = SchemaType<"MessageActionParams">;
-/** Public type describing Poll Params for packages/gateway-protocol. */
+/** Public alias for the Poll Params schema-derived TypeScript type. */
 export type PollParams = SchemaType<"PollParams">;
-/** Public type describing Agent Wait Params for packages/gateway-protocol. */
+/** Public alias for the Agent Wait Params schema-derived TypeScript type. */
 export type AgentWaitParams = SchemaType<"AgentWaitParams">;
-/** Public type describing Wake Params for packages/gateway-protocol. */
+/** Public alias for the Wake Params schema-derived TypeScript type. */
 export type WakeParams = SchemaType<"WakeParams">;
-/** Public type describing Node Pair Request Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair Request Params schema-derived TypeScript type. */
 export type NodePairRequestParams = SchemaType<"NodePairRequestParams">;
-/** Public type describing Node Pair List Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair List Params schema-derived TypeScript type. */
 export type NodePairListParams = SchemaType<"NodePairListParams">;
-/** Public type describing Node Pair Approve Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair Approve Params schema-derived TypeScript type. */
 export type NodePairApproveParams = SchemaType<"NodePairApproveParams">;
-/** Public type describing Node Pair Reject Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair Reject Params schema-derived TypeScript type. */
 export type NodePairRejectParams = SchemaType<"NodePairRejectParams">;
-/** Public type describing Node Pair Remove Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair Remove Params schema-derived TypeScript type. */
 export type NodePairRemoveParams = SchemaType<"NodePairRemoveParams">;
-/** Public type describing Node Pair Verify Params for packages/gateway-protocol. */
+/** Public alias for the Node Pair Verify Params schema-derived TypeScript type. */
 export type NodePairVerifyParams = SchemaType<"NodePairVerifyParams">;
-/** Public type describing Node Rename Params for packages/gateway-protocol. */
+/** Public alias for the Node Rename Params schema-derived TypeScript type. */
 export type NodeRenameParams = SchemaType<"NodeRenameParams">;
-/** Public type describing Node List Params for packages/gateway-protocol. */
+/** Public alias for the Node List Params schema-derived TypeScript type. */
 export type NodeListParams = SchemaType<"NodeListParams">;
-/** Public type describing Node Pending Ack Params for packages/gateway-protocol. */
+/** Public alias for the Node Pending Ack Params schema-derived TypeScript type. */
 export type NodePendingAckParams = SchemaType<"NodePendingAckParams">;
-/** Public type describing Node Describe Params for packages/gateway-protocol. */
+/** Public alias for the Node Describe Params schema-derived TypeScript type. */
 export type NodeDescribeParams = SchemaType<"NodeDescribeParams">;
-/** Public type describing Node Invoke Params for packages/gateway-protocol. */
+/** Public alias for the Node Invoke Params schema-derived TypeScript type. */
 export type NodeInvokeParams = SchemaType<"NodeInvokeParams">;
-/** Public type describing Node Invoke Result Params for packages/gateway-protocol. */
+/** Public alias for the Node Invoke Result Params schema-derived TypeScript type. */
 export type NodeInvokeResultParams = SchemaType<"NodeInvokeResultParams">;
-/** Public type describing Node Event Params for packages/gateway-protocol. */
+/** Public alias for the Node Event Params schema-derived TypeScript type. */
 export type NodeEventParams = SchemaType<"NodeEventParams">;
-/** Public type describing Node Event Result for packages/gateway-protocol. */
+/** Public alias for the Node Event Result schema-derived TypeScript type. */
 export type NodeEventResult = SchemaType<"NodeEventResult">;
-/** Public type describing Node Presence Alive Payload for packages/gateway-protocol. */
+/** Public alias for the Node Presence Alive Payload schema-derived TypeScript type. */
 export type NodePresenceAlivePayload = SchemaType<"NodePresenceAlivePayload">;
-/** Public type describing Node Presence Alive Reason for packages/gateway-protocol. */
+/** Public alias for the Node Presence Alive Reason schema-derived TypeScript type. */
 export type NodePresenceAliveReason = SchemaType<"NodePresenceAliveReason">;
-/** Public type describing Node Pending Drain Params for packages/gateway-protocol. */
+/** Public alias for the Node Pending Drain Params schema-derived TypeScript type. */
 export type NodePendingDrainParams = SchemaType<"NodePendingDrainParams">;
-/** Public type describing Node Pending Drain Result for packages/gateway-protocol. */
+/** Public alias for the Node Pending Drain Result schema-derived TypeScript type. */
 export type NodePendingDrainResult = SchemaType<"NodePendingDrainResult">;
-/** Public type describing Node Pending Enqueue Params for packages/gateway-protocol. */
+/** Public alias for the Node Pending Enqueue Params schema-derived TypeScript type. */
 export type NodePendingEnqueueParams = SchemaType<"NodePendingEnqueueParams">;
-/** Public type describing Node Pending Enqueue Result for packages/gateway-protocol. */
+/** Public alias for the Node Pending Enqueue Result schema-derived TypeScript type. */
 export type NodePendingEnqueueResult = SchemaType<"NodePendingEnqueueResult">;
-/** Public type describing Push Test Params for packages/gateway-protocol. */
+/** Public alias for the Push Test Params schema-derived TypeScript type. */
 export type PushTestParams = SchemaType<"PushTestParams">;
-/** Public type describing Push Test Result for packages/gateway-protocol. */
+/** Public alias for the Push Test Result schema-derived TypeScript type. */
 export type PushTestResult = SchemaType<"PushTestResult">;
-/** Public type describing Sessions List Params for packages/gateway-protocol. */
+/** Public alias for the Sessions List Params schema-derived TypeScript type. */
 export type SessionsListParams = SchemaType<"SessionsListParams">;
-/** Public type describing Sessions Cleanup Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Cleanup Params schema-derived TypeScript type. */
 export type SessionsCleanupParams = SchemaType<"SessionsCleanupParams">;
-/** Public type describing Sessions Preview Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Preview Params schema-derived TypeScript type. */
 export type SessionsPreviewParams = SchemaType<"SessionsPreviewParams">;
-/** Public type describing Sessions Describe Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Describe Params schema-derived TypeScript type. */
 export type SessionsDescribeParams = SchemaType<"SessionsDescribeParams">;
-/** Public type describing Sessions Resolve Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Resolve Params schema-derived TypeScript type. */
 export type SessionsResolveParams = SchemaType<"SessionsResolveParams">;
-/** Public type describing Session Compaction Checkpoint for packages/gateway-protocol. */
+/** Public alias for the Session Compaction Checkpoint schema-derived TypeScript type. */
 export type SessionCompactionCheckpoint = SchemaType<"SessionCompactionCheckpoint">;
-/** Public type describing Session Operation Event for packages/gateway-protocol. */
+/** Public alias for the Session Operation Event schema-derived TypeScript type. */
 export type SessionOperationEvent = SchemaType<"SessionOperationEvent">;
-/** Public type describing Sessions Compaction List Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction List Params schema-derived TypeScript type. */
 export type SessionsCompactionListParams = SchemaType<"SessionsCompactionListParams">;
-/** Public type describing Sessions Compaction Get Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Get Params schema-derived TypeScript type. */
 export type SessionsCompactionGetParams = SchemaType<"SessionsCompactionGetParams">;
-/** Public type describing Sessions Compaction Branch Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Branch Params schema-derived TypeScript type. */
 export type SessionsCompactionBranchParams = SchemaType<"SessionsCompactionBranchParams">;
-/** Public type describing Sessions Compaction Restore Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Restore Params schema-derived TypeScript type. */
 export type SessionsCompactionRestoreParams = SchemaType<"SessionsCompactionRestoreParams">;
-/** Public type describing Sessions Compaction List Result for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction List Result schema-derived TypeScript type. */
 export type SessionsCompactionListResult = SchemaType<"SessionsCompactionListResult">;
-/** Public type describing Sessions Compaction Get Result for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Get Result schema-derived TypeScript type. */
 export type SessionsCompactionGetResult = SchemaType<"SessionsCompactionGetResult">;
-/** Public type describing Sessions Compaction Branch Result for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Branch Result schema-derived TypeScript type. */
 export type SessionsCompactionBranchResult = SchemaType<"SessionsCompactionBranchResult">;
-/** Public type describing Sessions Compaction Restore Result for packages/gateway-protocol. */
+/** Public alias for the Sessions Compaction Restore Result schema-derived TypeScript type. */
 export type SessionsCompactionRestoreResult = SchemaType<"SessionsCompactionRestoreResult">;
-/** Public type describing Sessions Create Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Create Params schema-derived TypeScript type. */
 export type SessionsCreateParams = SchemaType<"SessionsCreateParams">;
-/** Public type describing Sessions Send Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Send Params schema-derived TypeScript type. */
 export type SessionsSendParams = SchemaType<"SessionsSendParams">;
-/** Public type describing Sessions Messages Subscribe Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Messages Subscribe Params schema-derived TypeScript type. */
 export type SessionsMessagesSubscribeParams = SchemaType<"SessionsMessagesSubscribeParams">;
-/** Public type describing Sessions Messages Unsubscribe Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Messages Unsubscribe Params schema-derived TypeScript type. */
 export type SessionsMessagesUnsubscribeParams = SchemaType<"SessionsMessagesUnsubscribeParams">;
-/** Public type describing Sessions Abort Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Abort Params schema-derived TypeScript type. */
 export type SessionsAbortParams = SchemaType<"SessionsAbortParams">;
-/** Public type describing Sessions Patch Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Patch Params schema-derived TypeScript type. */
 export type SessionsPatchParams = SchemaType<"SessionsPatchParams">;
-/** Public type describing Sessions Plugin Patch Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Plugin Patch Params schema-derived TypeScript type. */
 export type SessionsPluginPatchParams = SchemaType<"SessionsPluginPatchParams">;
-/** Public type describing Sessions Plugin Patch Result for packages/gateway-protocol. */
+/** Public alias for the Sessions Plugin Patch Result schema-derived TypeScript type. */
 export type SessionsPluginPatchResult = SchemaType<"SessionsPluginPatchResult">;
-/** Public type describing Sessions Reset Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Reset Params schema-derived TypeScript type. */
 export type SessionsResetParams = SchemaType<"SessionsResetParams">;
-/** Public type describing Sessions Delete Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Delete Params schema-derived TypeScript type. */
 export type SessionsDeleteParams = SchemaType<"SessionsDeleteParams">;
-/** Public type describing Sessions Compact Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Compact Params schema-derived TypeScript type. */
 export type SessionsCompactParams = SchemaType<"SessionsCompactParams">;
-/** Public type describing Sessions Usage Params for packages/gateway-protocol. */
+/** Public alias for the Sessions Usage Params schema-derived TypeScript type. */
 export type SessionsUsageParams = SchemaType<"SessionsUsageParams">;
-/** Public type describing Task Summary for packages/gateway-protocol. */
+/** Public alias for the Task Summary schema-derived TypeScript type. */
 export type TaskSummary = SchemaType<"TaskSummary">;
-/** Public type describing Tasks List Params for packages/gateway-protocol. */
+/** Public alias for the Tasks List Params schema-derived TypeScript type. */
 export type TasksListParams = SchemaType<"TasksListParams">;
-/** Public type describing Tasks List Result for packages/gateway-protocol. */
+/** Public alias for the Tasks List Result schema-derived TypeScript type. */
 export type TasksListResult = SchemaType<"TasksListResult">;
-/** Public type describing Tasks Get Params for packages/gateway-protocol. */
+/** Public alias for the Tasks Get Params schema-derived TypeScript type. */
 export type TasksGetParams = SchemaType<"TasksGetParams">;
-/** Public type describing Tasks Get Result for packages/gateway-protocol. */
+/** Public alias for the Tasks Get Result schema-derived TypeScript type. */
 export type TasksGetResult = SchemaType<"TasksGetResult">;
-/** Public type describing Tasks Cancel Params for packages/gateway-protocol. */
+/** Public alias for the Tasks Cancel Params schema-derived TypeScript type. */
 export type TasksCancelParams = SchemaType<"TasksCancelParams">;
-/** Public type describing Tasks Cancel Result for packages/gateway-protocol. */
+/** Public alias for the Tasks Cancel Result schema-derived TypeScript type. */
 export type TasksCancelResult = SchemaType<"TasksCancelResult">;
-/** Public type describing Config Get Params for packages/gateway-protocol. */
+/** Public alias for the Config Get Params schema-derived TypeScript type. */
 export type ConfigGetParams = SchemaType<"ConfigGetParams">;
-/** Public type describing Config Set Params for packages/gateway-protocol. */
+/** Public alias for the Config Set Params schema-derived TypeScript type. */
 export type ConfigSetParams = SchemaType<"ConfigSetParams">;
-/** Public type describing Config Apply Params for packages/gateway-protocol. */
+/** Public alias for the Config Apply Params schema-derived TypeScript type. */
 export type ConfigApplyParams = SchemaType<"ConfigApplyParams">;
-/** Public type describing Config Patch Params for packages/gateway-protocol. */
+/** Public alias for the Config Patch Params schema-derived TypeScript type. */
 export type ConfigPatchParams = SchemaType<"ConfigPatchParams">;
-/** Public type describing Config Schema Params for packages/gateway-protocol. */
+/** Public alias for the Config Schema Params schema-derived TypeScript type. */
 export type ConfigSchemaParams = SchemaType<"ConfigSchemaParams">;
-/** Public type describing Config Schema Lookup Params for packages/gateway-protocol. */
+/** Public alias for the Config Schema Lookup Params schema-derived TypeScript type. */
 export type ConfigSchemaLookupParams = SchemaType<"ConfigSchemaLookupParams">;
-/** Public type describing Config Schema Response for packages/gateway-protocol. */
+/** Public alias for the Config Schema Response schema-derived TypeScript type. */
 export type ConfigSchemaResponse = SchemaType<"ConfigSchemaResponse">;
-/** Public type describing Config Schema Lookup Result for packages/gateway-protocol. */
+/** Public alias for the Config Schema Lookup Result schema-derived TypeScript type. */
 export type ConfigSchemaLookupResult = SchemaType<"ConfigSchemaLookupResult">;
-/** Public type describing Update Status Params for packages/gateway-protocol. */
+/** Public alias for the Update Status Params schema-derived TypeScript type. */
 export type UpdateStatusParams = SchemaType<"UpdateStatusParams">;
-/** Public type describing Wizard Start Params for packages/gateway-protocol. */
+/** Public alias for the Wizard Start Params schema-derived TypeScript type. */
 export type WizardStartParams = SchemaType<"WizardStartParams">;
-/** Public type describing Wizard Next Params for packages/gateway-protocol. */
+/** Public alias for the Wizard Next Params schema-derived TypeScript type. */
 export type WizardNextParams = SchemaType<"WizardNextParams">;
-/** Public type describing Wizard Cancel Params for packages/gateway-protocol. */
+/** Public alias for the Wizard Cancel Params schema-derived TypeScript type. */
 export type WizardCancelParams = SchemaType<"WizardCancelParams">;
-/** Public type describing Wizard Status Params for packages/gateway-protocol. */
+/** Public alias for the Wizard Status Params schema-derived TypeScript type. */
 export type WizardStatusParams = SchemaType<"WizardStatusParams">;
-/** Public type describing Wizard Step for packages/gateway-protocol. */
+/** Public alias for the Wizard Step schema-derived TypeScript type. */
 export type WizardStep = SchemaType<"WizardStep">;
-/** Public type describing Wizard Next Result for packages/gateway-protocol. */
+/** Public alias for the Wizard Next Result schema-derived TypeScript type. */
 export type WizardNextResult = SchemaType<"WizardNextResult">;
-/** Public type describing Wizard Start Result for packages/gateway-protocol. */
+/** Public alias for the Wizard Start Result schema-derived TypeScript type. */
 export type WizardStartResult = SchemaType<"WizardStartResult">;
-/** Public type describing Wizard Status Result for packages/gateway-protocol. */
+/** Public alias for the Wizard Status Result schema-derived TypeScript type. */
 export type WizardStatusResult = SchemaType<"WizardStatusResult">;
-/** Public type describing Talk Event for packages/gateway-protocol. */
+/** Public alias for the Talk Event schema-derived TypeScript type. */
 export type TalkEvent = SchemaType<"TalkEvent">;
-/** Public type describing Talk Mode Params for packages/gateway-protocol. */
+/** Public alias for the Talk Mode Params schema-derived TypeScript type. */
 export type TalkModeParams = SchemaType<"TalkModeParams">;
-/** Public type describing Talk Catalog Params for packages/gateway-protocol. */
+/** Public alias for the Talk Catalog Params schema-derived TypeScript type. */
 export type TalkCatalogParams = SchemaType<"TalkCatalogParams">;
-/** Public type describing Talk Catalog Result for packages/gateway-protocol. */
+/** Public alias for the Talk Catalog Result schema-derived TypeScript type. */
 export type TalkCatalogResult = SchemaType<"TalkCatalogResult">;
-/** Public type describing Talk Config Params for packages/gateway-protocol. */
+/** Public alias for the Talk Config Params schema-derived TypeScript type. */
 export type TalkConfigParams = SchemaType<"TalkConfigParams">;
-/** Public type describing Talk Config Result for packages/gateway-protocol. */
+/** Public alias for the Talk Config Result schema-derived TypeScript type. */
 export type TalkConfigResult = SchemaType<"TalkConfigResult">;
-/** Public type describing Talk Client Create Params for packages/gateway-protocol. */
+/** Public alias for the Talk Client Create Params schema-derived TypeScript type. */
 export type TalkClientCreateParams = SchemaType<"TalkClientCreateParams">;
-/** Public type describing Talk Client Create Result for packages/gateway-protocol. */
+/** Public alias for the Talk Client Create Result schema-derived TypeScript type. */
 export type TalkClientCreateResult = SchemaType<"TalkClientCreateResult">;
-/** Public type describing Talk Client Steer Params for packages/gateway-protocol. */
+/** Public alias for the Talk Client Steer Params schema-derived TypeScript type. */
 export type TalkClientSteerParams = SchemaType<"TalkClientSteerParams">;
-/** Public type describing Talk Agent Control Result for packages/gateway-protocol. */
+/** Public alias for the Talk Agent Control Result schema-derived TypeScript type. */
 export type TalkAgentControlResult = SchemaType<"TalkAgentControlResult">;
-/** Public type describing Talk Client Tool Call Params for packages/gateway-protocol. */
+/** Public alias for the Talk Client Tool Call Params schema-derived TypeScript type. */
 export type TalkClientToolCallParams = SchemaType<"TalkClientToolCallParams">;
-/** Public type describing Talk Client Tool Call Result for packages/gateway-protocol. */
+/** Public alias for the Talk Client Tool Call Result schema-derived TypeScript type. */
 export type TalkClientToolCallResult = SchemaType<"TalkClientToolCallResult">;
-/** Public type describing Talk Session Create Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Create Params schema-derived TypeScript type. */
 export type TalkSessionCreateParams = SchemaType<"TalkSessionCreateParams">;
-/** Public type describing Talk Session Create Result for packages/gateway-protocol. */
+/** Public alias for the Talk Session Create Result schema-derived TypeScript type. */
 export type TalkSessionCreateResult = SchemaType<"TalkSessionCreateResult">;
-/** Public type describing Talk Session Join Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Join Params schema-derived TypeScript type. */
 export type TalkSessionJoinParams = SchemaType<"TalkSessionJoinParams">;
-/** Public type describing Talk Session Join Result for packages/gateway-protocol. */
+/** Public alias for the Talk Session Join Result schema-derived TypeScript type. */
 export type TalkSessionJoinResult = SchemaType<"TalkSessionJoinResult">;
-/** Public type describing Talk Session Append Audio Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Append Audio Params schema-derived TypeScript type. */
 export type TalkSessionAppendAudioParams = SchemaType<"TalkSessionAppendAudioParams">;
-/** Public type describing Talk Session Turn Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Turn Params schema-derived TypeScript type. */
 export type TalkSessionTurnParams = SchemaType<"TalkSessionTurnParams">;
-/** Public type describing Talk Session Cancel Turn Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Cancel Turn Params schema-derived TypeScript type. */
 export type TalkSessionCancelTurnParams = SchemaType<"TalkSessionCancelTurnParams">;
-/** Public type describing Talk Session Cancel Output Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Cancel Output Params schema-derived TypeScript type. */
 export type TalkSessionCancelOutputParams = SchemaType<"TalkSessionCancelOutputParams">;
-/** Public type describing Talk Session Turn Result for packages/gateway-protocol. */
+/** Public alias for the Talk Session Turn Result schema-derived TypeScript type. */
 export type TalkSessionTurnResult = SchemaType<"TalkSessionTurnResult">;
-/** Public type describing Talk Session Steer Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Steer Params schema-derived TypeScript type. */
 export type TalkSessionSteerParams = SchemaType<"TalkSessionSteerParams">;
-/** Public type describing Talk Session Submit Tool Result Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Submit Tool Result Params schema-derived TypeScript type. */
 export type TalkSessionSubmitToolResultParams = SchemaType<"TalkSessionSubmitToolResultParams">;
-/** Public type describing Talk Session Close Params for packages/gateway-protocol. */
+/** Public alias for the Talk Session Close Params schema-derived TypeScript type. */
 export type TalkSessionCloseParams = SchemaType<"TalkSessionCloseParams">;
-/** Public type describing Talk Session Ok Result for packages/gateway-protocol. */
+/** Public alias for the Talk Session Ok Result schema-derived TypeScript type. */
 export type TalkSessionOkResult = SchemaType<"TalkSessionOkResult">;
-/** Public type describing Talk Speak Params for packages/gateway-protocol. */
+/** Public alias for the Talk Speak Params schema-derived TypeScript type. */
 export type TalkSpeakParams = SchemaType<"TalkSpeakParams">;
-/** Public type describing Talk Speak Result for packages/gateway-protocol. */
+/** Public alias for the Talk Speak Result schema-derived TypeScript type. */
 export type TalkSpeakResult = SchemaType<"TalkSpeakResult">;
-/** Public type describing Channels Status Params for packages/gateway-protocol. */
+/** Public alias for the Channels Status Params schema-derived TypeScript type. */
 export type ChannelsStatusParams = SchemaType<"ChannelsStatusParams">;
-/** Public type describing Channels Status Result for packages/gateway-protocol. */
+/** Public alias for the Channels Status Result schema-derived TypeScript type. */
 export type ChannelsStatusResult = SchemaType<"ChannelsStatusResult">;
-/** Public type describing Channels Start Params for packages/gateway-protocol. */
+/** Public alias for the Channels Start Params schema-derived TypeScript type. */
 export type ChannelsStartParams = SchemaType<"ChannelsStartParams">;
-/** Public type describing Channels Stop Params for packages/gateway-protocol. */
+/** Public alias for the Channels Stop Params schema-derived TypeScript type. */
 export type ChannelsStopParams = SchemaType<"ChannelsStopParams">;
-/** Public type describing Channels Logout Params for packages/gateway-protocol. */
+/** Public alias for the Channels Logout Params schema-derived TypeScript type. */
 export type ChannelsLogoutParams = SchemaType<"ChannelsLogoutParams">;
-/** Public type describing Web Login Start Params for packages/gateway-protocol. */
+/** Public alias for the Web Login Start Params schema-derived TypeScript type. */
 export type WebLoginStartParams = SchemaType<"WebLoginStartParams">;
-/** Public type describing Web Login Wait Params for packages/gateway-protocol. */
+/** Public alias for the Web Login Wait Params schema-derived TypeScript type. */
 export type WebLoginWaitParams = SchemaType<"WebLoginWaitParams">;
-/** Public type describing Agent Summary for packages/gateway-protocol. */
+/** Public alias for the Agent Summary schema-derived TypeScript type. */
 export type AgentSummary = SchemaType<"AgentSummary">;
-/** Public type describing Agents File Entry for packages/gateway-protocol. */
+/** Public alias for the Agents File Entry schema-derived TypeScript type. */
 export type AgentsFileEntry = SchemaType<"AgentsFileEntry">;
-/** Public type describing Agents Create Params for packages/gateway-protocol. */
+/** Public alias for the Agents Create Params schema-derived TypeScript type. */
 export type AgentsCreateParams = SchemaType<"AgentsCreateParams">;
-/** Public type describing Agents Create Result for packages/gateway-protocol. */
+/** Public alias for the Agents Create Result schema-derived TypeScript type. */
 export type AgentsCreateResult = SchemaType<"AgentsCreateResult">;
-/** Public type describing Agents Update Params for packages/gateway-protocol. */
+/** Public alias for the Agents Update Params schema-derived TypeScript type. */
 export type AgentsUpdateParams = SchemaType<"AgentsUpdateParams">;
-/** Public type describing Agents Update Result for packages/gateway-protocol. */
+/** Public alias for the Agents Update Result schema-derived TypeScript type. */
 export type AgentsUpdateResult = SchemaType<"AgentsUpdateResult">;
-/** Public type describing Agents Delete Params for packages/gateway-protocol. */
+/** Public alias for the Agents Delete Params schema-derived TypeScript type. */
 export type AgentsDeleteParams = SchemaType<"AgentsDeleteParams">;
-/** Public type describing Agents Delete Result for packages/gateway-protocol. */
+/** Public alias for the Agents Delete Result schema-derived TypeScript type. */
 export type AgentsDeleteResult = SchemaType<"AgentsDeleteResult">;
-/** Public type describing Agents Files List Params for packages/gateway-protocol. */
+/** Public alias for the Agents Files List Params schema-derived TypeScript type. */
 export type AgentsFilesListParams = SchemaType<"AgentsFilesListParams">;
-/** Public type describing Agents Files List Result for packages/gateway-protocol. */
+/** Public alias for the Agents Files List Result schema-derived TypeScript type. */
 export type AgentsFilesListResult = SchemaType<"AgentsFilesListResult">;
-/** Public type describing Agents Files Get Params for packages/gateway-protocol. */
+/** Public alias for the Agents Files Get Params schema-derived TypeScript type. */
 export type AgentsFilesGetParams = SchemaType<"AgentsFilesGetParams">;
-/** Public type describing Agents Files Get Result for packages/gateway-protocol. */
+/** Public alias for the Agents Files Get Result schema-derived TypeScript type. */
 export type AgentsFilesGetResult = SchemaType<"AgentsFilesGetResult">;
-/** Public type describing Agents Files Set Params for packages/gateway-protocol. */
+/** Public alias for the Agents Files Set Params schema-derived TypeScript type. */
 export type AgentsFilesSetParams = SchemaType<"AgentsFilesSetParams">;
-/** Public type describing Agents Files Set Result for packages/gateway-protocol. */
+/** Public alias for the Agents Files Set Result schema-derived TypeScript type. */
 export type AgentsFilesSetResult = SchemaType<"AgentsFilesSetResult">;
-/** Public type describing Artifact Summary for packages/gateway-protocol. */
+/** Public alias for the Artifact Summary schema-derived TypeScript type. */
 export type ArtifactSummary = SchemaType<"ArtifactSummary">;
-/** Public type describing Artifacts List Params for packages/gateway-protocol. */
+/** Public alias for the Artifacts List Params schema-derived TypeScript type. */
 export type ArtifactsListParams = SchemaType<"ArtifactsListParams">;
-/** Public type describing Artifacts List Result for packages/gateway-protocol. */
+/** Public alias for the Artifacts List Result schema-derived TypeScript type. */
 export type ArtifactsListResult = SchemaType<"ArtifactsListResult">;
-/** Public type describing Artifacts Get Params for packages/gateway-protocol. */
+/** Public alias for the Artifacts Get Params schema-derived TypeScript type. */
 export type ArtifactsGetParams = SchemaType<"ArtifactsGetParams">;
-/** Public type describing Artifacts Get Result for packages/gateway-protocol. */
+/** Public alias for the Artifacts Get Result schema-derived TypeScript type. */
 export type ArtifactsGetResult = SchemaType<"ArtifactsGetResult">;
-/** Public type describing Artifacts Download Params for packages/gateway-protocol. */
+/** Public alias for the Artifacts Download Params schema-derived TypeScript type. */
 export type ArtifactsDownloadParams = SchemaType<"ArtifactsDownloadParams">;
-/** Public type describing Artifacts Download Result for packages/gateway-protocol. */
+/** Public alias for the Artifacts Download Result schema-derived TypeScript type. */
 export type ArtifactsDownloadResult = SchemaType<"ArtifactsDownloadResult">;
-/** Public type describing Agents List Params for packages/gateway-protocol. */
+/** Public alias for the Agents List Params schema-derived TypeScript type. */
 export type AgentsListParams = SchemaType<"AgentsListParams">;
-/** Public type describing Agents List Result for packages/gateway-protocol. */
+/** Public alias for the Agents List Result schema-derived TypeScript type. */
 export type AgentsListResult = SchemaType<"AgentsListResult">;
-/** Public type describing Model Choice for packages/gateway-protocol. */
+/** Public alias for the Model Choice schema-derived TypeScript type. */
 export type ModelChoice = SchemaType<"ModelChoice">;
-/** Public type describing Models List Params for packages/gateway-protocol. */
+/** Public alias for the Models List Params schema-derived TypeScript type. */
 export type ModelsListParams = SchemaType<"ModelsListParams">;
-/** Public type describing Models List Result for packages/gateway-protocol. */
+/** Public alias for the Models List Result schema-derived TypeScript type. */
 export type ModelsListResult = SchemaType<"ModelsListResult">;
-/** Public type describing Command Entry for packages/gateway-protocol. */
+/** Public alias for the Command Entry schema-derived TypeScript type. */
 export type CommandEntry = SchemaType<"CommandEntry">;
-/** Public type describing Commands List Params for packages/gateway-protocol. */
+/** Public alias for the Commands List Params schema-derived TypeScript type. */
 export type CommandsListParams = SchemaType<"CommandsListParams">;
-/** Public type describing Commands List Result for packages/gateway-protocol. */
+/** Public alias for the Commands List Result schema-derived TypeScript type. */
 export type CommandsListResult = SchemaType<"CommandsListResult">;
-/** Public type describing Plugin Control Ui Descriptor for packages/gateway-protocol. */
+/** Public alias for the Plugin Control Ui Descriptor schema-derived TypeScript type. */
 export type PluginControlUiDescriptor = SchemaType<"PluginControlUiDescriptor">;
-/** Public type describing Plugins Ui Descriptors Params for packages/gateway-protocol. */
+/** Public alias for the Plugins Ui Descriptors Params schema-derived TypeScript type. */
 export type PluginsUiDescriptorsParams = SchemaType<"PluginsUiDescriptorsParams">;
-/** Public type describing Plugins Ui Descriptors Result for packages/gateway-protocol. */
+/** Public alias for the Plugins Ui Descriptors Result schema-derived TypeScript type. */
 export type PluginsUiDescriptorsResult = SchemaType<"PluginsUiDescriptorsResult">;
-/** Public type describing Plugins Session Action Params for packages/gateway-protocol. */
+/** Public alias for the Plugins Session Action Params schema-derived TypeScript type. */
 export type PluginsSessionActionParams = SchemaType<"PluginsSessionActionParams">;
-/** Public type describing Plugins Session Action Result for packages/gateway-protocol. */
+/** Public alias for the Plugins Session Action Result schema-derived TypeScript type. */
 export type PluginsSessionActionResult = SchemaType<"PluginsSessionActionResult">;
-/** Public type describing Skills Status Params for packages/gateway-protocol. */
+/** Public alias for the Skills Status Params schema-derived TypeScript type. */
 export type SkillsStatusParams = SchemaType<"SkillsStatusParams">;
-/** Public type describing Tools Catalog Params for packages/gateway-protocol. */
+/** Public alias for the Tools Catalog Params schema-derived TypeScript type. */
 export type ToolsCatalogParams = SchemaType<"ToolsCatalogParams">;
-/** Public type describing Tool Catalog Profile for packages/gateway-protocol. */
+/** Public alias for the Tool Catalog Profile schema-derived TypeScript type. */
 export type ToolCatalogProfile = SchemaType<"ToolCatalogProfile">;
-/** Public type describing Tool Catalog Entry for packages/gateway-protocol. */
+/** Public alias for the Tool Catalog Entry schema-derived TypeScript type. */
 export type ToolCatalogEntry = SchemaType<"ToolCatalogEntry">;
-/** Public type describing Tool Catalog Group for packages/gateway-protocol. */
+/** Public alias for the Tool Catalog Group schema-derived TypeScript type. */
 export type ToolCatalogGroup = SchemaType<"ToolCatalogGroup">;
-/** Public type describing Tools Catalog Result for packages/gateway-protocol. */
+/** Public alias for the Tools Catalog Result schema-derived TypeScript type. */
 export type ToolsCatalogResult = SchemaType<"ToolsCatalogResult">;
-/** Public type describing Tools Effective Params for packages/gateway-protocol. */
+/** Public alias for the Tools Effective Params schema-derived TypeScript type. */
 export type ToolsEffectiveParams = SchemaType<"ToolsEffectiveParams">;
-/** Public type describing Tools Effective Entry for packages/gateway-protocol. */
+/** Public alias for the Tools Effective Entry schema-derived TypeScript type. */
 export type ToolsEffectiveEntry = SchemaType<"ToolsEffectiveEntry">;
-/** Public type describing Tools Effective Group for packages/gateway-protocol. */
+/** Public alias for the Tools Effective Group schema-derived TypeScript type. */
 export type ToolsEffectiveGroup = SchemaType<"ToolsEffectiveGroup">;
-/** Public type describing Tools Effective Notice for packages/gateway-protocol. */
+/** Public alias for the Tools Effective Notice schema-derived TypeScript type. */
 export type ToolsEffectiveNotice = SchemaType<"ToolsEffectiveNotice">;
-/** Public type describing Tools Effective Result for packages/gateway-protocol. */
+/** Public alias for the Tools Effective Result schema-derived TypeScript type. */
 export type ToolsEffectiveResult = SchemaType<"ToolsEffectiveResult">;
-/** Public type describing Tools Invoke Params for packages/gateway-protocol. */
+/** Public alias for the Tools Invoke Params schema-derived TypeScript type. */
 export type ToolsInvokeParams = SchemaType<"ToolsInvokeParams">;
-/** Public type describing Tools Invoke Result for packages/gateway-protocol. */
+/** Public alias for the Tools Invoke Result schema-derived TypeScript type. */
 export type ToolsInvokeResult = SchemaType<"ToolsInvokeResult">;
-/** Public type describing Skills Bins Params for packages/gateway-protocol. */
+/** Public alias for the Skills Bins Params schema-derived TypeScript type. */
 export type SkillsBinsParams = SchemaType<"SkillsBinsParams">;
-/** Public type describing Skills Bins Result for packages/gateway-protocol. */
+/** Public alias for the Skills Bins Result schema-derived TypeScript type. */
 export type SkillsBinsResult = SchemaType<"SkillsBinsResult">;
-/** Public type describing Skills Search Params for packages/gateway-protocol. */
+/** Public alias for the Skills Search Params schema-derived TypeScript type. */
 export type SkillsSearchParams = SchemaType<"SkillsSearchParams">;
-/** Public type describing Skills Search Result for packages/gateway-protocol. */
+/** Public alias for the Skills Search Result schema-derived TypeScript type. */
 export type SkillsSearchResult = SchemaType<"SkillsSearchResult">;
-/** Public type describing Skills Detail Params for packages/gateway-protocol. */
+/** Public alias for the Skills Detail Params schema-derived TypeScript type. */
 export type SkillsDetailParams = SchemaType<"SkillsDetailParams">;
-/** Public type describing Skills Detail Result for packages/gateway-protocol. */
+/** Public alias for the Skills Detail Result schema-derived TypeScript type. */
 export type SkillsDetailResult = SchemaType<"SkillsDetailResult">;
-/** Public type describing Skills Security Verdicts Params for packages/gateway-protocol. */
+/** Public alias for the Skills Security Verdicts Params schema-derived TypeScript type. */
 export type SkillsSecurityVerdictsParams = SchemaType<"SkillsSecurityVerdictsParams">;
-/** Public type describing Skills Security Verdicts Result for packages/gateway-protocol. */
+/** Public alias for the Skills Security Verdicts Result schema-derived TypeScript type. */
 export type SkillsSecurityVerdictsResult = SchemaType<"SkillsSecurityVerdictsResult">;
-/** Public type describing Skills Skill Card Params for packages/gateway-protocol. */
+/** Public alias for the Skills Skill Card Params schema-derived TypeScript type. */
 export type SkillsSkillCardParams = SchemaType<"SkillsSkillCardParams">;
-/** Public type describing Skills Skill Card Result for packages/gateway-protocol. */
+/** Public alias for the Skills Skill Card Result schema-derived TypeScript type. */
 export type SkillsSkillCardResult = SchemaType<"SkillsSkillCardResult">;
-/** Public type describing Skills Upload Begin Params for packages/gateway-protocol. */
+/** Public alias for the Skills Upload Begin Params schema-derived TypeScript type. */
 export type SkillsUploadBeginParams = SchemaType<"SkillsUploadBeginParams">;
-/** Public type describing Skills Upload Chunk Params for packages/gateway-protocol. */
+/** Public alias for the Skills Upload Chunk Params schema-derived TypeScript type. */
 export type SkillsUploadChunkParams = SchemaType<"SkillsUploadChunkParams">;
-/** Public type describing Skills Upload Commit Params for packages/gateway-protocol. */
+/** Public alias for the Skills Upload Commit Params schema-derived TypeScript type. */
 export type SkillsUploadCommitParams = SchemaType<"SkillsUploadCommitParams">;
-/** Public type describing Skills Install Params for packages/gateway-protocol. */
+/** Public alias for the Skills Install Params schema-derived TypeScript type. */
 export type SkillsInstallParams = SchemaType<"SkillsInstallParams">;
-/** Public type describing Skills Update Params for packages/gateway-protocol. */
+/** Public alias for the Skills Update Params schema-derived TypeScript type. */
 export type SkillsUpdateParams = SchemaType<"SkillsUpdateParams">;
-/** Public type describing Cron Job for packages/gateway-protocol. */
+/** Public alias for the Cron Job schema-derived TypeScript type. */
 export type CronJob = SchemaType<"CronJob">;
-/** Public type describing Cron List Params for packages/gateway-protocol. */
+/** Public alias for the Cron List Params schema-derived TypeScript type. */
 export type CronListParams = SchemaType<"CronListParams">;
-/** Public type describing Cron Status Params for packages/gateway-protocol. */
+/** Public alias for the Cron Status Params schema-derived TypeScript type. */
 export type CronStatusParams = SchemaType<"CronStatusParams">;
-/** Public type describing Cron Get Params for packages/gateway-protocol. */
+/** Public alias for the Cron Get Params schema-derived TypeScript type. */
 export type CronGetParams = SchemaType<"CronGetParams">;
-/** Public type describing Cron Add Params for packages/gateway-protocol. */
+/** Public alias for the Cron Add Params schema-derived TypeScript type. */
 export type CronAddParams = SchemaType<"CronAddParams">;
-/** Public type describing Cron Update Params for packages/gateway-protocol. */
+/** Public alias for the Cron Update Params schema-derived TypeScript type. */
 export type CronUpdateParams = SchemaType<"CronUpdateParams">;
-/** Public type describing Cron Remove Params for packages/gateway-protocol. */
+/** Public alias for the Cron Remove Params schema-derived TypeScript type. */
 export type CronRemoveParams = SchemaType<"CronRemoveParams">;
-/** Public type describing Cron Run Params for packages/gateway-protocol. */
+/** Public alias for the Cron Run Params schema-derived TypeScript type. */
 export type CronRunParams = SchemaType<"CronRunParams">;
-/** Public type describing Cron Runs Params for packages/gateway-protocol. */
+/** Public alias for the Cron Runs Params schema-derived TypeScript type. */
 export type CronRunsParams = SchemaType<"CronRunsParams">;
-/** Public type describing Cron Run Log Entry for packages/gateway-protocol. */
+/** Public alias for the Cron Run Log Entry schema-derived TypeScript type. */
 export type CronRunLogEntry = SchemaType<"CronRunLogEntry">;
-/** Public type describing Logs Tail Params for packages/gateway-protocol. */
+/** Public alias for the Logs Tail Params schema-derived TypeScript type. */
 export type LogsTailParams = SchemaType<"LogsTailParams">;
-/** Public type describing Logs Tail Result for packages/gateway-protocol. */
+/** Public alias for the Logs Tail Result schema-derived TypeScript type. */
 export type LogsTailResult = SchemaType<"LogsTailResult">;
-/** Public type describing Exec Approvals Get Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approvals Get Params schema-derived TypeScript type. */
 export type ExecApprovalsGetParams = SchemaType<"ExecApprovalsGetParams">;
-/** Public type describing Exec Approvals Set Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approvals Set Params schema-derived TypeScript type. */
 export type ExecApprovalsSetParams = SchemaType<"ExecApprovalsSetParams">;
-/** Public type describing Exec Approvals Node Get Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approvals Node Get Params schema-derived TypeScript type. */
 export type ExecApprovalsNodeGetParams = SchemaType<"ExecApprovalsNodeGetParams">;
-/** Public type describing Exec Approvals Node Set Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approvals Node Set Params schema-derived TypeScript type. */
 export type ExecApprovalsNodeSetParams = SchemaType<"ExecApprovalsNodeSetParams">;
-/** Public type describing Exec Approvals Snapshot for packages/gateway-protocol. */
+/** Public alias for the Exec Approvals Snapshot schema-derived TypeScript type. */
 export type ExecApprovalsSnapshot = SchemaType<"ExecApprovalsSnapshot">;
-/** Public type describing Exec Approval Get Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approval Get Params schema-derived TypeScript type. */
 export type ExecApprovalGetParams = SchemaType<"ExecApprovalGetParams">;
-/** Public type describing Exec Approval Request Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approval Request Params schema-derived TypeScript type. */
 export type ExecApprovalRequestParams = SchemaType<"ExecApprovalRequestParams">;
-/** Public type describing Exec Approval Resolve Params for packages/gateway-protocol. */
+/** Public alias for the Exec Approval Resolve Params schema-derived TypeScript type. */
 export type ExecApprovalResolveParams = SchemaType<"ExecApprovalResolveParams">;
-/** Public type describing Plugin Approval Request Params for packages/gateway-protocol. */
+/** Public alias for the Plugin Approval Request Params schema-derived TypeScript type. */
 export type PluginApprovalRequestParams = SchemaType<"PluginApprovalRequestParams">;
-/** Public type describing Plugin Approval Resolve Params for packages/gateway-protocol. */
+/** Public alias for the Plugin Approval Resolve Params schema-derived TypeScript type. */
 export type PluginApprovalResolveParams = SchemaType<"PluginApprovalResolveParams">;
-/** Public type describing Device Pair List Params for packages/gateway-protocol. */
+/** Public alias for the Device Pair List Params schema-derived TypeScript type. */
 export type DevicePairListParams = SchemaType<"DevicePairListParams">;
-/** Public type describing Device Pair Approve Params for packages/gateway-protocol. */
+/** Public alias for the Device Pair Approve Params schema-derived TypeScript type. */
 export type DevicePairApproveParams = SchemaType<"DevicePairApproveParams">;
-/** Public type describing Device Pair Reject Params for packages/gateway-protocol. */
+/** Public alias for the Device Pair Reject Params schema-derived TypeScript type. */
 export type DevicePairRejectParams = SchemaType<"DevicePairRejectParams">;
-/** Public type describing Device Pair Remove Params for packages/gateway-protocol. */
+/** Public alias for the Device Pair Remove Params schema-derived TypeScript type. */
 export type DevicePairRemoveParams = SchemaType<"DevicePairRemoveParams">;
-/** Public type describing Device Token Rotate Params for packages/gateway-protocol. */
+/** Public alias for the Device Token Rotate Params schema-derived TypeScript type. */
 export type DeviceTokenRotateParams = SchemaType<"DeviceTokenRotateParams">;
-/** Public type describing Device Token Revoke Params for packages/gateway-protocol. */
+/** Public alias for the Device Token Revoke Params schema-derived TypeScript type. */
 export type DeviceTokenRevokeParams = SchemaType<"DeviceTokenRevokeParams">;
-/** Public type describing Chat Abort Params for packages/gateway-protocol. */
+/** Public alias for the Chat Abort Params schema-derived TypeScript type. */
 export type ChatAbortParams = SchemaType<"ChatAbortParams">;
-/** Public type describing Chat Inject Params for packages/gateway-protocol. */
+/** Public alias for the Chat Inject Params schema-derived TypeScript type. */
 export type ChatInjectParams = SchemaType<"ChatInjectParams">;
-/** Public type describing Chat Event for packages/gateway-protocol. */
+/** Public alias for the Chat Event schema-derived TypeScript type. */
 export type ChatEvent = SchemaType<"ChatEvent">;
-/** Public type describing Update Run Params for packages/gateway-protocol. */
+/** Public alias for the Update Run Params schema-derived TypeScript type. */
 export type UpdateRunParams = SchemaType<"UpdateRunParams">;
-/** Public type describing Tick Event for packages/gateway-protocol. */
+/** Public alias for the Tick Event schema-derived TypeScript type. */
 export type TickEvent = SchemaType<"TickEvent">;
-/** Public type describing Shutdown Event for packages/gateway-protocol. */
+/** Public alias for the Shutdown Event schema-derived TypeScript type. */
 export type ShutdownEvent = SchemaType<"ShutdownEvent">;
