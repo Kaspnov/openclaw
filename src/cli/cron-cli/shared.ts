@@ -18,7 +18,7 @@ import {
 import type { GatewayRpcOpts } from "../gateway-rpc.js";
 import { callGatewayFromCli } from "../gateway-rpc.js";
 
-/** Reused constant for get Cron Channel Options behavior in src/cli/cron-cli. */
+/** Returns dynamic help text for channel delivery choices. */
 export const getCronChannelOptions = () => {
   // Keep help truthful even before the plugin registry is bootstrapped.
   const pluginIds = listChannelPlugins()
@@ -50,7 +50,7 @@ function addCronRunCauseFields(value: unknown): unknown {
   return { ...record, entries: nextEntries };
 }
 
-/** Reused helper for print Cron Json behavior in src/cli/cron-cli. */
+/** Writes cron JSON output after adding compatibility `cause` fields. */
 export function printCronJson(value: unknown) {
   defaultRuntime.writeJson(addCronRunCauseFields(value));
 }
@@ -94,13 +94,13 @@ function computeStatus(job: CronJob): string {
   return state.lastRunStatus ?? state.lastStatus ?? "idle";
 }
 
-/** Reused helper for handle Cron Cli Error behavior in src/cli/cron-cli. */
+/** Prints a cron CLI error and exits with failure. */
 export function handleCronCliError(err: unknown) {
   defaultRuntime.error(danger(String(err)));
   defaultRuntime.exit(1);
 }
 
-/** Reused helper for warn If Cron Scheduler Disabled behavior in src/cli/cron-cli. */
+/** Warns when cron commands can save jobs but the gateway scheduler is disabled. */
 export async function warnIfCronSchedulerDisabled(opts: GatewayRpcOpts) {
   try {
     const res = (await callGatewayFromCli("cron.status", opts, {})) as {
@@ -125,7 +125,7 @@ export async function warnIfCronSchedulerDisabled(opts: GatewayRpcOpts) {
   }
 }
 
-/** Reused helper for parse Duration Ms behavior in src/cli/cron-cli. */
+/** Parses compact duration strings accepted by cron CLI flags. */
 export function parseDurationMs(input: string): number | null {
   const raw = input.trim();
   if (!raw) {
@@ -153,7 +153,7 @@ export function parseDurationMs(input: string): number | null {
   return Math.floor(n * factor);
 }
 
-/** Reused helper for parse Cron Stagger Ms behavior in src/cli/cron-cli. */
+/** Resolves cron stagger behavior from exact/stagger flags. */
 export function parseCronStaggerMs(params: {
   staggerRaw: string;
   useExact: boolean;
@@ -171,7 +171,7 @@ export function parseCronStaggerMs(params: {
   return parsed;
 }
 
-/** Reused helper for parse Cron Tools Allow behavior in src/cli/cron-cli. */
+/** Parses comma/space separated tool allowlists for cron agent turns. */
 export function parseCronToolsAllow(input: unknown): string[] | undefined {
   const raw = Array.isArray(input)
     ? input.map((value) => String(value)).join(" ")
@@ -310,7 +310,7 @@ const formatStatus = (job: CronJob) => {
   return state.lastStatus ?? "idle";
 };
 
-/** Reused helper for coerce Cron Delivery Previews behavior in src/cli/cron-cli. */
+/** Coerces gateway delivery preview objects into a job-id keyed map. */
 export function coerceCronDeliveryPreviews(value: unknown): Map<string, CronDeliveryPreview> {
   const previews =
     value && typeof value === "object"
@@ -333,7 +333,7 @@ export function coerceCronDeliveryPreviews(value: unknown): Map<string, CronDeli
   );
 }
 
-/** Reused helper for print Cron List behavior in src/cli/cron-cli. */
+/** Renders cron list output with status, schedule, target, delivery, and model columns. */
 export function printCronList(
   jobs: CronJob[],
   runtime: RuntimeEnv = defaultRuntime,
@@ -436,7 +436,7 @@ export function printCronList(
   }
 }
 
-/** Reused helper for print Cron Show behavior in src/cli/cron-cli. */
+/** Renders a single cron job in key/value form for `cron show`. */
 export function printCronShow(
   job: CronJob,
   runtime: RuntimeEnv = defaultRuntime,
