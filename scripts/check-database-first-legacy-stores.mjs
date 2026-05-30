@@ -460,6 +460,8 @@ const forbiddenRootDoctorLegacyModuleMarkers = [
 
 const allowedExactPaths = new Set([
   "extensions/discord/src/doctor-legacy-state.ts",
+  "extensions/discord/src/monitor/model-picker-preferences-migrations.ts",
+  "extensions/feishu/src/doctor.ts",
   "extensions/feishu/src/doctor-legacy-state.ts",
   "extensions/imessage/src/doctor-legacy-state.ts",
   "extensions/matrix/src/doctor-legacy-state.ts",
@@ -477,13 +479,16 @@ const allowedExactPaths = new Set([
   "extensions/whatsapp/src/doctor-legacy-state.ts",
   "extensions/memory-wiki/src/log-migration.ts",
   "extensions/codex/src/node-cli-sessions.ts",
+  "src/agents/skills-clawhub.ts",
   "src/agents/session-tool-result-guard.ts",
+  "src/agents/harness/native-hook-relay.ts",
   "src/agents/pi-embedded-runner/run/helpers.ts",
   "src/index.ts",
   "src/infra/exec-approvals.ts",
   "src/infra/restart-sentinel.ts",
   "src/library.ts",
   "src/plugin-sdk/session-store-runtime.ts",
+  "packages/gateway-protocol/src/schema/sessions.ts",
 ]);
 
 const allowedPrefixes = ["src/commands/doctor", "src/commands/export-trajectory"];

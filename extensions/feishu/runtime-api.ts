@@ -41,10 +41,6 @@ export {
 } from "openclaw/plugin-sdk/context-visibility-runtime";
 export { getSessionEntry } from "openclaw/plugin-sdk/session-store-runtime";
 export { resolveAgentIdFromSessionKey } from "openclaw/plugin-sdk/routing";
-export {
-  loadSessionStore,
-  resolveSessionStoreEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
 export { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
 export { normalizeAgentId } from "openclaw/plugin-sdk/routing";
 export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";

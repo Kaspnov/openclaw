@@ -95,42 +95,37 @@ async function writeClawHubOriginFixture(params: {
   const registry = params.registry ?? "https://private.example.com/clawhub";
   const installedVersion = params.installedVersion ?? "1.2.3";
   const installedAt = params.installedAt ?? 123;
-  await fs.mkdir(path.join(skillDir, ".clawhub"), { recursive: true });
-  await fs.writeFile(
-    path.join(skillDir, ".clawhub", "origin.json"),
-    `${JSON.stringify(
-      {
-        version: 1,
-        registry,
-        slug: params.originSlug ?? params.slug,
-        installedVersion,
-        installedAt,
-      },
-      null,
-      2,
-    )}\n`,
-    "utf8",
-  );
+  await fs.mkdir(skillDir, { recursive: true });
   if (params.writeLock !== false) {
-    await fs.mkdir(path.join(params.workspaceDir, ".clawhub"), { recursive: true });
-    await fs.writeFile(
-      path.join(params.workspaceDir, ".clawhub", "lock.json"),
-      `${JSON.stringify(
-        {
-          version: 1,
-          skills: {
-            [params.slug]: {
-              version: installedVersion,
-              installedAt,
-              registry,
-            },
-          },
-        },
-        null,
-        2,
-      )}\n`,
-      "utf8",
-    );
+    const workspaceKey = crypto
+      .createHash("sha256")
+      .update(path.resolve(params.workspaceDir))
+      .digest("hex")
+      .slice(0, 24);
+    const store = createCorePluginStateKeyedStore<{
+      version: 1;
+      registry: string;
+      slug: string;
+      installedVersion: string;
+      installedAt: number;
+      workspaceDir: string;
+      targetDir: string;
+      updatedAt: number;
+    }>({
+      ownerId: "core:clawhub-skills",
+      namespace: "skill-installs",
+      maxEntries: 10_000,
+    });
+    await store.register(`${workspaceKey}:${params.slug}`, {
+      version: 1,
+      registry,
+      slug: params.originSlug ?? params.slug,
+      installedVersion,
+      installedAt,
+      workspaceDir: path.resolve(params.workspaceDir),
+      targetDir: skillDir,
+      updatedAt: installedAt,
+    });
   }
   return skillDir;
 }
@@ -546,7 +541,7 @@ describe("skills-clawhub", () => {
       }
     });
 
-    it("rejects installed origin metadata without workspace lock tracking", async () => {
+    it("uses registry resolution when no SQLite install tracking exists", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
         await writeClawHubOriginFixture({
@@ -560,11 +555,10 @@ describe("skills-clawhub", () => {
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected untracked origin failure");
-        }
-        expect(result.error).toContain("not tracked by the workspace ClawHub lockfile");
+        expect(result).toMatchObject({
+          ok: true,
+          resolution: { source: "registry", selector: "latest" },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
@@ -588,13 +582,13 @@ describe("skills-clawhub", () => {
         if (result.ok) {
           throw new Error("expected slug mismatch failure");
         }
-        expect(result.error).toContain('origin metadata for "trusted-skill"');
+        expect(result.error).toContain("not tracked by the workspace ClawHub lockfile");
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
     });
 
-    it("rejects installed origin metadata that does not match lock tracking", async () => {
+    it("uses updated SQLite install tracking", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
         await writeClawHubOriginFixture({
@@ -603,32 +597,32 @@ describe("skills-clawhub", () => {
           installedVersion: "2.0.0",
           installedAt: 123,
         });
-        const lockPath = path.join(workspaceDir, ".clawhub", "lock.json");
-        const lock = JSON.parse(await fs.readFile(lockPath, "utf8")) as {
-          skills: Record<string, { version: string; installedAt: number; registry: string }>;
-        };
-        lock.skills.agentreceipt = {
-          ...lock.skills.agentreceipt,
-          version: "1.0.0",
-        };
-        await fs.writeFile(lockPath, `${JSON.stringify(lock, null, 2)}\n`, "utf8");
+        await writeClawHubOriginFixture({
+          workspaceDir,
+          slug: "agentreceipt",
+          installedVersion: "1.0.0",
+          installedAt: 456,
+        });
 
         const result = await resolveClawHubSkillVerificationTarget({
           workspaceDir,
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected lock mismatch failure");
-        }
-        expect(result.error).toContain("does not match the workspace ClawHub lockfile");
+        expect(result).toMatchObject({
+          ok: true,
+          version: "1.0.0",
+          resolution: {
+            source: "installed",
+            installedVersion: "1.0.0",
+          },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
     });
 
-    it("rejects installed origin metadata when lock registry disagrees", async () => {
+    it("uses updated SQLite install registry", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
         await writeClawHubOriginFixture({
@@ -638,70 +632,59 @@ describe("skills-clawhub", () => {
           installedVersion: "2.0.0",
           installedAt: 123,
         });
-        const lockPath = path.join(workspaceDir, ".clawhub", "lock.json");
-        const lock = JSON.parse(await fs.readFile(lockPath, "utf8")) as {
-          skills: Record<string, { version: string; installedAt: number; registry: string }>;
-        };
-        lock.skills.agentreceipt = {
-          ...lock.skills.agentreceipt,
+        await writeClawHubOriginFixture({
+          workspaceDir,
+          slug: "agentreceipt",
           registry: "https://other.example.com/clawhub",
-        };
-        await fs.writeFile(lockPath, `${JSON.stringify(lock, null, 2)}\n`, "utf8");
+          installedVersion: "2.0.0",
+          installedAt: 456,
+        });
 
         const result = await resolveClawHubSkillVerificationTarget({
           workspaceDir,
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected registry mismatch failure");
-        }
-        expect(result.error).toContain("does not match the workspace ClawHub lockfile");
+        expect(result).toMatchObject({
+          ok: true,
+          baseUrl: "https://other.example.com/clawhub",
+          resolution: {
+            source: "installed",
+            registry: "https://other.example.com/clawhub",
+          },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
     });
 
-    it("rejects lock-tracked installed skills without origin metadata", async () => {
+    it("uses SQLite install tracking without legacy origin files", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
-        await fs.mkdir(path.join(workspaceDir, ".clawhub"), { recursive: true });
-        await fs.writeFile(
-          path.join(workspaceDir, ".clawhub", "lock.json"),
-          `${JSON.stringify(
-            {
-              version: 1,
-              skills: {
-                agentreceipt: {
-                  version: "2.0.0",
-                  installedAt: 123,
-                  registry: "https://private.example.com/clawhub",
-                },
-              },
-            },
-            null,
-            2,
-          )}\n`,
-          "utf8",
-        );
+        await writeClawHubOriginFixture({
+          workspaceDir,
+          slug: "agentreceipt",
+          registry: "https://private.example.com/clawhub",
+          installedVersion: "2.0.0",
+          installedAt: 123,
+        });
 
         const result = await resolveClawHubSkillVerificationTarget({
           workspaceDir,
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected missing origin failure");
-        }
-        expect(result.error).toContain("missing ClawHub origin metadata");
+        expect(result).toMatchObject({
+          ok: true,
+          baseUrl: "https://private.example.com/clawhub",
+          resolution: { source: "installed" },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
     });
 
-    it("rejects malformed workspace locks before registry fallback", async () => {
+    it("ignores malformed legacy workspace locks during runtime resolution", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
         await fs.mkdir(path.join(workspaceDir, ".clawhub"), { recursive: true });
@@ -712,11 +695,10 @@ describe("skills-clawhub", () => {
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected malformed lock failure");
-        }
-        expect(result.error).toContain("Malformed workspace ClawHub lockfile");
+        expect(result).toMatchObject({
+          ok: true,
+          resolution: { source: "registry" },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
@@ -751,7 +733,7 @@ describe("skills-clawhub", () => {
       }
     });
 
-    it("fails clearly when installed origin metadata is malformed", async () => {
+    it("ignores malformed legacy origin metadata during runtime resolution", async () => {
       const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skill-verify-"));
       try {
         const skillDir = path.join(workspaceDir, "skills", "agentreceipt");
@@ -763,12 +745,10 @@ describe("skills-clawhub", () => {
           slug: "agentreceipt",
         });
 
-        expect(result.ok).toBe(false);
-        if (result.ok) {
-          throw new Error("expected malformed origin failure");
-        }
-        expect(result.error).toContain("Malformed ClawHub origin metadata");
-        expect(result.error).toContain(path.join(skillDir, ".clawhub", "origin.json"));
+        expect(result).toMatchObject({
+          ok: true,
+          resolution: { source: "registry" },
+        });
       } finally {
         await fs.rm(workspaceDir, { recursive: true, force: true });
       }
