@@ -33,6 +33,7 @@ import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
 } from "../shared/string-coerce.js";
+import { VERSION } from "../version.js";
 import { buildGatewayInstallPlan } from "./daemon-install-helpers.js";
 import { DEFAULT_GATEWAY_DAEMON_RUNTIME, type GatewayDaemonRuntime } from "./daemon-runtime.js";
 import { resolveGatewayAuthTokenForService } from "./doctor-gateway-auth-token.js";
@@ -179,6 +180,17 @@ function shouldDeferUpdateModeSystemdServiceRepair(params: {
     isDoctorUpdateRepairMode(params.repairMode) &&
     !params.shouldForce
   );
+}
+
+async function isWindowsGatewayRunningForUpdateRepair(params: {
+  service: ReturnType<typeof resolveGatewayService>;
+  env: NodeJS.ProcessEnv;
+}): Promise<boolean> {
+  if (process.platform !== "win32") {
+    return false;
+  }
+  const runtime = await params.service.readRuntime(params.env).catch(() => null);
+  return runtime?.status === "running";
 }
 
 async function suppressRunningSystemdExecStartRepairs(params: {
@@ -429,6 +441,15 @@ export async function maybeRepairGatewayServiceConfig(
       level: "recommended",
     });
   }
+  const serviceVersion = normalizeOptionalString(command.environment?.OPENCLAW_SERVICE_VERSION);
+  if (serviceVersion && serviceVersion !== VERSION) {
+    audit.issues.push({
+      code: SERVICE_AUDIT_CODES.gatewayVersionMismatch,
+      message: "Gateway service version does not match the current CLI.",
+      detail: `${serviceVersion} -> ${VERSION}`,
+      level: "recommended",
+    });
+  }
   const needsNodeRuntime = needsNodeRuntimeMigration(audit.issues);
   const systemNodeInfo = needsNodeRuntime
     ? await resolveSystemNodeInfo({ env: process.env })
@@ -628,8 +649,18 @@ export async function maybeRepairGatewayServiceConfig(
     runtime: needsNodeRuntime && systemNodePath ? "node" : runtimeChoice,
     nodePath: systemNodePath ?? undefined,
   });
+  const updateRepairShouldInstall =
+    updateRepairMode &&
+    (await isWindowsGatewayRunningForUpdateRepair({
+      service,
+      env: serviceInstallEnv,
+    }));
+  // Windows `install` activates the task/login item. In update mode, only take
+  // that path when the gateway was already running; stopped installs stay staged.
+  const repairService =
+    updateRepairMode && !updateRepairShouldInstall ? service.stage : service.install;
   try {
-    await (updateRepairMode ? service.stage : service.install)({
+    await repairService({
       env: serviceInstallEnv,
       stdout: process.stdout,
       programArguments: updatedPlan.programArguments,

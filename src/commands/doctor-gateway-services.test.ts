@@ -28,6 +28,7 @@ vi.mock("node:fs/promises", async () => {
 
 const mocks = vi.hoisted(() => ({
   readCommand: vi.fn(),
+  readRuntime: vi.fn(),
   stage: vi.fn(),
   install: vi.fn(),
   replaceConfigFile: vi.fn().mockResolvedValue(undefined),
@@ -79,6 +80,7 @@ vi.mock("../daemon/service-audit.js", () => ({
     gatewayManagedEnvEmbedded: testServiceAuditCodes.gatewayManagedEnvEmbedded,
     gatewayPortMismatch: testServiceAuditCodes.gatewayPortMismatch,
     gatewayProxyEnvEmbedded: testServiceAuditCodes.gatewayProxyEnvEmbedded,
+    gatewayVersionMismatch: testServiceAuditCodes.gatewayVersionMismatch,
     gatewayTokenMismatch: testServiceAuditCodes.gatewayTokenMismatch,
   },
 }));
@@ -86,6 +88,7 @@ vi.mock("../daemon/service-audit.js", () => ({
 vi.mock("../daemon/service.js", () => ({
   resolveGatewayService: () => ({
     readCommand: mocks.readCommand,
+    readRuntime: mocks.readRuntime,
     stage: mocks.stage,
     install: mocks.install,
   }),
@@ -322,6 +325,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     vi.clearAllMocks();
     fsMocks.realpath.mockImplementation(async (value: string) => value);
     mocks.resolveGatewayPort.mockReturnValue(18789);
+    mocks.readRuntime.mockResolvedValue({ status: "unknown" });
     mocks.needsNodeRuntimeMigration.mockReturnValue(false);
     mocks.renderSystemNodeWarning.mockReturnValue(undefined);
     mocks.resolveSystemNodeInfo.mockResolvedValue(null);
@@ -937,6 +941,74 @@ describe("maybeRepairGatewayServiceConfig", () => {
         expect(mocks.install).not.toHaveBeenCalled();
       },
     );
+  });
+
+  it("installs running Windows update repairs so Startup-folder fallback installs can migrate", async () => {
+    mockProcessPlatform("win32");
+    Object.defineProperty(process.stdin, "isTTY", {
+      value: false,
+      configurable: true,
+    });
+    process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+    mocks.readCommand.mockResolvedValue({
+      programArguments: gatewayProgramArguments,
+      environment: {
+        OPENCLAW_SERVICE_VERSION: "2026.5.25",
+      },
+    });
+    mocks.auditGatewayServiceConfig.mockResolvedValue({
+      ok: true,
+      issues: [],
+    });
+    mocks.buildGatewayInstallPlan.mockResolvedValue({
+      programArguments: gatewayProgramArguments,
+      workingDirectory: "/tmp",
+      environment: {
+        OPENCLAW_SERVICE_VERSION: "2026.5.26",
+      },
+    });
+    mocks.readRuntime.mockResolvedValue({ status: "running" });
+
+    await runNonInteractiveRepair({ updateInProgress: true });
+
+    expectNoteContaining(
+      "Gateway service version does not match the current CLI.",
+      "Gateway service config",
+    );
+    expect(mocks.stage).not.toHaveBeenCalled();
+    expect(mocks.install).toHaveBeenCalledTimes(1);
+  });
+
+  it("stages stopped Windows update repairs without activating the gateway", async () => {
+    mockProcessPlatform("win32");
+    Object.defineProperty(process.stdin, "isTTY", {
+      value: false,
+      configurable: true,
+    });
+    process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+    mocks.readCommand.mockResolvedValue({
+      programArguments: gatewayProgramArguments,
+      environment: {
+        OPENCLAW_SERVICE_VERSION: "2026.5.25",
+      },
+    });
+    mocks.auditGatewayServiceConfig.mockResolvedValue({
+      ok: true,
+      issues: [],
+    });
+    mocks.buildGatewayInstallPlan.mockResolvedValue({
+      programArguments: gatewayProgramArguments,
+      workingDirectory: "/tmp",
+      environment: {
+        OPENCLAW_SERVICE_VERSION: "2026.5.26",
+      },
+    });
+    mocks.readRuntime.mockResolvedValue({ status: "stopped" });
+
+    await runNonInteractiveRepair({ updateInProgress: true });
+
+    expect(mocks.install).not.toHaveBeenCalled();
+    expect(mocks.stage).toHaveBeenCalledTimes(1);
   });
 
   it("does not persist EnvironmentFile-backed service tokens into config", async () => {
