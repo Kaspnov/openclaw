@@ -1,4 +1,4 @@
-// secrets provider env vars helpers and runtime behavior.
+// Provider auth/setup environment variable lookup maps from core defaults and plugin metadata.
 import { resolveProviderAuthAliasMap } from "../agents/provider-auth-aliases.js";
 import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";
@@ -31,7 +31,7 @@ const CORE_PROVIDER_SETUP_ENV_VAR_OVERRIDES = {
   "minimax-cn": ["MINIMAX_API_KEY"],
 } as const;
 
-/** Shared type for Provider Env Var Lookup Params in src/secrets. */
+/** Inputs for resolving provider env vars from config, workspace, env, and metadata snapshots. */
 export type ProviderEnvVarLookupParams = {
   config?: OpenClawConfig;
   workspaceDir?: string;
@@ -40,7 +40,7 @@ export type ProviderEnvVarLookupParams = {
   metadataSnapshot?: PluginMetadataSnapshot;
 };
 
-/** Shared type for Provider Auth Evidence in src/secrets. */
+/** File/env evidence used to detect local provider authentication. */
 export type ProviderAuthEvidence = {
   type: "local-file-with-env";
   fileEnvVar?: string;
@@ -51,7 +51,7 @@ export type ProviderAuthEvidence = {
   source?: string;
 };
 
-/** Shared type for Provider Auth Lookup Maps in src/secrets. */
+/** Combined provider alias, env candidate, and auth evidence lookup maps. */
 export type ProviderAuthLookupMaps = {
   aliasMap: Readonly<Record<string, string>>;
   envCandidateMap: Readonly<Record<string, readonly string[]>>;
@@ -264,7 +264,7 @@ function resolveManifestProviderAuthEvidenceFromSnapshot(
   return evidenceByProvider;
 }
 
-/** Reused helper for resolve Provider Auth Env Var Candidates behavior in src/secrets. */
+/** Resolves provider auth env var candidates from plugin manifests plus core defaults. */
 export function resolveProviderAuthEnvVarCandidates(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly string[]> {
@@ -274,14 +274,14 @@ export function resolveProviderAuthEnvVarCandidates(
   };
 }
 
-/** Reused helper for resolve Provider Auth Evidence behavior in src/secrets. */
+/** Resolves provider auth evidence declared by enabled/trusted plugin manifests. */
 export function resolveProviderAuthEvidence(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly ProviderAuthEvidence[]> {
   return resolveManifestProviderAuthEvidence(params);
 }
 
-/** Reused helper for resolve Provider Auth Lookup Maps behavior in src/secrets. */
+/** Resolves provider auth alias, env candidate, and evidence maps from one metadata snapshot. */
 export function resolveProviderAuthLookupMaps(
   params?: ProviderEnvVarLookupParams,
 ): ProviderAuthLookupMaps {
@@ -301,7 +301,7 @@ export function resolveProviderAuthLookupMaps(
   };
 }
 
-/** Reused helper for resolve Provider Env Vars behavior in src/secrets. */
+/** Resolves provider env vars used for setup defaults and secret scrubbing. */
 export function resolveProviderEnvVars(
   params?: ProviderEnvVarLookupParams,
 ): Record<string, readonly string[]> {
@@ -378,7 +378,7 @@ export const PROVIDER_AUTH_ENV_VAR_CANDIDATES = createLazyReadonlyRecord(() =>
  */
 export const PROVIDER_ENV_VARS = createLazyReadonlyRecord(() => resolveProviderEnvVars());
 
-/** Reused constant for testing behavior in src/secrets. */
+/** Test hook for resetting lazy provider env var maps. */
 export const testing = {
   resetProviderEnvVarCachesForTests(): void {
     for (const reset of lazyRecordCacheResetters) {
@@ -387,7 +387,7 @@ export const testing = {
   },
 };
 
-/** Reused helper for get Provider Env Vars behavior in src/secrets. */
+/** Returns provider env vars as a mutable array for one provider id. */
 export function getProviderEnvVars(
   providerId: string,
   params?: ProviderEnvVarLookupParams,
@@ -401,7 +401,7 @@ export function getProviderEnvVars(
 
 // OPENCLAW_API_KEY authenticates the local OpenClaw bridge itself and must
 // remain available to child bridge/runtime processes.
-/** Reused helper for list Known Provider Auth Env Var Names behavior in src/secrets. */
+/** Lists all known auth/setup provider env var names for auth-related child env filtering. */
 export function listKnownProviderAuthEnvVarNames(params?: ProviderEnvVarLookupParams): string[] {
   return uniqueStrings([
     ...Object.values(resolveProviderAuthEnvVarCandidates(params)).flatMap((keys) => keys),
@@ -409,12 +409,12 @@ export function listKnownProviderAuthEnvVarNames(params?: ProviderEnvVarLookupPa
   ]);
 }
 
-/** Reused helper for list Known Secret Env Var Names behavior in src/secrets. */
+/** Lists provider secret env var names for broad secret filtering. */
 export function listKnownSecretEnvVarNames(params?: ProviderEnvVarLookupParams): string[] {
   return uniqueStrings(Object.values(resolveProviderEnvVars(params)).flatMap((keys) => keys));
 }
 
-/** Reused helper for omit Env Keys Case Insensitive behavior in src/secrets. */
+/** Removes env keys case-insensitively from a copied process environment. */
 export function omitEnvKeysCaseInsensitive(
   baseEnv: NodeJS.ProcessEnv,
   keys: Iterable<string>,
@@ -437,5 +437,5 @@ export function omitEnvKeysCaseInsensitive(
   }
   return env;
 }
-/** Re-exported API for src/secrets, starting with testing. */
+/** Internal test-only access to provider env var cache reset hooks. */
 export { testing as __testing };
