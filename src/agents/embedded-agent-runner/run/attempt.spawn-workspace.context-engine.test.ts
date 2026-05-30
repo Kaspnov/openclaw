@@ -274,8 +274,8 @@ describe("runEmbeddedAttempt context engine sessionKey forwarding", () => {
         execute: async () => ({ text: "ok" }),
       },
       {
-        name: "fuzz_move_angles",
-        label: "Fuzz Move Angles",
+        name: "dofbot_move_angles",
+        label: "Dofbot Move Angles",
         description: "Move robot joints.",
         parameters: {
           type: "object",

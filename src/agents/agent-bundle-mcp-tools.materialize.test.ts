@@ -144,9 +144,9 @@ describe("createBundleMcpToolRuntime", () => {
   it("preserves catalog diagnostics when MCP servers fail tool listing", async () => {
     const diagnostics = [
       {
-        serverName: "fuzzplugin",
-        safeServerName: "fuzzplugin",
-        launchSummary: "node fuzzplugin-mcp.mjs",
+        serverName: "dofbot",
+        safeServerName: "dofbot",
+        launchSummary: "node dofbot-mcp.mjs",
         message: 'tools[0].inputSchema.type expected "object"',
       },
     ];
