@@ -11,6 +11,7 @@ const { unexpectedIo } = vi.hoisted(() => ({
   },
 }));
 
+// mock-isolation: Status-only hooks must not discover models or boot an agent runtime.
 vi.mock("openclaw/plugin-sdk/agent-runtime", () => ({
   DEFAULT_PROVIDER: "ollama",
   parseModelRef: () => ({ provider: "ollama", model: "qwen3:4b" }),
@@ -20,24 +21,29 @@ vi.mock("openclaw/plugin-sdk/agent-runtime", () => ({
   resolveAgentDir: () => "/synthetic/agent",
   resolveAgentWorkspaceDir: () => "/synthetic/workspace",
 }));
+// mock-isolation: Keep the configured memory policy independent of installed providers.
 vi.mock("openclaw/plugin-sdk/memory-core-host-runtime-core", () => ({
   resolveRememberAcrossConversations: () => false,
 }));
+// mock-isolation: Supply the recall capability without loading the plugin registry.
 vi.mock("openclaw/plugin-sdk/memory-host-core", () => ({
   getMemoryCapabilityRegistration: () => ({
     pluginId: "memory-core",
     capability: { recallToolNames: ["memory_search"] },
   }),
 }));
+// mock-isolation: A skipped recall must never open a real memory search manager.
 vi.mock("openclaw/plugin-sdk/memory-host-search", () => ({
   closeActiveMemorySearchManager: unexpectedIo,
   getActiveMemoryProvider: unexpectedIo,
   getActiveMemorySearchManager: unexpectedIo,
 }));
+// mock-isolation: Status-only turns must not read or classify stored memory entries.
 vi.mock("openclaw/plugin-sdk/memory-core-host-engine-storage", () => ({
   isAutomaticMemoryEntryEligible: unexpectedIo,
   stripMemoryAnnotationCarriers: unexpectedIo,
 }));
+// mock-isolation: The fixture owns session state; unexpected database I/O must fail.
 vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
   cleanupSessionLifecycleArtifacts: unexpectedIo,
   formatSqliteSessionFileMarker: unexpectedIo,
@@ -49,6 +55,7 @@ vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
     throw error;
   },
 }));
+// mock-isolation: Skipped recall must not load a real transcript reader or its workers.
 vi.mock("openclaw/plugin-sdk/session-transcript-runtime", () => ({
   readSessionTranscriptEvents: unexpectedIo,
   readSessionTranscriptRawDelta: unexpectedIo,
